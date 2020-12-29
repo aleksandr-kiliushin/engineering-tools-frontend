@@ -1,0 +1,8 @@
+.partner {
+  display: flex;
+  margin-top: 82px;
+}
+
+.displayNone {
+  display: none;
+}

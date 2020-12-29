@@ -1,0 +1,14 @@
+.coll {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.branchesLeft {
+  display: flex;
+}
+
+.branchesRight {
+  display: flex;
+  transform: scaleX(-1);
+}

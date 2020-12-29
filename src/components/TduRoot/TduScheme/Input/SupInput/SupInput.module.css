@@ -1,0 +1,11 @@
+.supInput {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  height: 248px;
+}
+
+.unionNutValve {
+  display: flex;
+  margin-top: 61px;
+}

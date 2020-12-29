@@ -1,0 +1,7 @@
+.tduControl {
+  padding: 10px;
+  display: flex;
+  width: 500px;
+  justify-content: space-between;
+  /* background: gray; */
+}

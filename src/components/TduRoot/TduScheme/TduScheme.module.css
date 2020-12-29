@@ -1,0 +1,24 @@
+.tduSchemeLeft {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+}
+
+.tduSchemeRight {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  justify-content: flex-end;
+  transform: scaleX(-1);
+}
+
+.isBoxFalse {
+  display: inline-block;
+  border: 5px solid transparent;
+}
+
+.isBoxTrue {
+  display: inline-block;
+  border: solid 5px rgb(230, 230, 230);
+  background: linear-gradient(#b1b1b1, #727272);
+}

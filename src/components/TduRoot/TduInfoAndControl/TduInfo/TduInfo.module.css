@@ -1,0 +1,7 @@
+.tduInfo {
+  display: flex;
+  padding: 5px;
+}
+.tduCode {
+  width: 120px;
+}
