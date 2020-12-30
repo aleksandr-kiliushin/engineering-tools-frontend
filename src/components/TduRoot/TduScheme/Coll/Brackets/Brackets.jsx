@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawBrackets } from '../../../../../common/drawFuncs';
+import { drawBrackets } from '../../../../../utils/drawFuncs';
 
 const Brackets = (props) => {
 

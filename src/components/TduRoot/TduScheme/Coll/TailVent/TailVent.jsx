@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawTailVent } from '../../../../../common/drawFuncs';
+import { drawTailVent } from '../../../../../utils/drawFuncs';
 
 const TailVent = (props) => {
 

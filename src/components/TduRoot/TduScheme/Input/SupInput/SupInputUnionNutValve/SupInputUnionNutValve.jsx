@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawUnionNutValve } from '../../../../../../common/drawFuncs';
+import { drawUnionNutValve } from '../../../../../../utils/drawFuncs';
 import s from './SupInputUnionNutValve.module.css';
 
 const SupInputUnionNutValve = (props) => {

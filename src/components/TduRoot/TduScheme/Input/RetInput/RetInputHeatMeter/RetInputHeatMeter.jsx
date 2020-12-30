@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawHeatMeter } from "../../../../../../common/drawFuncs";
+import { drawHeatMeter } from "../../../../../../utils/drawFuncs";
 import s from './RetInputHeatMeter.module.css';
 
 const RetInputHeatMeter = (props) => {

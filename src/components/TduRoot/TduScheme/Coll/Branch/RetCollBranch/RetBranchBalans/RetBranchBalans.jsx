@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawBranchBalans } from '../../../../../../../common/drawFuncs';
+import { drawBranchBalans } from '../../../../../../../utils/drawFuncs';
 
 const RetBranchBalans = (props) => {
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawFilter } from '../../../../../../common/drawFuncs';
+import { drawFilter } from '../../../../../../utils/drawFuncs';
 import s from './SupInputFilter.module.css';
 
 const SupInputFilter = (props) => {

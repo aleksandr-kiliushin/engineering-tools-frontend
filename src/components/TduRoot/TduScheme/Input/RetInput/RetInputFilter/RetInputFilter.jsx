@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import s from './RetInputFilter.module.css';
-import { drawFilter } from '../../../../../../common/drawFuncs';
+import { drawFilter } from '../../../../../../utils/drawFuncs';
 
 const RetInputFilter = (props) => {
   

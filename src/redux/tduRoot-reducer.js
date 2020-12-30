@@ -1,4 +1,4 @@
-import { aptTypeDnArr, branchBalansTypeDnArr, bvAndFilterDnArr, heatMetersTypeArr, partnerTypeDnArr } from "../common/storage";
+import { aptTypeDnArr, branchBalansTypeDnArr, bvAndFilterDnArr, heatMetersTypeArr, partnerTypeDnArr } from "../utils/tduModelStorage";
 
 const ADD_BRANCH = 'ADD_BRANCH';
 const ADD_TDU_TO_BASKET = 'ADD_TDU_TO_BASKET';
@@ -28,7 +28,7 @@ const initialState = {
   isBrackets: true,
   isDrainageBranch: false,
   isPartner: true,
-  side: 'right',
+  side: 'left',
   heatMetersLoc: 'branches',
   heatMetersTypeId: 0,
   partnerTypeDnId: 1,

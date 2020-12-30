@@ -1,7 +1,17 @@
 import React from "react";
 
-import {Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
-import {GetApp as GetAppIcon} from '@material-ui/icons';
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Toolbar
+} from '@material-ui/core';
+import {GetApp as GetAppIcon, Menu as MenuIcon} from '@material-ui/icons';
 
 
 const Chart = (props) => {
@@ -142,10 +152,7 @@ const Chart = (props) => {
       <TableCell/>
       <TableCell/>
       <TableCell align='right'>
-        <Button size='small'>
-          <GetAppIcon fontSize='small'/>
-          Total Price:
-        </Button>
+        <Button startIcon={<GetAppIcon />} size="small">Total:</Button>
       </TableCell>
       <TableCell align='right'>{total.toFixed(2)}</TableCell>
     </TableRow>

@@ -1,4 +1,4 @@
-import { heatMetersTypeArr } from "./storage";
+import { heatMetersTypeArr } from "./tduModelStorage";
 
 const colors = {
   brass1: '#A58540',

@@ -5,6 +5,7 @@ import TduRoot from "./components/TduRoot/TduRoot";
 import Header from "./components/Header/Header";
 import {BrowserRouter as Router, Route, Switch,} from "react-router-dom";
 import Home from "./components/Home/Home";
+import Converter from "./components/Converter/Converter";
 
 
 function App() {
@@ -13,10 +14,11 @@ function App() {
       <div className="App">
         <Header/>
         <Switch>
-          <Route exact path="/valves" component={SchemeAndChart}/>
-          <Route exact path="/tdu" component={TduRoot}/>
           <Route exact path="/" component={Home} />
-        </Switch>
+          <Route exact path="/tdu" component={TduRoot}/>
+          <Route exact path="/valves" component={SchemeAndChart}/>
+          <Route exact path="/converter" component={Converter}/>
+          </Switch>
       </div>
     </Router>
   );

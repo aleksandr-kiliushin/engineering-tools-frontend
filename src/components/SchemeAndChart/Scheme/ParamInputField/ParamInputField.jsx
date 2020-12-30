@@ -25,10 +25,10 @@ const ParamInputField = (props) => {
       <foreignObject x={x} y={y} width={width} height={25}>
         <TextField
           disabled={props.disabled}
-          inputProps={{style: {height: 25, padding: 0, fontSize: 14,},}}                                                       // styles the input component
+          inputProps={{style: {height: 25, padding: 0, fontSize: 14, textAlign: 'center',},}}
           onChange={onChangeHandler}
           placeholder={props.placeholder}
-          style={{height: 25,}}                                                                                                // styles the wrapper
+          style={{height: 25,}}
           value={props.value}
         />
       </foreignObject>

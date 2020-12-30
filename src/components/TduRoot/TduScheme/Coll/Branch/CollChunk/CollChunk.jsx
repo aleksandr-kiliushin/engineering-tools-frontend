@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawCollChunkAndBrassInsert } from '../../../../../../common/drawFuncs';
+import { drawCollChunkAndBrassInsert } from '../../../../../../utils/drawFuncs';
 
 const CollChunk = (props) => {
 

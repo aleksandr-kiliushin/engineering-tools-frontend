@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import s from './Partner.module.css';
-import { drawPartner } from '../../../../../../common/drawFuncs';
+import { drawPartner } from '../../../../../../utils/drawFuncs';
 
 const Partner = (props) => {
 

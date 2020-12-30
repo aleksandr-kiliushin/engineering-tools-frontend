@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { drawControlBtn } from '../../../../common/drawFuncs';
+import { drawControlBtn } from '../../../../utils/drawFuncs';
 import s from './TduControl.module.css';
 
 const TduControl = (props) => {
