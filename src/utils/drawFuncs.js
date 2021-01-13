@@ -166,6 +166,7 @@ export const drawTailVent = (ctx, airVent, isDrainageBranch) => {
         ctx.fillRect(19, offset+7, 8, 8);
         break;
       }
+      default: return;
     }
 
     ctx.fillStyle = colors.mildBlack; // appendix for airVent

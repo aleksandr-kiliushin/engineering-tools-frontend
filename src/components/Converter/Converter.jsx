@@ -1,9 +1,10 @@
 import React from 'react';
 import {Card, CardContent, TextField, Typography} from '@material-ui/core';
+import {fromBar, scales, toBar,} from './../../utils/calcFunctions';
 
 function ParamInputField(props) {
   const onChangeHandler = (e) => {
-    props.onChangeHandler(props.id, e.target.value);
+    props.onChangeHandler(e.target.value, props.scale);
   }
   return (
     <div>
@@ -17,38 +18,31 @@ export default class Converter extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      pFields: {bar: '', mpa: '', mh2o: '',},
-    };
+    this.state = {bar: 5,};
   }
 
-  onChangeHandler = (id, value) => {
-    let bar;
-
-    if (id === 'bar') {bar = +value}
-    else if (id === 'mpa') {bar = +value * 10}
-    else if (id === 'mh2o') {bar = +value * 0.0980665}
-
-    this.setState({
-      ...this.state,
-      pFields: {
-        bar: bar,
-        mpa: bar / 10,
-        mh2o: bar / 0.0980665,
-      },
-    });
+  onChangeHandler = (value, scale) => {
+    const bar = toBar(value, scale);
+    this.setState((prevState) => ({
+      bar,
+    }));
   }
 
   render() {
+    const bar = this.state.bar;
+    const mpa = fromBar(bar, scales.p.mpa);
+    const mh2o = fromBar(bar, scales.p.mh2o);
+    const kgcm2 = fromBar(bar, scales.p.kgcm2);
     return (
       <Card style={{width: 250,}}>
         <CardContent>
 
           <Typography color="textSecondary">Pressure</Typography>
 
-          <ParamInputField id="bar" label="bar" onChangeHandler={this.onChangeHandler} value={this.state.pFields.bar} />
-          <ParamInputField id="mpa" label="MPa" onChangeHandler={this.onChangeHandler} value={this.state.pFields.mpa} />
-          <ParamInputField id="mh2o" label="mH2O" onChangeHandler={this.onChangeHandler} value={this.state.pFields.mh2o} />
+          <ParamInputField label="bar" onChangeHandler={this.onChangeHandler} scale={scales.p.bar} value={bar} />
+          <ParamInputField label="MPa" onChangeHandler={this.onChangeHandler} scale={scales.p.mpa} value={mpa} />
+          <ParamInputField label="mH2O" onChangeHandler={this.onChangeHandler} scale={scales.p.mh2o} value={mh2o} />
+          <ParamInputField label="kg/cm2" onChangeHandler={this.onChangeHandler} scale={scales.p.kgcm2} value={kgcm2} />
 
         </CardContent>
       </Card>

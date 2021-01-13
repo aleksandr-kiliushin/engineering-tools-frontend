@@ -9,9 +9,8 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Toolbar
 } from '@material-ui/core';
-import {GetApp as GetAppIcon, Menu as MenuIcon} from '@material-ui/icons';
+import {GetApp as GetAppIcon,} from '@material-ui/icons';
 
 
 const Chart = (props) => {
