@@ -1,31 +1,24 @@
 import React from 'react';
 import {Card, CardContent, TextField, Typography} from '@material-ui/core';
-import {fromBar, scales, toBar,} from './../../utils/calcFunctions';
-
-function ParamInputField(props) {
-  const onChangeHandler = (e) => {
-    props.onChangeHandler(e.target.value, props.scale);
-  }
-  return (
-    <div>
-      <TextField label={props.label} onChange={onChangeHandler} style={{width: 100,}} value={props.value} />
-    </div>
-  );
-}
+import {fromBar, scales, toBar,} from '../../utils/calcFunctions';
 
 
 export default class Converter extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {bar: 5, scale: scales.p.bar, isDot: false,};
+    this.state = {
+      valueInBar: 5,
+      scale: scales.p.bar,
+      isDot: false,
+    };
   }
 
   onChangeHandler = (value, scale) => {
     const bar = toBar(value, scale);
     const dotCount = (value.match(/\./g) || []).length;
 
-    if (isNaN(value) || dotCount > 1) {
+    if (isNaN(+value) || dotCount > 1) {
       return;
     }
 
@@ -35,17 +28,18 @@ export default class Converter extends React.Component {
     }
 
     this.setState((prevState) => ({
-      bar, scale, isDot,
+      valueInBar: bar, scale, isDot,
     }));
   }
 
   render() {
-    let bar = this.state.bar;
+    let valueInBar = this.state.valueInBar;
     const scale = this.state.scale;
 
-    let mpa = fromBar(bar, scales.p.mpa);
-    let mh2o = fromBar(bar, scales.p.mh2o);
-    let kgcm2 = fromBar(bar, scales.p.kgcm2);
+    let bar = valueInBar.toString();
+    let mpa = fromBar(valueInBar, scales.p.mpa);
+    let mh2o = fromBar(valueInBar, scales.p.mh2o);
+    let kgcm2 = fromBar(valueInBar, scales.p.kgcm2);
 
     if (this.state.isDot) {
       if (scale === scales.p.bar) {bar += '.';}
@@ -69,4 +63,17 @@ export default class Converter extends React.Component {
       </Card>
     );
   }
+}
+
+
+
+function ParamInputField(props) {
+  const onChangeHandler = (e) => {
+    props.onChangeHandler(e.target.value, props.scale);
+  }
+  return (
+    <div>
+      <TextField label={props.label} onChange={onChangeHandler} style={{width: 100,}} value={props.value} />
+    </div>
+  );
 }

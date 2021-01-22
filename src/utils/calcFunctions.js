@@ -20,7 +20,7 @@ export const fromBar = (input, scale) => {
       return 0;
     }
   }
-  return +output.toFixed(2);
+  return output.toFixed(2);
 }
 
 export const toBar = (input, scale) => {
