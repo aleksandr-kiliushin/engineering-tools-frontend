@@ -18,23 +18,44 @@ export default class Converter extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {bar: 5,};
+    this.state = {bar: 5, scale: scales.p.bar, isDot: false,};
   }
 
   onChangeHandler = (value, scale) => {
     const bar = toBar(value, scale);
+    const dotCount = (value.match(/\./g) || []).length;
+
+    if (isNaN(value) || dotCount > 1) {
+      return;
+    }
+
+    let isDot = false;
+    if (value.endsWith('.') && dotCount === 1) {
+      isDot = true;
+    }
+
     this.setState((prevState) => ({
-      bar,
+      bar, scale, isDot,
     }));
   }
 
   render() {
-    const bar = this.state.bar;
-    const mpa = fromBar(bar, scales.p.mpa);
-    const mh2o = fromBar(bar, scales.p.mh2o);
-    const kgcm2 = fromBar(bar, scales.p.kgcm2);
+    let bar = this.state.bar;
+    const scale = this.state.scale;
+
+    let mpa = fromBar(bar, scales.p.mpa);
+    let mh2o = fromBar(bar, scales.p.mh2o);
+    let kgcm2 = fromBar(bar, scales.p.kgcm2);
+
+    if (this.state.isDot) {
+      if (scale === scales.p.bar) {bar += '.';}
+      else if (scale === scales.p.mpa) {mpa += '.';}
+      else if (scale === scales.p.mh2o) {mh2o += '.';}
+      else if (scale === scales.p.kgcm2) {kgcm2 += '.';}
+    }
+
     return (
-      <Card style={{width: 250,}}>
+      <Card style={{width: 150,}}>
         <CardContent>
 
           <Typography color="textSecondary">Pressure</Typography>

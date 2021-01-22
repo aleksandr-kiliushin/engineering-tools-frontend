@@ -33,7 +33,7 @@ export default function Header() {
           </List>
           <Divider/>
           <List>
-            <ListItem button component={Link} to="/contact">Contact Me</ListItem>
+            <ListItem button component={Link} to="/contact">Contact me</ListItem>
           </List>
         </div>
       </Drawer>
