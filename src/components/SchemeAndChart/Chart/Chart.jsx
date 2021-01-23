@@ -29,6 +29,7 @@ const Chart = (props) => {
 
   const changeHoveredTarget = props.changeHoveredTarget
 
+  const pulseTubePrice = 45.46;
 
   const rows = [
     {
@@ -38,7 +39,7 @@ const Chart = (props) => {
       dpMax: downstream1.valve.dpMax,
       isMounted: downstream1.isMounted,
       position: 'Downstream 1',
-      price: downstream1.valve.price + downstream1.controlUnit.price,
+      price: downstream1.valve.price + downstream1.controlUnit.price + pulseTubePrice,
       v: downstream1.valve.v,
       valveModel: `${downstream1.valve.type} ${downstream1.valve.dn}/${downstream1.valve.kvs}`,
     },
@@ -49,7 +50,7 @@ const Chart = (props) => {
       dpMax: downstream2.valve.dpMax,
       isMounted: downstream2.isMounted,
       position: 'Downstream 2',
-      price: downstream2.valve.price + downstream2.controlUnit.price,
+      price: downstream2.valve.price + downstream2.controlUnit.price + pulseTubePrice,
       v: downstream2.valve.v,
       valveModel: `${downstream2.valve.type} ${downstream2.valve.dn}/${downstream2.valve.kvs}`,
     },
@@ -60,7 +61,7 @@ const Chart = (props) => {
       dpMax: supDpr.valve.dpMax,
       isMounted: supDpr.isMounted,
       position: 'Supply DPR',
-      price: supDpr.valve.price + supDpr.controlUnit.price,
+      price: supDpr.valve.price + supDpr.controlUnit.price + pulseTubePrice * 2,
       v: supDpr.valve.v,
       valveModel: `${supDpr.valve.type} ${supDpr.valve.dn}/${supDpr.valve.kvs}`,
     },
@@ -95,7 +96,7 @@ const Chart = (props) => {
       dpMax: retDpr.valve.dpMax,
       isMounted: retDpr.isMounted,
       position: 'Return DPR',
-      price: retDpr.valve.price + retDpr.controlUnit.price,
+      price: retDpr.valve.price + retDpr.controlUnit.price + pulseTubePrice * 2,
       v: retDpr.valve.v,
       valveModel: `${retDpr.valve.type} ${retDpr.valve.dn}/${retDpr.valve.kvs}`,
     },
@@ -106,7 +107,7 @@ const Chart = (props) => {
       dpMax: upstream1.valve.dpMax,
       isMounted: upstream1.isMounted,
       position: 'Upstream 1',
-      price: upstream1.valve.price + upstream1.controlUnit.price,
+      price: upstream1.valve.price + upstream1.controlUnit.price + pulseTubePrice,
       v: upstream1.valve.v,
       valveModel: `${upstream1.valve.type} ${upstream1.valve.dn}/${upstream1.valve.kvs}`,
     },
@@ -117,7 +118,7 @@ const Chart = (props) => {
       dpMax: upstream2.valve.dpMax,
       isMounted: upstream2.isMounted,
       position: 'Upstream 2',
-      price: upstream2.valve.price + upstream2.controlUnit.price,
+      price: upstream2.valve.price + upstream2.controlUnit.price + pulseTubePrice,
       v: upstream2.valve.v,
       valveModel: `${upstream2.valve.type} ${upstream2.valve.dn}/${upstream2.valve.kvs}`,
     },
@@ -128,14 +129,14 @@ const Chart = (props) => {
   const rowsAreMountedJsx = rowsAreMounted.map((row) => (
     <TableRow key={row.position} selected={row.alias === hoveredTarget}
               onMouseEnter={() => {changeHoveredTarget(row.alias)}} onMouseOut={() => {changeHoveredTarget(null)}}>
-      <TableCell scope='row'>{row.position}</TableCell>
-      <TableCell align='right'>{row.valveModel}</TableCell>
-      <TableCell align='right'>{row.controlUnitModel}</TableCell>
-      <TableCell align='right'>{row.dp.toFixed(2)}</TableCell>
-      <TableCell align='right'>{row.dpMax.toFixed(2)}</TableCell>
-      <TableCell align='right'>{row.v.toFixed(2)}</TableCell>
-      <TableCell align='right'>{row.authority}</TableCell>
-      <TableCell align='right'>{row.price.toFixed(2)}</TableCell>
+      <TableCell scope="row">{row.position}</TableCell>
+      <TableCell align="right">{row.valveModel}</TableCell>
+      <TableCell align="right">{row.controlUnitModel}</TableCell>
+      <TableCell align="right">{row.dp.toFixed(2)}</TableCell>
+      <TableCell align="right">{row.dpMax.toFixed(2)}</TableCell>
+      <TableCell align="right">{row.v.toFixed(2)}</TableCell>
+      <TableCell align="right">{row.authority}</TableCell>
+      <TableCell align="right">{row.price.toFixed(2)}</TableCell>
     </TableRow>
   ))
 
@@ -150,10 +151,10 @@ const Chart = (props) => {
       <TableCell/>
       <TableCell/>
       <TableCell/>
-      <TableCell align='right'>
+      <TableCell align="right">
         <Button startIcon={<GetAppIcon />} size="small">Total:</Button>
       </TableCell>
-      <TableCell align='right'>{total.toFixed(2)}</TableCell>
+      <TableCell align="right">{total.toFixed(2)}</TableCell>
     </TableRow>
   );
 
@@ -176,13 +177,13 @@ const Chart = (props) => {
           <TableHead>
             <TableRow>
               <TableCell/>
-              <TableCell align='right'>Valve</TableCell>
-              <TableCell align='right'>Control Unit</TableCell>
-              <TableCell align='right'>ΔP, bar</TableCell>
-              <TableCell align='right'>ΔPmax, bar</TableCell>
-              <TableCell align='right'>V, m/s</TableCell>
-              <TableCell align='right'>Authority</TableCell>
-              <TableCell align='right'>Price</TableCell>
+              <TableCell align="right">Valve</TableCell>
+              <TableCell align="right">Control Unit</TableCell>
+              <TableCell align="right">ΔP, bar</TableCell>
+              <TableCell align="right">ΔPmax, bar</TableCell>
+              <TableCell align="right">V, m/s</TableCell>
+              <TableCell align="right">Authority</TableCell>
+              <TableCell align="right">Price</TableCell>
             </TableRow>
           </TableHead>
 
