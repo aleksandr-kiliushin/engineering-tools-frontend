@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import s from './RetInputFilter.module.css';
 import { drawFilter } from '../../../../../../utils/drawFuncs';
 
@@ -6,9 +6,9 @@ const RetInputFilter = (props) => {
   
   const canvasRef = useRef(null);
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawFilter(ctx, props.bvAndFilterDn);
-  }
+  }, [props.bvAndFilterDn,]);
   
   useEffect(() => {
     const canvas = canvasRef.current;

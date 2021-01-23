@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import { drawHeatMeter } from "../../../../../../utils/drawFuncs";
 import s from './RetInputHeatMeter.module.css';
 
 const RetInputHeatMeter = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawHeatMeter(ctx, props.heatMetersType);
-  }
+  }, [props.heatMetersType,]);
 
   const canvasRef = useRef(null);
   useEffect(() => {

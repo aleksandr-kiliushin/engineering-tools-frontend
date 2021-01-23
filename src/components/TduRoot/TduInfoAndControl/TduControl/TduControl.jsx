@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef } from 'react';
 import { drawControlBtn } from '../../../../utils/drawFuncs';
 import s from './TduControl.module.css';
 
@@ -13,15 +13,39 @@ const TduControl = (props) => {
   const canvasSwitchIsPartnerBtnRef = useRef(null);
   const canvasSwitchSideBtnRef = useRef(null);
 
-  const drawAddBranchBtn = (ctx) => {drawControlBtn(ctx, 'addBranch');}
-  const drawRemoveBranchBtn = (ctx) => {drawControlBtn(ctx, 'removeBranch');}
-  const drawSwitchHeatMetersLocBtn = (ctx) => {drawControlBtn(ctx, 'switchHeatMetersLoc');}
-  const drawSwitchIsAddInputFilterBtn = (ctx) => {drawControlBtn(ctx, 'switchIsAddInputFilter');}
-  const drawSwitchIsBoxBtn = (ctx) => {drawControlBtn(ctx, 'switchIsBox');}
-  const drawSwitchIsDrainageBranchBtn = (ctx) => {drawControlBtn(ctx, 'switchIsDrainageBranch');}
-  const drawSwitchIsPartnerBtn = (ctx) => {drawControlBtn(ctx, 'switchIsPartner');}
-  const drawSwitchSideBtn = (ctx) => {drawControlBtn(ctx, 'switchSide');}
+  const drawAddBranchBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'addBranch');
+  }, []);
+  const drawRemoveBranchBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'removeBranch');
+  }, []);
+  const drawSwitchHeatMetersLocBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'switchHeatMetersLoc');
+  }, []);
+  const drawSwitchIsAddInputFilterBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'switchIsAddInputFilter');
+  }, []);
+  const drawSwitchIsBoxBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'switchIsBox');
+  }, []);
+  const drawSwitchIsDrainageBranchBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'switchIsDrainageBranch');
+  }, []);
+  const drawSwitchIsPartnerBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'switchIsPartner');
+  }, []);
+  const drawSwitchSideBtn = useCallback((ctx) => {
+    drawControlBtn(ctx, 'switchSide');
+  }, []);
 
+  // const drawAddBranchBtn = (ctx) => {drawControlBtn(ctx, 'addBranch');}
+  // const drawRemoveBranchBtn = (ctx) => {drawControlBtn(ctx, 'removeBranch');}
+  // const drawSwitchHeatMetersLocBtn = (ctx) => {drawControlBtn(ctx, 'switchHeatMetersLoc');}
+  // const drawSwitchIsAddInputFilterBtn = (ctx) => {drawControlBtn(ctx, 'switchIsAddInputFilter');}
+  // const drawSwitchIsBoxBtn = (ctx) => {drawControlBtn(ctx, 'switchIsBox');}
+  // const drawSwitchIsDrainageBranchBtn = (ctx) => {drawControlBtn(ctx, 'switchIsDrainageBranch');}
+  // const drawSwitchIsPartnerBtn = (ctx) => {drawControlBtn(ctx, 'switchIsPartner');}
+  // const drawSwitchSideBtn = (ctx) => {drawControlBtn(ctx, 'switchSide');}
 
   useEffect(() => {
 

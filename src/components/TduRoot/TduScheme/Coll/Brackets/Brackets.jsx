@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import { drawBrackets } from '../../../../../utils/drawFuncs';
 
 const Brackets = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawBrackets(ctx, props.isBrackets, props.isTail);
-  }
+  }, [props.isBrackets, props.isTail,]);
 
   const canvasRef = useRef(null);
   useEffect(() => {
@@ -15,7 +15,7 @@ const Brackets = (props) => {
   }, [draw,]);
 
   const onswitchIsBrackets = () => {
-    // props.switchIsBrackets();
+    // props.switchIsBrackets(); // Comment if you don't want to consumers know this option.
   }
 
   return(

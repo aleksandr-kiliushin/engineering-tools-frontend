@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import { drawApt } from '../../../../../../utils/drawFuncs';
 import s from './RetApt.module.css';
 
 const RetApt = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawApt(ctx, props.aptTypeDn);
-  }
+  }, [props.aptTypeDn,]);
 
   const canvasRef = useRef(null);
   useEffect(() => {

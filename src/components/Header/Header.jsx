@@ -13,11 +13,7 @@ export default function Header() {
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Button
-            onClick={toggleDrawer(true)}
-            color="inherit"
-            startIcon={<MenuIcon />}
-          >
+          <Button onClick={toggleDrawer(true)} color="inherit" startIcon={<MenuIcon />}>
             Menu
           </Button>
         </Toolbar>
@@ -26,10 +22,10 @@ export default function Header() {
       <Drawer anchor="left" open={state['drawer']} onClose={toggleDrawer(false)}>
         <div style={{width: 250,}} onClick={toggleDrawer(false)}>
           <List>
-            <ListItem button component={Link} to="/">Home</ListItem>
-            <ListItem button component={Link} to="/tdu">TDU</ListItem>
-            <ListItem button component={Link} to="/valves">Valves</ListItem>
-            <ListItem button component={Link} to="/converter">Converter</ListItem>
+            <ListItem button={true} component={Link} to="/">Home</ListItem>
+            <ListItem button={true} component={Link} to="/valves">Valves</ListItem>
+            <ListItem button={true} component={Link} to="/tdu">TDU</ListItem>
+            <ListItem button={true} component={Link} to="/converter">Converter</ListItem>
           </List>
           <Divider/>
           <List>

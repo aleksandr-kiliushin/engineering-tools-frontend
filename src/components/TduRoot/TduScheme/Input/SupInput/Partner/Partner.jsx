@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import s from './Partner.module.css';
 import { drawPartner } from '../../../../../../utils/drawFuncs';
 
 const Partner = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawPartner(ctx, props.partnerTypeDn);
-  }
+  }, [props.partnerTypeDn,]);
 
   const canvasRef = useRef(null);
   useEffect(() => {

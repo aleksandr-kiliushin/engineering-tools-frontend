@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import { drawCollChunkAndBrassInsert } from '../../../../../../utils/drawFuncs';
 
 const CollChunk = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawCollChunkAndBrassInsert(ctx);
-  }
+  }, []);
   
   const canvasRef = useRef(null);
   useEffect(() => {

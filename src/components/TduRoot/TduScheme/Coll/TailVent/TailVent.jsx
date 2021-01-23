@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import { drawTailVent } from '../../../../../utils/drawFuncs';
 
 const TailVent = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawTailVent(ctx, props.airVent, props.isDrainageBranch);
-  }
+  }, [props.airVent, props.isDrainageBranch,]);
 
   const canvasRef = useRef(null);
   useEffect(() => {

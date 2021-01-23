@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import { drawBranchBalans } from '../../../../../../../utils/drawFuncs';
 
 const RetBranchBalans = (props) => {
 
-  const draw = (ctx) => {
+  const draw = useCallback((ctx) => {
     drawBranchBalans(ctx, props.branchBalansTypeDn);
-  }
+  }, [props.branchBalansTypeDn,]);
 
   const canvasRef = useRef(null);
   useEffect(() => {
