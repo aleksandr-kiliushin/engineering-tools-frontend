@@ -1,3 +1,4 @@
+/*
 export const cvValves = [
   {dn: 15,  kvs: 0.25, price: 353.43,   type: 'VFM2', z: 0.5, },
   {dn: 15,  kvs: 0.4,  price: 353.43,   type: 'VFM2', z: 0.5, },
@@ -19,6 +20,7 @@ export const cvValves = [
   {dn: 200, kvs: 630,  price: 10621.73, type: 'VFM2', z: 0.25,},
   {dn: 250, kvs: 900,  price: 14086.47, type: 'VFM2', z: 0.21,},
 ];
+*/
 export const drives = [
   {model: 'ARV152 230/pulse',    price: 564.01,},
   {model: 'ARV152 24/pulse',     price: 564.01,},
@@ -76,64 +78,6 @@ const CHANGE_HOVERED_TARGET = 'CHANGE_HOVERED_TARGET';
 const SWITCH_MODEL = 'SWITCH_MODEL';
 
 const initialState = {
-  equip: {
-    downstream1: {
-      controlUnit: {...downstreamBlocks[0], id: 0,},
-      isMounted: false,
-      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    downstream2: {
-      controlUnit: {...downstreamBlocks[0], id: 0,},
-      isMounted: false,
-      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    supDpr: {
-      controlUnit: {...dprBlocks[0], id: 0,},
-      isMounted: true,
-      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    supCv: {
-      controlUnit: {...drives[0], id: 0,},
-      isMounted: true,
-      valve: {...cvValves[0], authority: 'authority', dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    retCv: {
-      controlUnit: {...drives[0], id: 0,},
-      isMounted: false,
-      valve: {...cvValves[0], authority: 'authority', dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    retDpr: {
-      controlUnit: {...dprBlocks[0], id: 0,},
-      isMounted: false,
-      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    upstream1: {
-      controlUnit: {...upstreamBlocks[0], id: 0,},
-      isMounted: false,
-      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-    upstream2: {
-      controlUnit: {...upstreamBlocks[0], id: 0,},
-      isMounted: false,
-      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
-    },
-  },
-  generalParams: {
-    g: 10,
-    hexDp: 0.15,
-    t1: 150,
-    t2: 70,
-    p1: 8,
-    p2: 8,
-    p3: 8,
-    p4: 0,
-    p5: 0,
-    p6: 0,
-    p7: 0,
-    p8: 6,
-    p9: 6,
-    p10: 6,
-  },
   ALIASES: {
     UNITS: {
       downstream1: {
@@ -189,6 +133,97 @@ const initialState = {
       p9: 'p9',
       p10: 'p10',
     },
+  },
+  dataArrays: {
+    cvValves: [
+      {dn: 15,  kvs: 0.25, price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 15,  kvs: 0.4,  price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 15,  kvs: 0.63, price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 15,  kvs: 1,    price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 15,  kvs: 1.6,  price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 15,  kvs: 2.5,  price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 15,  kvs: 4,    price: 353.43,   type: 'VFM2', z: 0.5, },
+      {dn: 20,  kvs: 6.3,  price: 383.61,   type: 'VFM2', z: 0.5, },
+      {dn: 25,  kvs: 10,   price: 387.30,   type: 'VFM2', z: 0.5, },
+      {dn: 32,  kvs: 16,   price: 442.21,   type: 'VFM2', z: 0.5, },
+      {dn: 40,  kvs: 25,   price: 544.00,   type: 'VFM2', z: 0.5, },
+      {dn: 50,  kvs: 40,   price: 665.10,   type: 'VFM2', z: 0.5, },
+      {dn: 65,  kvs: 63,   price: 1159.05,  type: 'VFM2', z: 0.45,},
+      {dn: 80,  kvs: 100,  price: 1383.25,  type: 'VFM2', z: 0.4, },
+      {dn: 100, kvs: 160,  price: 2167.15,  type: 'VFM2', z: 0.35,},
+      {dn: 125, kvs: 250,  price: 2388.16,  type: 'VFM2', z: 0.35,},
+      {dn: 150, kvs: 400,  price: 2478.23,  type: 'VFM2', z: 0.35,},
+      {dn: 200, kvs: 630,  price: 10621.73, type: 'VFM2', z: 0.25,},
+      {dn: 250, kvs: 900,  price: 14086.47, type: 'VFM2', z: 0.21,},
+    ],
+  },
+  equip: {
+    downstream1: {
+      controlUnit: {...downstreamBlocks[0], id: 0,},
+      isMounted: false,
+      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
+    },
+    downstream2: {
+      controlUnit: {...downstreamBlocks[0], id: 0,},
+      isMounted: false,
+      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
+    },
+    supDpr: {
+      controlUnit: {...dprBlocks[0], id: 0,},
+      isMounted: true,
+      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
+    },
+    // supCv: {
+    //   controlUnit: {...drives[0], id: 0,},
+    //   isMounted: true,
+    //   valve: {...this[0], authority: 'authority', dp: 0, dpMax: 0, id: 0, v: 0,},
+    // },
+    supCv: {
+      controlUnit: {...drives[0], id: 0,},
+      isMounted: true,
+      valve: {authority: null, dp: null, dpMax: null, id: null, v: null,},
+    },
+    // retCv: {
+    //   controlUnit: {...drives[0], id: 0,},
+    //   isMounted: false,
+    //   valve: {...cvValves[0], authority: 'authority', dp: 0, dpMax: 0, id: 0, v: 0,},
+    // },
+    retCv: {
+      controlUnit: {...drives[0], id: 0,},
+      isMounted: false,
+      valve: {authority: null, dp: null, dpMax: null, id: null, v: null,},
+    },
+    retDpr: {
+      controlUnit: {...dprBlocks[0], id: 0,},
+      isMounted: false,
+      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
+    },
+    upstream1: {
+      controlUnit: {...upstreamBlocks[0], id: 0,},
+      isMounted: false,
+      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
+    },
+    upstream2: {
+      controlUnit: {...upstreamBlocks[0], id: 0,},
+      isMounted: false,
+      valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
+    },
+  },
+  generalParams: {
+    g: 10,
+    hexDp: 0.15,
+    t1: 150,
+    t2: 70,
+    p1: 8,
+    p2: 8,
+    p3: 8,
+    p4: 0,
+    p5: 0,
+    p6: 0,
+    p7: 0,
+    p8: 6,
+    p9: 6,
+    p10: 6,
   },
   hoveredTarget: 'upstream1',
 }
@@ -346,7 +381,8 @@ const schemeAndChartReducer = (state = initialState, action) => {
               supCv: {
                 ...state.equip.supCv,
                 isMounted: true,
-                valve: getNewUnitState(state.equip.supCv.valve.id, cvValves, action.direction),
+                // valve: getNewUnitState(state.equip.supCv.valve.id, cvValves, action.direction),
+                valve: getNewUnitState(state.equip.supCv.valve.id, state.dataArrays.cvValves, action.direction),
               },
               retCv: {
                 ...state.equip.retCv,
@@ -383,7 +419,8 @@ const schemeAndChartReducer = (state = initialState, action) => {
               retCv: {
                 ...state.equip.retCv,
                 isMounted: true,
-                valve: getNewUnitState(state.equip.retCv.valve.id, cvValves, action.direction),
+                // valve: getNewUnitState(state.equip.retCv.valve.id, cvValves, action.direction),
+                valve: getNewUnitState(state.equip.retCv.valve.id, state.dataArrays.cvValves, action.direction),
               },
               supCv: {
                 ...state.equip.supCv,
