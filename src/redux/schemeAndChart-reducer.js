@@ -21,6 +21,7 @@ export const cvValves = [
   {dn: 250, kvs: 900,  price: 14086.47, type: 'VFM2', z: 0.21,},
 ];
 */
+
 export const drives = [
   {model: 'ARV152 230/pulse',    price: 564.01,},
   {model: 'ARV152 24/pulse',     price: 564.01,},
@@ -136,76 +137,65 @@ const initialState = {
   },
   dataArrays: {
     cvValves: [
-      {dn: 15,  kvs: 0.25, price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 15,  kvs: 0.4,  price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 15,  kvs: 0.63, price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 15,  kvs: 1,    price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 15,  kvs: 1.6,  price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 15,  kvs: 2.5,  price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 15,  kvs: 4,    price: 353.43,   type: 'VFM2', z: 0.5, },
-      {dn: 20,  kvs: 6.3,  price: 383.61,   type: 'VFM2', z: 0.5, },
-      {dn: 25,  kvs: 10,   price: 387.30,   type: 'VFM2', z: 0.5, },
-      {dn: 32,  kvs: 16,   price: 442.21,   type: 'VFM2', z: 0.5, },
-      {dn: 40,  kvs: 25,   price: 544.00,   type: 'VFM2', z: 0.5, },
-      {dn: 50,  kvs: 40,   price: 665.10,   type: 'VFM2', z: 0.5, },
-      {dn: 65,  kvs: 63,   price: 1159.05,  type: 'VFM2', z: 0.45,},
-      {dn: 80,  kvs: 100,  price: 1383.25,  type: 'VFM2', z: 0.4, },
-      {dn: 100, kvs: 160,  price: 2167.15,  type: 'VFM2', z: 0.35,},
-      {dn: 125, kvs: 250,  price: 2388.16,  type: 'VFM2', z: 0.35,},
-      {dn: 150, kvs: 400,  price: 2478.23,  type: 'VFM2', z: 0.35,},
-      {dn: 200, kvs: 630,  price: 10621.73, type: 'VFM2', z: 0.25,},
-      {dn: 250, kvs: 900,  price: 14086.47, type: 'VFM2', z: 0.21,},
+      // API returns a variant with valve_type.
+      {id: 1, code: '065B3050', dn: 15, kvs: 0.25, price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 2, code: '065B3051', dn: 15, kvs: 0.4,  price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 3, code: '065B3052', dn: 15, kvs: 0.63, price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 4, code: '065B3053', dn: 15, kvs: 1,    price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 5, code: '065B3054', dn: 15, kvs: 1.6,  price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 6, code: '065B3055', dn: 15, kvs: 2.5,  price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 7, code: '065B3056', dn: 15, kvs: 4,    price: 353.43, type: 'VFM2', z: 0.5, },
+      {id: 8, code: '065B3057', dn: 20, kvs: 6.3,  price: 383.61, type: 'VFM2', z: 0.5, },
+      {id: 9, code: '065B3058', dn: 25, kvs: 10,   price: 387.30, type: 'VFM2', z: 0.5, },
     ],
   },
   equip: {
     downstream1: {
       controlUnit: {...downstreamBlocks[0], id: 0,},
       isMounted: false,
+      position: 'Downstream 1',
       valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
     },
     downstream2: {
       controlUnit: {...downstreamBlocks[0], id: 0,},
       isMounted: false,
+      position: 'Downstream 2',
       valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
     },
     supDpr: {
       controlUnit: {...dprBlocks[0], id: 0,},
       isMounted: true,
+      position: 'Supply DPR',
       valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
     },
-    // supCv: {
-    //   controlUnit: {...drives[0], id: 0,},
-    //   isMounted: true,
-    //   valve: {...this[0], authority: 'authority', dp: 0, dpMax: 0, id: 0, v: 0,},
-    // },
     supCv: {
       controlUnit: {...drives[0], id: 0,},
       isMounted: true,
-      valve: {authority: null, dp: null, dpMax: null, id: null, v: null,},
+      position: 'Supply CV',
+      valve: {authority: 0, dp: 0, dpMax: 0, id: 0, v: 0,},
     },
-    // retCv: {
-    //   controlUnit: {...drives[0], id: 0,},
-    //   isMounted: false,
-    //   valve: {...cvValves[0], authority: 'authority', dp: 0, dpMax: 0, id: 0, v: 0,},
-    // },
     retCv: {
       controlUnit: {...drives[0], id: 0,},
       isMounted: false,
-      valve: {authority: null, dp: null, dpMax: null, id: null, v: null,},
+      position: 'Return CV',
+      valve: {authority: 0, dp: 0, dpMax: 0, id: 0, v: 0,},
     },
     retDpr: {
       controlUnit: {...dprBlocks[0], id: 0,},
       isMounted: false,
+      position: 'Return DPR',
       valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
     },
     upstream1: {
       controlUnit: {...upstreamBlocks[0], id: 0,},
       isMounted: false,
+      position: 'Upstream 1',
       valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
     },
     upstream2: {
       controlUnit: {...upstreamBlocks[0], id: 0,},
       isMounted: false,
+      position: 'Upstream 2',
       valve: {...pressureRegulatorValves[0], dp: 0, dpMax: 0, id: 0, v: 0,},
     },
   },
@@ -225,7 +215,7 @@ const initialState = {
     p9: 6,
     p10: 6,
   },
-  hoveredTarget: 'upstream1',
+  hoveredTarget: null,
 }
 
 const schemeAndChartReducer = (state = initialState, action) => {
@@ -260,20 +250,14 @@ const schemeAndChartReducer = (state = initialState, action) => {
 
     case SWITCH_MODEL: {
       const getNewUnitState = (currentId, dataArr, switchDirection) => {
-        // Calculate new id // ==========================
+        // Calculate new id // ===========
         let newId;
         if (switchDirection === 'up') {
-          if (currentId !== dataArr.length - 1) {
-            newId =  currentId + 1;
-          } else {
-            newId = 0;
-          }
+          if (currentId !== dataArr.length - 1) {newId =  currentId + 1;}
+          else {newId = 0;}
         } else {
-          if (currentId !== 0) {
-            newId = currentId - 1;
-          } else {
-            newId = dataArr.length - 1;
-          }
+          if (currentId !== 0) {newId = currentId - 1;}
+          else {newId = dataArr.length - 1;}
         }
         // Return new unit state as result.
         return ({
@@ -544,7 +528,7 @@ const schemeAndChartReducer = (state = initialState, action) => {
       }
     }
     break;
-    
+
     default:
       return state;
   }
@@ -634,7 +618,7 @@ const schemeAndChartReducer = (state = initialState, action) => {
         valve: {...st.equip.downstream1.valve, dp: downstream1Dp, dpMax: downstream1DpMax, v: downstream1V,},
       },
       downstream2: {
-        ...st.equip.downstream1,
+        ...st.equip.downstream2,
         isMounted: downstream2Dp,
         valve: {...st.equip.downstream2.valve, dp: downstream2Dp, dpMax: downstream2DpMax, v: downstream2V,},
       },
@@ -676,7 +660,7 @@ const schemeAndChartReducer = (state = initialState, action) => {
 
 }
 
-
+// ToDo: add 'AC' at the end of function names.
 export const changeGeneralParam = (field, value) => ({type: CHANGE_GENERAL_PARAM, field, value,});
 export const changeHoveredTarget = (target) => ({type: CHANGE_HOVERED_TARGET, target,});
 export const switchModel = (object, direction) => ({type: SWITCH_MODEL, object, direction,});

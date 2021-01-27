@@ -23,7 +23,6 @@ export default function Contacts() {
 */
 
 
-
 export default class Contacts extends React.Component {
   constructor(props) {
     super(props);
