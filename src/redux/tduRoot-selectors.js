@@ -1,5 +1,5 @@
-import { aptTypeDnArr, branchBalansTypeDnArr, bvAndFilterDnArr, designationToCodeMap, heatMetersTypeArr,
-partnerTypeDnArr } from "../utils/tduModelStorage";
+import {aptTypeDnArr, branchBalansTypeDnArr, bvAndFilterDnArr, designationToCodeMap, heatMetersTypeArr,
+partnerTypeDnArr,} from "../utils/tduModelStorage";
 
 export const getAptTypeDnSelector = (state) => {
   return aptTypeDnArr[state.tduRoot.aptTypeDnId];

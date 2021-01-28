@@ -164,20 +164,20 @@ const initialState = {
     },
   },
   generalParams: {
-    g:     {alias: 'g',      value: 10,  },
-    hexDp: {alias: 'hexDp',  value: 0.15,},
-    t1:    {alias: 't1',     value: 150, },
-    t2:    {alias: 't2',     value: 70,  },
-    p1:    {alias: 'p1',     value: 8,   },
-    p2:    {alias: 'p2',     value: 8,   },
-    p3:    {alias: 'p3',     value: 8,   },
-    p4:    {                 value: 0,   },
-    p5:    {                 value: 0,   },
-    p6:    {                 value: 0,   },
-    p7:    {                 value: 0,   },
-    p8:    {alias: 'p8',     value: 6,   },
-    p9:    {alias: 'p9',     value: 6,   },
-    p10:   {alias: 'p10',    value: 6,   },
+    g:     {alias: 'g',     value: 10,  },
+    hexDp: {alias: 'hexDp', value: 0.15,},
+    p1:    {alias: 'p1',    value: 8,   },
+    p2:    {alias: 'p2',    value: 8,   },
+    p3:    {alias: 'p3',    value: 8,   },
+    p4:    {alias: 'p4',    value: 0,   },
+    p5:    {alias: 'p5',    value: 0,   },
+    p6:    {alias: 'p6',    value: 0,   },
+    p7:    {alias: 'p7',    value: 0,   },
+    p8:    {alias: 'p8',    value: 6,   },
+    p9:    {alias: 'p9',    value: 6,   },
+    p10:   {alias: 'p10',   value: 6,   },
+    t1:    {alias: 't1',    value: 150, },
+    t2:    {alias: 't2',    value: 70,  },
   },
   hoveredTarget: null,
   pulseTubePrice: 45.46,
@@ -556,12 +556,12 @@ const schemeAndChartReducer = (state = initialState, action) => {
 
   const downstream1DpMax = st.equip.downstream1.valve.z * (p1 - pSatSup);
   const downstream2DpMax = st.equip.downstream2.valve.z * (p2 - pSatSup);
-  const supDprDpMax      = st.equip.supDpr.valve.z *      (p3 - pSatSup);
-  const supCvDpMax       = st.equip.supCv.valve.z *       (p4 - pSatSup);
-  const retCvDpMax       = st.equip.retCv.valve.z *       (p6 - pSatRet);
-  const retDprDpMax      = st.equip.retDpr.valve.z *      (p7 - pSatRet);
-  const upstream1DpMax   = st.equip.upstream1.valve.z *   (p8 - pSatRet);
-  const upstream2DpMax   = st.equip.upstream2.valve.z *   (p9 - pSatRet);
+  const supDprDpMax      = st.equip.supDpr.valve.z      * (p3 - pSatSup);
+  const supCvDpMax       = st.equip.supCv.valve.z       * (p4 - pSatSup);
+  const retCvDpMax       = st.equip.retCv.valve.z       * (p6 - pSatRet);
+  const retDprDpMax      = st.equip.retDpr.valve.z      * (p7 - pSatRet);
+  const upstream1DpMax   = st.equip.upstream1.valve.z   * (p8 - pSatRet);
+  const upstream2DpMax   = st.equip.upstream2.valve.z   * (p9 - pSatRet);
 
   const downstream1V = g * (18.8 / st.equip.downstream1.valve.dn) ** 2;
   const downstream2V = g * (18.8 / st.equip.downstream2.valve.dn) ** 2;
@@ -627,8 +627,7 @@ const schemeAndChartReducer = (state = initialState, action) => {
 
 }
 
-// ToDo: add 'AC' at the end of function names.
-export const changeGeneralParamAC  = (field, value) =>      ({type: CHANGE_GENERAL_PARAM,  field, value,     });
+export const changeGeneralParamAC  = (field, value) =>      ({type: CHANGE_GENERAL_PARAM,  field,  value,    });
 export const changeHoveredTargetAC = (target) =>            ({type: CHANGE_HOVERED_TARGET, target,           });
 export const switchModelAC         = (object, direction) => ({type: SWITCH_MODEL,          object, direction,});
 

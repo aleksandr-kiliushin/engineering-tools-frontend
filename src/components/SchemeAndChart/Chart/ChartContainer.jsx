@@ -2,42 +2,39 @@ import React from 'react';
 import {connect,} from 'react-redux';
 import Chart from "./Chart";
 import {changeHoveredTargetAC,} from "../../../redux/schemeAndChart-reducer";
+import {getUnitsListSelector,} from "../../../redux/schemeAndChart-selectors";
 
 class ChartContainer extends React.Component {
+
   render() {
     const pulseTubePrice = this.props.pulseTubePrice;
+    const unitsList      = this.props.unitsList;
 
-    const equip = this.props.equip;
-    const rowsFromState = [
-      equip.downstream1,
-      equip.downstream2,
-      equip.supDpr,
-      equip.supCv,
-      equip.retCv,
-      equip.retDpr,
-      equip.upstream1,
-      equip.upstream2,
-    ];
+    const unitRows = unitsList.map((unit) => {
+      const position = unit.aliases.position;
 
-    const rows = rowsFromState.map((row, i) => {
       let additionalPulseTubePrice = 0;
-      if ([0, 1, 6, 7,].includes(i)) {additionalPulseTubePrice += pulseTubePrice;}
-      if ([2, 5,].includes(i))       {additionalPulseTubePrice += pulseTubePrice * 2;}
+      if (['Downstream 1', 'Downstream 2', 'Upstream 1', 'Upstream 2',].includes(position)) {
+        additionalPulseTubePrice += pulseTubePrice;
+      }
+      else if (['Supply DPR', 'Return DPR',].includes(position)) {
+        additionalPulseTubePrice += pulseTubePrice * 2;
+      }
 
       return {
-        authority        : ([3, 4,].includes(i)) ? rowsFromState[i].valve.authority : null,
-        controlUnitModel : rowsFromState[i].controlUnit.model,
-        dp               : rowsFromState[i].valve.dp.toFixed(2),
-        dpMax            : rowsFromState[i].valve.dpMax.toFixed(2),
-        isMounted        : rowsFromState[i].isMounted,
-        position         : rowsFromState[i].aliases.position,
-        price            : +((rowsFromState[i].valve.price + rowsFromState[i].controlUnit.price + additionalPulseTubePrice).toFixed(2)),
-        v                : rowsFromState[i].valve.v.toFixed(2),
-        valveModel       : `${rowsFromState[i].valve.type} ${rowsFromState[i].valve.dn}/${rowsFromState[i].valve.kvs}`,
+        authority        : (['Supply CV', 'Return CV',].includes(position)) ? unit.valve.authority : null,
+        controlUnitModel : unit.controlUnit.model,
+        dp               : unit.valve.dp.toFixed(2),
+        dpMax            : unit.valve.dpMax.toFixed(2),
+        isMounted        : unit.isMounted,
+        position         : unit.aliases.position,
+        price            : +((unit.valve.price + unit.controlUnit.price + additionalPulseTubePrice).toFixed(2)),
+        v                : unit.valve.v.toFixed(2),
+        valveModel       : `${unit.valve.type} ${unit.valve.dn}/${unit.valve.kvs}`,
       }
     });
 
-    const mountedRows = rows.filter((row) => row.isMounted);
+    const mountedRows = unitRows.filter((row) => row.isMounted);
 
     let totalPrice = 0;
     for (let row of mountedRows) {totalPrice += row.price;}
@@ -45,12 +42,12 @@ class ChartContainer extends React.Component {
 
     return(
       <Chart
-        hoveredTarget={this.props.hoveredTarget}
-        mountedRows={mountedRows}
-        totalPrice={totalPrice}
+        hoveredTarget = {this.props.hoveredTarget}
+        mountedRows   = {mountedRows}
+        totalPrice    = {totalPrice}
 
-        hover={(row) => {this.props.changeHoveredTargetAC(row.position)}}
-        unhover={() => {this.props.changeHoveredTargetAC(null)}}
+        hover         = {(row) => {this.props.changeHoveredTargetAC(row.position)}}
+        unhover       = {() => {this.props.changeHoveredTargetAC(null)}}
       />
     );
   }
@@ -59,9 +56,9 @@ class ChartContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    equip: state.schemeAndChart.equip,
-    hoveredTarget: state.schemeAndChart.hoveredTarget,
-    pulseTubePrice: state.schemeAndChart.pulseTubePrice,
+    hoveredTarget  : state.schemeAndChart.hoveredTarget,
+    pulseTubePrice : state.schemeAndChart.pulseTubePrice,
+    unitsList      : getUnitsListSelector(state),
   }
 }
 

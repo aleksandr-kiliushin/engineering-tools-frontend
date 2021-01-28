@@ -8,10 +8,10 @@ export default function Chart (props) {
 
   const mountedRows = props.mountedRows.map((row) => (
     <TableRow
-      key={row.position}
-      selected={row.position === props.hoveredTarget}
-      onMouseEnter={() => props.hover(row)}
-      onMouseOut={() => props.unhover()}
+      key          = {row.position}
+      selected     = {row.position === props.hoveredTarget}
+      onMouseEnter = {() => props.hover(row)}
+      onMouseOut   = {() => props.unhover()}
     >
       <TableCell>              {row.position}        </TableCell>
       <TableCell align="right">{row.valveModel}      </TableCell>
@@ -32,7 +32,9 @@ export default function Chart (props) {
       <TableCell/>
       <TableCell/>
       <TableCell/>
-      <TableCell align="right"><Button startIcon={<GetAppIcon />}>Total:</Button></TableCell>
+      <TableCell align="right">
+        <Button startIcon={<GetAppIcon />}>Total:</Button>
+      </TableCell>
       <TableCell align="right">{props.totalPrice}</TableCell>
     </TableRow>
   );
