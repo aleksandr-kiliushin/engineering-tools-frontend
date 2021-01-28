@@ -7,14 +7,12 @@ const ParamInputField = (props) => {
 
   const x = props.x;
   let y;
-  if (props.positionToGetY === 'sup') {y = 55;}
+  if      (props.positionToGetY === 'sup') {y = 55 ;}
   else if (props.positionToGetY === 'ret') {y = 250;}
   else if (props.positionToGetY === 'mid') {y = 180;}
 
-  const width = (props.isWide) ? 70 : 50;
-
   const onChangeHandler = (e) => {
-    props.changeGeneralParam(props.field, e.target.value);
+    props.changeGeneralParamAC(props.alias, e.target.value);
   }
 
   return (
@@ -22,14 +20,13 @@ const ParamInputField = (props) => {
 
       {props.positionToGetY !== 'mid' && <line className={s.paramInputFieldStem} x1={x+25} y1={y+25} x2={x+25} y2={y+40}/>} {/* Check if stem is needed */}
 
-      <foreignObject x={x} y={y} width={width} height={25}>
+      <foreignObject x={x} y={y} width="50" height="50">
         <TextField
-          disabled={props.disabled}
-          inputProps={{style: {height: 25, padding: 0, fontSize: 14, textAlign: 'center',},}}
-          onChange={onChangeHandler}
-          placeholder={props.placeholder}
-          style={{height: 25,}}
-          value={props.value}
+          disabled   = {props.disabled}
+          inputProps = {{style: {height: 25, padding: 0, fontSize: 14, textAlign: 'center',},}}
+          onChange   = {onChangeHandler}
+          style      = {{height: 25,}}
+          value      = {props.value}
         />
       </foreignObject>
 

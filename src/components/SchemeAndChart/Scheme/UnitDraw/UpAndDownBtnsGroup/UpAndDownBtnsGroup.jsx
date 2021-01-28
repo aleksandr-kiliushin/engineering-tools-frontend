@@ -1,15 +1,15 @@
 import {ButtonGroup} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@material-ui/icons";
+import {KeyboardArrowDown, KeyboardArrowUp,} from "@material-ui/icons";
 import React from "react";
 
 const UpAndDownBtnsGroup = (props) => {
 
   const onUpClick = () => {
-    props.switchModel(props.objectToSwitch, 'up');
+    props.switchModelAC(props.objectToSwitch, 'up');
   }
   const onDownClick = () => {
-    props.switchModel(props.objectToSwitch, 'down');
+    props.switchModelAC(props.objectToSwitch, 'down');
   }
 
   return(

@@ -9,7 +9,7 @@ export default function Chart (props) {
   const mountedRows = props.mountedRows.map((row) => (
     <TableRow
       key={row.position}
-      selected={row.alias === props.hoveredTarget}
+      selected={row.position === props.hoveredTarget}
       onMouseEnter={() => props.hover(row)}
       onMouseOut={() => props.unhover()}
     >
