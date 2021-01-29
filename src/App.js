@@ -15,11 +15,11 @@ function App() {
       <div className="App">
         <Header/>
         <Switch>
-          <Route exact={true} path="/" component={Home} />
-          <Route exact={true} path="/valves" component={SchemeAndChart}/>
-          <Route exact={true} path="/tdu" component={TduRoot}/>
-          <Route exact={true} path="/converter" component={Converter}/>
-          <Route exact={true} path="/contacts" component={Contacts}/>
+          <Route exact={true} path="/"          component={Home}          />
+          <Route exact={true} path="/valves"    component={SchemeAndChart}/>
+          <Route exact={true} path="/tdu"       component={TduRoot}       />
+          <Route exact={true} path="/converter" component={Converter}     />
+          <Route exact={true} path="/contacts"  component={Contacts}      />
         </Switch>
       </div>
     </Router>

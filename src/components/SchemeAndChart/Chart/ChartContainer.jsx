@@ -6,6 +6,8 @@ import {getUnitsListSelector,} from "../../../redux/schemeAndChart-selectors";
 
 class ChartContainer extends React.Component {
 
+  // ToDo: object to array using Object.values(). Move it to Container component and delete selector file.
+
   render() {
     const pulseTubePrice = this.props.pulseTubePrice;
     const unitsList      = this.props.unitsList;

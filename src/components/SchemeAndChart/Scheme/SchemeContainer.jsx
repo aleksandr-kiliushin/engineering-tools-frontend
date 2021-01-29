@@ -5,6 +5,9 @@ import {changeGeneralParamAC, changeHoveredTargetAC, switchModelAC,} from "../..
 import {getGeneralParamsListSelector, getUnitsListSelector,} from "../../../redux/schemeAndChart-selectors";
 
 class SchemeContainer extends React.Component {
+
+  // ToDo: object to array using Object.values(). Move it to Container component and delete selector file.
+
   render() {
     return(
       <Scheme
@@ -27,6 +30,8 @@ const mapStateToProps = (state) => {
     unitsList         : getUnitsListSelector(state),
   }
 }
+
+// const mapDispatchToProps =
 
 export default connect(
   mapStateToProps,

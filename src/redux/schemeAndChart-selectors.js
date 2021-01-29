@@ -1,5 +1,6 @@
 export const getUnitsListSelector = (state) => {
 	const equip = state.schemeAndChart.equip;
+	// ToDo: object to array using Object.values(). Move it to Container component and delete selector file.
 	return [
 	  equip.downstream1,
 		equip.downstream2,
