@@ -1,7 +1,7 @@
 import './App.css';
 import React from "react";
 import {BrowserRouter as Router, Route, Switch,} from "react-router-dom";
-import SchemeAndChart from "./components/SchemeAndChart/SchemeAndChart";
+import SchemeAndChartContainer from "./components/SchemeAndChart/SchemeAndChartContainer";
 import TduRoot from "./components/TduRoot/TduRoot";
 import Header from "./components/Header/Header";
 import Home from "./components/Home/Home";
@@ -16,7 +16,7 @@ function App() {
         <Header/>
         <Switch>
           <Route exact={true} path="/"          component={Home}             />
-          <Route exact={true} path="/valves"    component={SchemeAndChart}   />
+          <Route exact={true} path="/valves"    component={SchemeAndChartContainer}   />
           <Route exact={true} path="/tdu"       component={TduRoot}          />
           <Route exact={true} path="/converter" component={Converter}        />
           <Route exact={true} path="/contacts"  component={ContactsContainer}/>

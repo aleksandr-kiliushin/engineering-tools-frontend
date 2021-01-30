@@ -10,79 +10,6 @@ const initialCvValveState    = {...initialPrValveState, authority: 0,};
 
 const initialState = {
   dataArrays: null,
-    // {
-    // cv_valves: [
-      // {id: 1,  code: '065B3050', dn: 15,  kvs: 0.25, price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 2,  code: '065B3051', dn: 15,  kvs: 0.4,  price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 3,  code: '065B3052', dn: 15,  kvs: 0.63, price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 4,  code: '065B3053', dn: 15,  kvs: 1,    price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 5,  code: '065B3054', dn: 15,  kvs: 1.6,  price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 6,  code: '065B3055', dn: 15,  kvs: 2.5,  price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 7,  code: '065B3056', dn: 15,  kvs: 4,    price: 353.43,   type_title: 'VFM2', z: 0.5, },
-      // {id: 8,  code: '065B3057', dn: 20,  kvs: 6.3,  price: 383.61,   type_title: 'VFM2', z: 0.5, },
-      // {id: 9,  code: '065B3058', dn: 25,  kvs: 10,   price: 387.30,   type_title: 'VFM2', z: 0.5, },
-      // {id: 10, code: '065B3059', dn: 32,  kvs: 16,   price: 442.21,   type_title: 'VFM2', z: 0.5, },
-      // {id: 11, code: '065B3060', dn: 40,  kvs: 25,   price: 544.00,   type_title: 'VFM2', z: 0.5, },
-      // {id: 12, code: '065B3061', dn: 50,  kvs: 40,   price: 665.10,   type_title: 'VFM2', z: 0.5, },
-      // {id: 13, code: '065B3500', dn: 65,  kvs: 63,   price: 1159.05,  type_title: 'VFM2', z: 0.45,},
-      // {id: 14, code: '065B3501', dn: 80,  kvs: 100,  price: 1383.25,  type_title: 'VFM2', z: 0.4, },
-      // {id: 15, code: '065B3502', dn: 100, kvs: 160,  price: 2167.15,  type_title: 'VFM2', z: 0.35,},
-      // {id: 16, code: '065B3503', dn: 125, kvs: 250,  price: 2388.16,  type_title: 'VFM2', z: 0.35,},
-      // {id: 17, code: '065B3504', dn: 150, kvs: 400,  price: 2478.23,  type_title: 'VFM2', z: 0.35,},
-      // {id: 18, code: '065B3505', dn: 200, kvs: 630,  price: 10621.73, type_title: 'VFM2', z: 0.25,},
-      // {id: 19, code: '065B3506', dn: 250, kvs: 900,  price: 14086.47, type_title: 'VFM2', z: 0.21,},
-    // ],
-    // downstream_blocks: [
-    //   {id: 1, code: '003G1006', model: 'AFD 0.05..0.35', price: 1317.15},
-    //   {id: 2, code: '003G1004', model: 'AFD 0.1..0.7',   price: 719.20 },
-    //   {id: 3, code: '003G1005', model: 'AFD 0.15..1.5',  price: 719.20 },
-    //   {id: 4, code: '003G1003', model: 'AFD 0.5..3',     price: 655.30 },
-    //   {id: 5, code: '003G1002', model: 'AFD 1..6',       price: 655.30 },
-    //   {id: 6, code: '003G1001', model: 'AFD 3..12',      price: 655.30 },
-    //   {id: 7, code: '003G1000', model: 'AFD 8..16',      price: 996.06 },
-    // ],
-    // dpr_blocks: [
-    //   {id: 1, code: '003G1018', model: 'AFP 0.05..0.35', price: 1518.66,},
-    //   {id: 2, code: '003G1017', model: 'AFP 0.1..0.7',   price: 1012.42,},
-    //   {id: 3, code: '003G1016', model: 'AFP 0.15..1.5',  price: 1012.42,},
-    //   {id: 4, code: '003G1015', model: 'AFP-09 0.5..3',  price: 1012.42,},
-    //   {id: 5, code: '003G1014', model: 'AFP-09 1..6',    price: 1012.42,},
-    // ],
-    // cv_actuators: [
-    //   {id: 1, code: '082G6007', model: 'ARV152 230/pulse',    price: 564.01,},
-    //   {id: 2, code: '082G6008', model: 'ARV152 24/pulse',     price: 564.01,},
-    //   {id: 3, code: '082G6015', model: 'ARE152 24/an',        price: 638.39,},
-    //   {id: 4, code: '082G6011', model: 'ARV153 230/pulse',    price: 719.67,},
-    //   {id: 5, code: '082G6012', model: 'ARV153 24/pulse',     price: 719.67,},
-    //   {id: 6, code: '082G6017', model: 'ARE153 24/an',        price: 815.61,},
-    //   {id: 7, code: '082G3443', model: 'AME655 230/pulse/an', price: 1324.60,},
-    //   {id: 8, code: '082G3442', model: 'AME655 24/pulse/an',  price: 1324.60,},
-    // ],
-    // pr_valves: [
-    //   {id: 1,  code: '065B2388',  dn: 15,  kvs: 4,   price: 733.44,   type_title: 'VFG2',  z: 0.6, },
-    //   {id: 2,  code: '065B2389',  dn: 20,  kvs: 6.3, price: 801.61,   type_title: 'VFG2',  z: 0.6, },
-    //   {id: 3,  code: '065B2390',  dn: 25,  kvs: 8,   price: 842.14,   type_title: 'VFG2',  z: 0.6, },
-    //   {id: 4,  code: '065B2391',  dn: 32,  kvs: 16,  price: 963.86,   type_title: 'VFG2',  z: 0.55,},
-    //   {id: 5,  code: '065B2392',  dn: 40,  kvs: 20,  price: 1090.42,  type_title: 'VFG2',  z: 0.55,},
-    //   {id: 6,  code: '065B2393',  dn: 50,  kvs: 32,  price: 1298.10,  type_title: 'VFG2',  z: 0.5, },
-    //   {id: 7,  code: '065B2394',  dn: 65,  kvs: 50,  price: 1844.94,  type_title: 'VFG2',  z: 0.5, },
-    //   {id: 8,  code: '065B2395',  dn: 80,  kvs: 80,  price: 1935.81,  type_title: 'VFG2',  z: 0.45,},
-    //   {id: 9,  code: '065B2396',  dn: 100, kvs: 125, price: 2865.55,  type_title: 'VFG2',  z: 0.4, },
-    //   {id: 10, code: '065B2397',  dn: 125, kvs: 160, price: 4632.63,  type_title: 'VFG2',  z: 0.35,},
-    //   {id: 11, code: '065B2398',  dn: 150, kvs: 280, price: 8273.80,  type_title: 'VFG2',  z: 0.3, },
-    //   {id: 12, code: '065B2399',  dn: 200, kvs: 320, price: 13782.63, type_title: 'VFG2',  z: 0.2, },
-    //   {id: 13, code: '065B2400',  dn: 250, kvs: 400, price: 18009.61, type_title: 'VFG2',  z: 0.2, },
-    // ],
-    // upstream_blocks: [
-    //   {id: 1, code: '003G1013', model: 'AFA 0.05..0.35', price: 1620.23},
-    //   {id: 2, code: '003G1012', model: 'AFA 0.1..0.6',   price: 1200.84},
-    //   {id: 3, code: '003G1011', model: 'AFA 0.15..1.2',  price: 1200.84},
-    //   {id: 4, code: '003G1010', model: 'AFA 0.5..2.5',   price: 1058.31},
-    //   {id: 5, code: '003G1009', model: 'AFA 1..5',       price: 1058.31},
-    //   {id: 6, code: '003G1008', model: 'AFA 3..11',      price: 1058.31},
-    //   {id: 7, code: '003G1007', model: 'AFA 10..16',     price: 1367.91},
-    // ],
-  // },
   equip: {
     downstream1: {
       aliases: {
@@ -182,6 +109,7 @@ const initialState = {
     t2:    {alias: 't2',    value: 70,  },
   },
   hoveredTarget: null,
+  isFetching: true,
 }
 
 const schemeAndChartReducer = (state = initialState, action) => {
@@ -639,8 +567,7 @@ const schemeAndChartReducer = (state = initialState, action) => {
 export const changeGeneralParamAC  = (field, value)      => ({type: CHANGE_GENERAL_PARAM,  field,       value,    });
 export const changeHoveredTargetAC = (target)            => ({type: CHANGE_HOVERED_TARGET, target,                });
 export const switchModelAC         = (object, direction) => ({type: SWITCH_MODEL,          object,      direction,});
-
-export const setCvValvesAC         = (equipsDbData)      => ({type: SET_EQUIPS_DB_DATA,    equipsDbData,          });
+export const setEquipsDbData       = (equipsDbData)      => ({type: SET_EQUIPS_DB_DATA,    equipsDbData,          });
 
 
 export default schemeAndChartReducer;

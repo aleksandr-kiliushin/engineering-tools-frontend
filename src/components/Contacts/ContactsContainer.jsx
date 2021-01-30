@@ -1,7 +1,7 @@
 // import React from 'react';
 import Contacts from "./Contacts";
 import {connect} from "react-redux";
-import {setCvValvesAC} from "../../redux/schemeAndChart-reducer";
+import {setEquipsDbData} from "../../redux/schemeAndChart-reducer";
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setCvValves: (cvValves) => {
-      dispatch(setCvValvesAC(cvValves));
+      dispatch(setEquipsDbData(cvValves));
     },
   };
 }

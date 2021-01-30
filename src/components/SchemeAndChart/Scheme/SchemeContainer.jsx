@@ -4,12 +4,12 @@ import {connect,} from 'react-redux';
 import {
   changeGeneralParamAC,
   changeHoveredTargetAC,
-  setCvValvesAC,
   switchModelAC,
 } from "../../../redux/schemeAndChart-reducer";
 
 
 class SchemeContainer extends React.Component {
+
   render() {
     const generalParamsList = Object.values(this.props.generalParams);
     const unitsList = Object.values(this.props.equip);
@@ -23,8 +23,6 @@ class SchemeContainer extends React.Component {
         changeGeneralParamAC  = {this.props.changeGeneralParamAC}
         changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
         switchModelAC         = {this.props.switchModelAC}
-
-        setCvValvesAC         = {this.props.setCvValvesAC}
       />
     );
   }
@@ -44,7 +42,6 @@ export default connect(
   {
     changeGeneralParamAC,
     changeHoveredTargetAC,
-    setCvValvesAC,
     switchModelAC,
   }
 )(SchemeContainer);
