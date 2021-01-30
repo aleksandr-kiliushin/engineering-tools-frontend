@@ -1,23 +1,30 @@
 import React from 'react';
 import Scheme from './Scheme';
 import {connect,} from 'react-redux';
-import {changeGeneralParamAC, changeHoveredTargetAC, switchModelAC,} from "../../../redux/schemeAndChart-reducer";
-import {getGeneralParamsListSelector, getUnitsListSelector,} from "../../../redux/schemeAndChart-selectors";
+import {
+  changeGeneralParamAC,
+  changeHoveredTargetAC,
+  setCvValvesAC,
+  switchModelAC,
+} from "../../../redux/schemeAndChart-reducer";
+
 
 class SchemeContainer extends React.Component {
-
-  // ToDo: object to array using Object.values(). Move it to Container component and delete selector file.
-
   render() {
+    const generalParamsList = Object.values(this.props.generalParams);
+    const unitsList = Object.values(this.props.equip);
     return(
       <Scheme
-        generalParamsList     = {this.props.generalParamsList}
+        dataArrays            = {this.props.dataArrays}
+        generalParamsList     = {generalParamsList}
         hoveredTarget         = {this.props.hoveredTarget}
-        unitsList             = {this.props.unitsList}
+        unitsList             = {unitsList}
 
         changeGeneralParamAC  = {this.props.changeGeneralParamAC}
         changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
         switchModelAC         = {this.props.switchModelAC}
+
+        setCvValvesAC         = {this.props.setCvValvesAC}
       />
     );
   }
@@ -25,19 +32,19 @@ class SchemeContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    generalParamsList : getGeneralParamsListSelector(state),
-    hoveredTarget     : state.schemeAndChart.hoveredTarget,
-    unitsList         : getUnitsListSelector(state),
+    dataArrays    : state.schemeAndChart.dataArrays,
+    generalParams : state.schemeAndChart.generalParams,
+    hoveredTarget : state.schemeAndChart.hoveredTarget,
+    equip         : state.schemeAndChart.equip,
   }
 }
-
-// const mapDispatchToProps =
 
 export default connect(
   mapStateToProps,
   {
     changeGeneralParamAC,
     changeHoveredTargetAC,
+    setCvValvesAC,
     switchModelAC,
   }
 )(SchemeContainer);

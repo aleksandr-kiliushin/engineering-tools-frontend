@@ -2,15 +2,12 @@ import React from 'react';
 import {connect,} from 'react-redux';
 import Chart from "./Chart";
 import {changeHoveredTargetAC,} from "../../../redux/schemeAndChart-reducer";
-import {getUnitsListSelector,} from "../../../redux/schemeAndChart-selectors";
 
 class ChartContainer extends React.Component {
-
-  // ToDo: object to array using Object.values(). Move it to Container component and delete selector file.
-
   render() {
     const pulseTubePrice = this.props.pulseTubePrice;
-    const unitsList      = this.props.unitsList;
+
+    const unitsList = Object.values(this.props.equip);
 
     const unitRows = unitsList.map((unit) => {
       const position = unit.aliases.position;
@@ -23,16 +20,23 @@ class ChartContainer extends React.Component {
         additionalPulseTubePrice += pulseTubePrice * 2;
       }
 
+      let controlUnitModel;
+      if (['Downstream 1', 'Downstream 2', 'Supply DPR', 'Return DPR', 'Upstream 1', 'Upstream 2',].includes(position)) {
+        controlUnitModel = `${unit.controlUnit.type_title} ${unit.controlUnit.setting_range}`;
+      } else if (['Supply CV', 'Return CV',].includes(position)) {
+        controlUnitModel = `${unit.controlUnit.type_title}/${unit.controlUnit.voltage}/${unit.controlUnit.control_signal}`;
+      }
+
       return {
         authority        : (['Supply CV', 'Return CV',].includes(position)) ? unit.valve.authority : null,
-        controlUnitModel : unit.controlUnit.model,
+        controlUnitModel : controlUnitModel,
         dp               : unit.valve.dp.toFixed(2),
         dpMax            : unit.valve.dpMax.toFixed(2),
         isMounted        : unit.isMounted,
         position         : unit.aliases.position,
         price            : +((unit.valve.price + unit.controlUnit.price + additionalPulseTubePrice).toFixed(2)),
         v                : unit.valve.v.toFixed(2),
-        valveModel       : `${unit.valve.type} ${unit.valve.dn}/${unit.valve.kvs}`,
+        valveModel       : `${unit.valve.type_title} ${unit.valve.dn}/${unit.valve.kvs}`,
       }
     });
 
@@ -59,8 +63,8 @@ class ChartContainer extends React.Component {
 const mapStateToProps = (state) => {
   return {
     hoveredTarget  : state.schemeAndChart.hoveredTarget,
-    pulseTubePrice : state.schemeAndChart.pulseTubePrice,
-    unitsList      : getUnitsListSelector(state),
+    pulseTubePrice : state.schemeAndChart.dataArrays && state.schemeAndChart.dataArrays.pulse_tubes[0].price,
+    equip          : state.schemeAndChart.equip,
   }
 }
 

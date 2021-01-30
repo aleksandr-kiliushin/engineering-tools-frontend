@@ -1,12 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InstrumentCard from './InstrumentCard/InstrumentCard';
-
+import tduPhoto from '../../assets/img/tdu-for-home-page.png';
+import valvesPhoto from '../../assets/img/valves-for-home-page.png';
 
 const useStyles = makeStyles({
   cards: {
     display: 'flex',
-    flexDireсtion: 'row',
+    flexDirection: 'row',
     justifyContent: 'flex-start',
   },
 });
@@ -18,13 +19,13 @@ export default function Home() {
     <div className={classes.cards}>
       <InstrumentCard
         description="Select optimal valves for individual heating point."
-        imgSrc="https://i.ibb.co/L5vLVnm/valves-for-home-page.png"
+        imgSrc={valvesPhoto}
         linkTo={"/valves"}
         title="Valves calculator"
       />
       <InstrumentCard
         description="Select your TDU configuration."
-        imgSrc="https://i.ibb.co/BC0gg7B/tdu-for-home-page.png"
+        imgSrc={tduPhoto}
         linkTo={"/tdu"}
         title="TDU configurator"
       />

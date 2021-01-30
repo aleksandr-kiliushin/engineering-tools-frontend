@@ -18,14 +18,12 @@ const useStyles = makeStyles({
 });
 
 
-
 type MediaCardPropsType = {
   description: string
   imgSrc: string
   linkTo: string
   title: string
 };
-
 
 
 export default function InstrumentCard(props: MediaCardPropsType) {
