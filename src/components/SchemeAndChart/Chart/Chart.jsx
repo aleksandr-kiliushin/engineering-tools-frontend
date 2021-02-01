@@ -33,7 +33,7 @@ export default function Chart (props) {
       <TableCell/>
       <TableCell/>
       <TableCell align="right">
-        <Button startIcon={<GetAppIcon />}>Total:</Button>
+        <Button startIcon={<GetAppIcon />} onClick={props.downloadCp}>Total:</Button>
       </TableCell>
       <TableCell align="right">{props.totalPrice}</TableCell>
     </TableRow>

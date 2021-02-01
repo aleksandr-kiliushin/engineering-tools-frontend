@@ -2,7 +2,10 @@ const CHANGE_GENERAL_PARAM  = 'CHANGE_GENERAL_PARAM';
 const CHANGE_HOVERED_TARGET = 'CHANGE_HOVERED_TARGET';
 const SET_EQUIPS_DB_DATA    = 'SET_EQUIPS_DB_DATA';
 const SWITCH_MODEL          = 'SWITCH_MODEL';
+const SET_IS_FETCHING       = 'SET_IS_FETCHING';
 
+
+// ToDo: Delete these objects and leave just {id: 0,}.
 const initialPrValveState    = {code: '', dn: 0, dp: 0, dpMax: 0, id: 0, kvs: 0, price: 0, type: '', v: 0, z: 0,};
 const initialCvValveState    = {...initialPrValveState, authority: 0,};
 
@@ -109,7 +112,7 @@ const initialState = {
     t2:    {alias: 't2',    value: 70,  },
   },
   hoveredTarget: null,
-  isFetching: true,
+  isFetching: false,
 }
 
 const schemeAndChartReducer = (state = initialState, action) => {
@@ -140,6 +143,22 @@ const schemeAndChartReducer = (state = initialState, action) => {
       st = {
         ...state,
         hoveredTarget: action.target,
+      };
+      break;
+    }
+
+    case SET_EQUIPS_DB_DATA: {
+      st = {
+        ...state,
+        dataArrays: action.equipsDbData,
+      };
+      break;
+    }
+
+    case SET_IS_FETCHING: {
+      st = {
+        ...state,
+        isFetching: action.isFetching,
       };
       break;
     }
@@ -423,14 +442,6 @@ const schemeAndChartReducer = (state = initialState, action) => {
     }
     break;
 
-    case SET_EQUIPS_DB_DATA: {
-      st = {
-        ...state,
-        dataArrays: action.equipsDbData,
-      };
-      break;
-    }
-
     default:
       return state;
   }
@@ -566,8 +577,9 @@ const schemeAndChartReducer = (state = initialState, action) => {
 
 export const changeGeneralParamAC  = (field, value)      => ({type: CHANGE_GENERAL_PARAM,  field,       value,    });
 export const changeHoveredTargetAC = (target)            => ({type: CHANGE_HOVERED_TARGET, target,                });
+export const setEquipsDbDataAC     = (equipsDbData)      => ({type: SET_EQUIPS_DB_DATA,    equipsDbData,          });
+export const setIsFetchingAC       = (isFetching)        => ({type: SET_IS_FETCHING,       isFetching,            });
 export const switchModelAC         = (object, direction) => ({type: SWITCH_MODEL,          object,      direction,});
-export const setEquipsDbData       = (equipsDbData)      => ({type: SET_EQUIPS_DB_DATA,    equipsDbData,          });
 
 
 export default schemeAndChartReducer;

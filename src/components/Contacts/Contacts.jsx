@@ -1,21 +1,18 @@
 import React from 'react';
-import * as axios from 'axios';
+// import * as axios from "axios";
+// import {saveAs,} from 'file-saver';
 
-export default function Contacts(props) {
 
-  if (props.cvValves.length === 0) {
-    axios.get('http://localhost:8000/valves/').then((response) => {
-      props.setCvValves(response.data);
-    });
+export default class Contacts extends React.Component {
+
+
+
+  render() {
+    return (
+      <div>
+        hehe
+        {/*<button onClick={() => this.download()}>download</button>*/}
+      </div>
+    );
   }
-
-  return (
-    <div>
-      {
-        props.cvValves.map((valve) => (
-          <div key={valve.id}>{valve.kvs}</div>
-        ))
-      }
-    </div>
-  );
 }

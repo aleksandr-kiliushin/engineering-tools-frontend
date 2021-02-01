@@ -6,7 +6,7 @@ import TduRoot from "./components/TduRoot/TduRoot";
 import Header from "./components/Header/Header";
 import Home from "./components/Home/Home";
 import Converter from "./components/Converter/Converter";
-import ContactsContainer from "./components/Contacts/ContactsContainer";
+import Contacts from "./components/Contacts/Contacts";
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
           <Route exact={true} path="/valves"    component={SchemeAndChartContainer}   />
           <Route exact={true} path="/tdu"       component={TduRoot}          />
           <Route exact={true} path="/converter" component={Converter}        />
-          <Route exact={true} path="/contacts"  component={ContactsContainer}/>
+          <Route exact={true} path="/contacts"  component={Contacts}/>
         </Switch>
       </div>
     </Router>

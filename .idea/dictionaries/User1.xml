@@ -5,8 +5,12 @@
       <w>btns</w>
       <w>dprs</w>
       <w>kgcm</w>
+      <w>officedocument</w>
+      <w>openxmlformats</w>
       <w>pmax</w>
+      <w>spreadsheetml</w>
       <w>unhover</w>
+      <w>xlsx</w>
     </words>
   </dictionary>
 </component>
