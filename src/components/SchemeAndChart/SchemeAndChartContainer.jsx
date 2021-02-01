@@ -46,12 +46,12 @@ class SchemeAndChartContainer extends React.Component {
       return {
         authority        : (['Supply CV', 'Return CV',].includes(position)) ? unit.valve.authority : null,
         controlUnitModel : unit.controlUnit.full_title,
-        dp               : unit.valve.dp.toFixed(2),
-        dpMax            : unit.valve.dpMax.toFixed(2),
+        dp               : unit.valve.dp?.toFixed(2),
+        dpMax            : unit.valve.dpMax?.toFixed(2),
         isMounted        : unit.isMounted,
         position         : unit.aliases.position,
         price            : +((unit.valve.price + unit.controlUnit.price + additionalPulseTubePrice).toFixed(2)),
-        v                : unit.valve.v.toFixed(2),
+        v                : unit.valve.v?.toFixed(2),
         valveModel       : `${unit.valve.type_title} ${unit.valve.dn}/${unit.valve.kvs}`,
       }
     });

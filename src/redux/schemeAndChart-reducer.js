@@ -4,113 +4,40 @@ const SET_EQUIPS_DB_DATA    = 'SET_EQUIPS_DB_DATA';
 const SWITCH_MODEL          = 'SWITCH_MODEL';
 const SET_IS_FETCHING       = 'SET_IS_FETCHING';
 
-
-// ToDo: Delete these objects and leave just {id: 0,}.
-const initialPrValveState    = {code: '', dn: 0, dp: 0, dpMax: 0, id: 0, kvs: 0, price: 0, type: '', v: 0, z: 0,};
-const initialCvValveState    = {...initialPrValveState, authority: 0,};
-
 // ToDo: If data from db will not be added to state, add 'dataArray' field to return in the very end of schemeAndChartReducer.
+
+// Defines initial equip state.
+const isMountedArr       = [false,          false,          true,         true,        false,        false,       false,        false,       ];
+const equipItemTitles    = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retDpr',     'retCv',     'upstream1',  'upstream2', ];
+const positionAliases    = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return DPR', 'Return CV', 'Upstream 1', 'Upstream 2',];
+const valveAliases       = equipItemTitles.map((alias)        => (alias + 'Valve'));
+const controlUnitAliases = equipItemTitles.map((alias, index) => (alias + ([3, 4,].includes(index) ? 'Drive' : 'Block')));
+
+const initialEquip = {};
+for (let i = 0; i < equipItemTitles.length; i++) {
+  initialEquip[equipItemTitles[i]] = {
+    aliases     : {controlUnit: controlUnitAliases[i], position: positionAliases[i], valve: valveAliases[i],},
+    controlUnit : {id: 0,},
+    isMounted   : isMountedArr[i],
+    valve       : {id: 0,},
+  };
+}
+
+
+// Defines initial generalParams state.
+const generalParamsAliases = ['g', 'hexDp', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 't1', 't2',];
+const generalParamsValues  = [10,  0.15,    8,    8,    8,    0,    0,    0,    0,    6,    6,    6,     150,  70,  ];
+
+const initialGeneralParams = {};
+for (let i = 0; i < generalParamsAliases.length; i++) {
+  initialGeneralParams[generalParamsAliases[i]] = {alias: generalParamsAliases[i], value: generalParamsValues[i],};
+}
+
 
 const initialState = {
   dataArrays: null,
-  equip: {
-    downstream1: {
-      aliases: {
-        controlUnit: 'downstream1Block',
-        position: 'Downstream 1',
-        valve: 'downstream1Valve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: false,
-      valve: initialPrValveState,
-    },
-    downstream2: {
-      aliases: {
-        controlUnit: 'downstream2Block',
-        position: 'Downstream 2',
-        valve: 'downstream2Valve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: false,
-      valve: initialPrValveState,
-    },
-    supDpr: {
-      aliases: {
-        controlUnit: 'supDprBlock',
-        position: 'Supply DPR',
-        valve: 'supDprValve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: true,
-      valve: initialPrValveState,
-    },
-    supCv: {
-      aliases: {
-        controlUnit: 'supCvDrive',
-        position: 'Supply CV',
-        valve: 'supCvValve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: true,
-      valve: initialCvValveState,
-    },
-    retCv: {
-      aliases: {
-        controlUnit: 'retCvDrive',
-        position: 'Return CV',
-        valve: 'retCvValve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: false,
-      valve: initialCvValveState,
-    },
-    retDpr: {
-      aliases: {
-        controlUnit: 'retDprBlock',
-        position: 'Return DPR',
-        valve: 'retDprValve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: false,
-      valve: initialPrValveState,
-    },
-    upstream1: {
-      aliases: {
-        controlUnit: 'upstream1Block',
-        position: 'Upstream 1',
-        valve: 'upstream1Valve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: false,
-      valve: initialPrValveState,
-    },
-    upstream2: {
-      aliases: {
-        controlUnit: 'upstream2Block',
-        position: 'Upstream 2',
-        valve: 'upstream2Valve',
-      },
-      controlUnit: {id: 0,},
-      isMounted: false,
-      valve: initialPrValveState,
-    },
-  },
-  generalParams: {
-    g:     {alias: 'g',     value: 10,  },
-    hexDp: {alias: 'hexDp', value: 0.15,},
-    p1:    {alias: 'p1',    value: 8,   },
-    p2:    {alias: 'p2',    value: 8,   },
-    p3:    {alias: 'p3',    value: 8,   },
-    p4:    {alias: 'p4',    value: 0,   },
-    p5:    {alias: 'p5',    value: 0,   },
-    p6:    {alias: 'p6',    value: 0,   },
-    p7:    {alias: 'p7',    value: 0,   },
-    p8:    {alias: 'p8',    value: 6,   },
-    p9:    {alias: 'p9',    value: 6,   },
-    p10:   {alias: 'p10',   value: 6,   },
-    t1:    {alias: 't1',    value: 150, },
-    t2:    {alias: 't2',    value: 70,  },
-  },
+  equip: initialEquip,
+  generalParams: initialGeneralParams,
   hoveredTarget: null,
   isFetching: false,
 }
