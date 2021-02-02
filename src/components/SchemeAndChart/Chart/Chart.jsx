@@ -10,8 +10,8 @@ export default function Chart (props) {
     <TableRow
       key          = {row.position}
       selected     = {row.position === props.hoveredTarget}
-      onMouseEnter = {() => props.hover(row)}
-      onMouseOut   = {() => props.unhover()}
+      onMouseEnter = {() => props.changeHoveredTargetAC(row.position)}
+      onMouseOut   = {() => props.changeHoveredTargetAC(null)}
     >
       <TableCell>              {row.position}        </TableCell>
       <TableCell align="right">{row.valveModel}      </TableCell>

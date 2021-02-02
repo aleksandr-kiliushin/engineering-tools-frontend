@@ -9,7 +9,7 @@ export default function Scheme(props) {
   const unitDraws = props.unitsList.map((unit) => {
     return (
       <UnitDraw
-        aliases               = {unit.aliases}
+        aliases               = {unit?.aliases}
         hoveredTarget         = {props.hoveredTarget}
         isMounted             = {unit.isMounted}
         key                   = {unit.aliases.position}

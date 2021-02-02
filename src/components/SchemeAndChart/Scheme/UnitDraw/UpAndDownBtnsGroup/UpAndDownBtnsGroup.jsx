@@ -6,10 +6,10 @@ import React from "react";
 export default function UpAndDownBtnsGroup(props) {
 
   const onUpClick = () => {
-    props.switchModelAC(props.objectToSwitch, 'up');
+    props.switchModelAC(props.alias, props.objectToSwitch, 'up');
   }
   const onDownClick = () => {
-    props.switchModelAC(props.objectToSwitch, 'down');
+    props.switchModelAC(props.alias, props.objectToSwitch, 'down');
   }
 
   return(

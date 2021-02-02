@@ -8,8 +8,8 @@ import Chart from "./Chart/Chart";
 import Scheme from "./Scheme/Scheme";
 import {
   changeGeneralParamAC, changeHoveredTargetAC,
-  setEquipsDbDataAC,
-  setIsFetchingAC,
+  setEquipDbDataAC,
+  setIsFetchingAC, setStartEquipAC,
   switchModelAC,
 } from "../../redux/schemeAndChart-reducer";
 
@@ -18,33 +18,27 @@ class SchemeAndChartContainer extends React.Component {
   componentDidMount() {
     this.props.setIsFetchingAC(true);
     axios.get('http://localhost:8000/api/equipments/').then((response) => {
-      this.props.setEquipsDbDataAC(response.data);
+      this.props.setEquipDbDataAC(response.data);
+      this.props.setStartEquipAC();
       this.props.setIsFetchingAC(false);
     });
   }
 
   render() {
     const generalParamsList = Object.values(this.props.generalParams);
-    const pulseTubePrice = this.props.pulseTubePrice;
-
-    const unitsList = Object.values(this.props.equip);
-    const mountedUnitsList = unitsList.filter((unit) => unit.isMounted);
-
-
+    const pulseTubePrice    = this.props.pulseTubePrice;
+    const unitsList         = Object.values(this.props.equip);
+    const mountedUnitsList  = unitsList.filter((unit) => unit.isMounted);
 
     const mountedRows = mountedUnitsList.map((unit) => {
-      const position = unit.aliases.position;
+      const alias = unit.aliases.alias;
 
       let additionalPulseTubePrice = 0;
-      if (['Downstream 1', 'Downstream 2', 'Upstream 1', 'Upstream 2',].includes(position)) {
-        additionalPulseTubePrice += pulseTubePrice;
-      }
-      else if (['Supply DPR', 'Return DPR',].includes(position)) {
-        additionalPulseTubePrice += pulseTubePrice * 2;
-      }
+      if      (['downstream1', 'downstream2', 'upstream1', 'upstream2',].includes(alias)) additionalPulseTubePrice += pulseTubePrice;
+      else if (['supDpr', 'supDpr',].includes(alias))                                     additionalPulseTubePrice += pulseTubePrice * 2;
 
       return {
-        authority        : (['Supply CV', 'Return CV',].includes(position)) ? unit.valve.authority : null,
+        authority        : (['supCv', 'return',].includes(alias)) ? unit.valve.authority : null,
         controlUnitModel : unit.controlUnit.full_title,
         dp               : unit.valve.dp?.toFixed(2),
         dpMax            : unit.valve.dpMax?.toFixed(2),
@@ -57,17 +51,17 @@ class SchemeAndChartContainer extends React.Component {
     });
 
     let totalPrice = 0;
-    for (let row of mountedRows) {totalPrice += row.price;}
+    for (const row of mountedRows) {
+      totalPrice += row.price
+    };
     totalPrice = totalPrice.toFixed(2);
 
 
     const downloadCp = () => {
-
-      let mountedUnitsCodes = [];
+      const mountedUnitsCodes = [];
       for (const unit of mountedUnitsList) {
-        mountedUnitsCodes.push(unit.valve.code, unit.controlUnit.code);
-      }
-
+        mountedUnitsCodes.push(unit.valve.code, unit.controlUnit.code)
+      };
       axios({
         url: 'http://localhost:8000/api/downloadcp/',
         method: 'POST',
@@ -96,13 +90,12 @@ class SchemeAndChartContainer extends React.Component {
           switchModelAC         = {this.props.switchModelAC}
         />
         <Chart
-          hoveredTarget = {this.props.hoveredTarget}
-          mountedRows   = {mountedRows}
-          totalPrice    = {totalPrice}
+          hoveredTarget         = {this.props.hoveredTarget}
+          mountedRows           = {mountedRows}
+          totalPrice            = {totalPrice}
 
-          downloadCp    = {downloadCp}
-          hover         = {(row) => {this.props.changeHoveredTargetAC(row.position)}}
-          unhover       = {() => {this.props.changeHoveredTargetAC(null)}}
+          downloadCp            = {downloadCp}
+          changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
         />
       </div>
     );
@@ -116,13 +109,14 @@ const mapStateToProps = (state) => ({
   generalParams  : state.schemeAndChart.generalParams,
   hoveredTarget  : state.schemeAndChart.hoveredTarget,
   isFetching     : state.schemeAndChart.isFetching,
-  pulseTubePrice : state.schemeAndChart.dataArrays?.pulse_tubes[0].price,
+  pulseTubePrice : state.schemeAndChart.equipDbData?.pulse_tubes[0].price,
 });
 const mapDispatchToProps = {
   changeGeneralParamAC,
   changeHoveredTargetAC,
-  setEquipsDbDataAC,
+  setEquipDbDataAC,
   setIsFetchingAC,
+  setStartEquipAC,
   switchModelAC,
 };
 

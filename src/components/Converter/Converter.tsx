@@ -1,13 +1,13 @@
 import React from 'react';
 import {Card, CardContent, TextField, Typography} from '@material-ui/core';
-import {fromBar, scales, toBar,} from '../../utils/calcFunctions';
+import {fromBar, scales, toBar,} from '../../utils/converterCalcUtil';
 
 
 type ConverterPropsType = {};
 type ConverterStateType = {
-  valueInBar: number
-  scale: string
-  isDot: boolean
+  valueInBar : number
+  scale      : string
+  isDot      : boolean
 };
 
 
@@ -16,49 +16,40 @@ export default class Converter extends React.Component<ConverterPropsType, Conve
   constructor(props: ConverterPropsType) {
     super(props);
     this.state = {
-      valueInBar: 5,
-      scale: scales.p.bar,
-      isDot: false,
+      valueInBar : 5,
+      scale      : scales.p.bar,
+      isDot      : false,
     };
   }
 
-
-
   onChangeHandler = (value: string, scale: string) => {
-
-    const valueInBar: number = toBar(value, scale);
     const dotCount: number = (value.match(/\./g) || []).length;
-
     if (isNaN(+value) || dotCount > 1) {
       return;
     }
 
-    let isDot: boolean = false;
-    if (value.endsWith('.') && dotCount === 1) {
-      isDot = true;
-    }
+    const isDot: boolean = (value.endsWith('.') && dotCount === 1) ? true : false;
+
+    const valueInBar: number = toBar(value, scale);
 
     this.setState((prevState: ConverterPropsType) => ({
       valueInBar, scale, isDot,
     }));
-
   }
-
-
 
   render() {
     let valueInBar: number = this.state.valueInBar;
     const scale: string = this.state.scale;
 
-    let bar: string = (+valueInBar.toFixed(2)).toString();
-    let mpa: string = fromBar(valueInBar, scales.p.mpa);
-    let mh2o: string = fromBar(valueInBar, scales.p.mh2o);
+    let bar:   string = (+valueInBar.toFixed(2)).toString();
+    let mpa:   string = fromBar(valueInBar, scales.p.mpa);
+    let mh2o:  string = fromBar(valueInBar, scales.p.mh2o);
     let kgcm2: string = fromBar(valueInBar, scales.p.kgcm2);
 
     if (this.state.isDot) {
-      if (scale === scales.p.bar) {bar += '.';}
-      else if (scale === scales.p.mpa) {mpa += '.';}
-      else if (scale === scales.p.mh2o) {mh2o += '.';}
+      if      (scale === scales.p.bar)   {bar   += '.';}
+      else if (scale === scales.p.mpa)   {mpa   += '.';}
+      else if (scale === scales.p.mh2o)  {mh2o  += '.';}
       else if (scale === scales.p.kgcm2) {kgcm2 += '.';}
     }
 
@@ -83,10 +74,10 @@ export default class Converter extends React.Component<ConverterPropsType, Conve
 
 
 type ParamInputFieldPropsType = {
-  onChangeHandler: Function
-  label: string
-  scale: string
-  value: string
+  onChangeHandler : Function
+  label           : string
+  scale           : string
+  value           : string
 };
 
 

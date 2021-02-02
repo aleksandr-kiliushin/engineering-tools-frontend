@@ -54,8 +54,8 @@ export default function UnitDraw(props) {
       {detailsForPressureRegulator}
       {drive}
       {secondPulseTube}
-      <UpAndDownBtnsGroup x={x} y={y}    objectToSwitch={props.aliases.valve}       switchModelAC={props.switchModelAC} />
-      <UpAndDownBtnsGroup x={x} y={y-55} objectToSwitch={props.aliases.controlUnit} switchModelAC={props.switchModelAC} />
+      <UpAndDownBtnsGroup x={x} y={y}    alias={props.aliases.alias} objectToSwitch={'valve'}       switchModelAC={props.switchModelAC} />
+      <UpAndDownBtnsGroup x={x} y={y-55} alias={props.aliases.alias} objectToSwitch={'controlUnit'} switchModelAC={props.switchModelAC} />
     </g>
   );
 }
