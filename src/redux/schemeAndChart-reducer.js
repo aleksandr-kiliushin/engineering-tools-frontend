@@ -1,4 +1,6 @@
 import {getDataArr, getNewUnitState, getPSat} from "../utils/circuitUtil";
+import {circuitApi,} from "../api/api";
+import {saveAs,} from 'file-saver';
 
 const CHANGE_GENERAL_PARAM_AC  = 'CHANGE_GENERAL_PARAM_AC';
 const CHANGE_HOVERED_TARGET_AC = 'CHANGE_HOVERED_TARGET_AC';
@@ -210,5 +212,28 @@ export const setIsFetchingAC       = (isFetching                    ) => ({type:
 export const setStartEquipAC       = ()                               => ({type: SET_START_EQUIP_AC,                                      });
 export const switchModelAC         = (alias,       object, direction) => ({type: SWITCH_MODEL_AC,          alias,       object, direction,});
 
+export const getEquipDbDataAndSetStartEquipState = () => {
+  return ((dispatch) => {
+      dispatch(setIsFetchingAC(true));
+      circuitApi.getEquipDbData().then((data) => {
+        dispatch(setIsFetchingAC(false));
+        dispatch(setEquipDbDataAC(data));
+        dispatch(setStartEquipAC());
+      });
+    }
+  );
+}
+
+export const downloadCircuitCp = (mountedUnitsCodes) => {
+  return ((dispatch) => {
+    circuitApi.downloadCp(mountedUnitsCodes).then((data) => {
+        const blob = new Blob(
+          [data],
+          {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
+        );
+        saveAs(blob, 'cp.xlsx');
+      });
+  });
+}
 
 export default schemeAndChartReducer;

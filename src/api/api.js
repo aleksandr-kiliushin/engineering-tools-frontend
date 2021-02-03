@@ -1,19 +1,17 @@
-// import * as axios from 'axios';
+import * as axios from "axios";
 
-// const instance = axios.create({
-	// withCredentials: true,
-	// baseURL: 'https://localhost:8000/',
-	// headers: {
-	// 	'API-KEY': '155e3ed8-1e90-4fb2-b5f4-415274c4017f',
-	// },
-// });
+const instance = axios.create({baseURL: 'http://localhost:8000/api/',});
 
-
-// export const valvesAPI = {
-// 	getValves() {
-// 		return instance.get('valves/');
-		// axios.get('https://localhost:8000/valves/').then((response) => {
-		// 	return response.data;
-		// });
-// 	},
-// };
+export const circuitApi = {
+	getEquipDbData() {
+		return instance.get('equipments/').then(response => response.data);
+	},
+	downloadCp(mountedUnitsCodes) {
+		return axios({
+			url: 'http://localhost:8000/api/downloadcp/',
+			method: 'POST',
+			responseType: 'blob',
+			data: mountedUnitsCodes,
+		}).then(response => response.data);
+	},
+};

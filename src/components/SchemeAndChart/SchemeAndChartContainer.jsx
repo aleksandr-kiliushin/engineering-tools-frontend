@@ -1,27 +1,17 @@
 import React from "react";
 import {connect,} from 'react-redux';
-import * as axios from "axios";
 import {LinearProgress,} from "@material-ui/core";
-import {saveAs,} from 'file-saver';
 
 import Chart from "./Chart/Chart";
 import Scheme from "./Scheme/Scheme";
 import {
-  changeGeneralParamAC, changeHoveredTargetAC,
-  setEquipDbDataAC,
-  setIsFetchingAC, setStartEquipAC,
-  switchModelAC,
+  changeGeneralParamAC, changeHoveredTargetAC, downloadCircuitCp, getEquipDbDataAndSetStartEquipState, switchModelAC,
 } from "../../redux/schemeAndChart-reducer";
 
 
 class SchemeAndChartContainer extends React.Component {
   componentDidMount() {
-    this.props.setIsFetchingAC(true);
-    axios.get('http://localhost:8000/api/equipments/').then((response) => {
-      this.props.setEquipDbDataAC(response.data);
-      this.props.setStartEquipAC();
-      this.props.setIsFetchingAC(false);
-    });
+    this.props.getEquipDbDataAndSetStartEquipState();
   }
 
   render() {
@@ -35,7 +25,7 @@ class SchemeAndChartContainer extends React.Component {
 
       let additionalPulseTubePrice = 0;
       if      (['downstream1', 'downstream2', 'upstream1', 'upstream2',].includes(alias)) additionalPulseTubePrice += pulseTubePrice;
-      else if (['supDpr', 'supDpr',].includes(alias))                                     additionalPulseTubePrice += pulseTubePrice * 2;
+      else if (['supDpr', 'retDpr',].includes(alias))                                     additionalPulseTubePrice += pulseTubePrice * 2;
 
       return {
         authority        : (['supCv', 'return',].includes(alias)) ? unit.valve.authority : null,
@@ -57,23 +47,12 @@ class SchemeAndChartContainer extends React.Component {
     totalPrice = totalPrice.toFixed(2);
 
 
-    const downloadCp = () => {
+    const onDownloadCp = () => {
       const mountedUnitsCodes = [];
       for (const unit of mountedUnitsList) {
         mountedUnitsCodes.push(unit.valve.code, unit.controlUnit.code)
       };
-      axios({
-        url: 'http://localhost:8000/api/downloadcp/',
-        method: 'POST',
-        responseType: 'blob',
-        data: mountedUnitsCodes,
-      }).then((response) => {
-        const blob = new Blob(
-          [response.data],
-          {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'},
-        );
-        saveAs(blob, 'cp.xlsx');
-      });
+      this.props.downloadCircuitCp(mountedUnitsCodes);
     }
 
 
@@ -94,7 +73,7 @@ class SchemeAndChartContainer extends React.Component {
           mountedRows           = {mountedRows}
           totalPrice            = {totalPrice}
 
-          downloadCp            = {downloadCp}
+          onDownloadCp            = {onDownloadCp}
           changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
         />
       </div>
@@ -114,10 +93,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   changeGeneralParamAC,
   changeHoveredTargetAC,
-  setEquipDbDataAC,
-  setIsFetchingAC,
-  setStartEquipAC,
   switchModelAC,
+  downloadCircuitCp,
+  getEquipDbDataAndSetStartEquipState,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SchemeAndChartContainer);
