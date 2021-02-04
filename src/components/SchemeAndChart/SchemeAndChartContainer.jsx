@@ -47,15 +47,6 @@ class SchemeAndChartContainer extends React.Component {
     totalPrice = totalPrice.toFixed(2);
 
 
-    const onDownloadCp = () => {
-      const mountedUnitsCodes = [];
-      for (const unit of mountedUnitsList) {
-        mountedUnitsCodes.push(unit.valve.code, unit.controlUnit.code)
-      };
-      this.props.downloadCircuitCp(mountedUnitsCodes);
-    }
-
-
     const schemeAndChartJsx = (
       <div>
         <Scheme
@@ -73,7 +64,7 @@ class SchemeAndChartContainer extends React.Component {
           mountedRows           = {mountedRows}
           totalPrice            = {totalPrice}
 
-          onDownloadCp            = {onDownloadCp}
+          downloadCircuitCp     = {this.props.downloadCircuitCp}
           changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
         />
       </div>
