@@ -1,5 +1,5 @@
-export const getMountedUnitsCodes = (equip) => {
-	const unitsList         = Object.values(equip);
+export const selectMountedUnitsCodes = (state) => {
+	const unitsList         = Object.values(state.schemeAndChart.equip);
 	const mountedUnitsList  = unitsList.filter((unit) => unit.isMounted);
 	const mountedUnitsCodes = [];
 	for (const unit of mountedUnitsList) {

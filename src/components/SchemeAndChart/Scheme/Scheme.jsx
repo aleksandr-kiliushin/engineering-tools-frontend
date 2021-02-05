@@ -27,7 +27,6 @@ export default function Scheme(props) {
     );
   });
 
-
   return (
       <div className={s.scheme}>
         <svg viewBox="0 0 1000 340">

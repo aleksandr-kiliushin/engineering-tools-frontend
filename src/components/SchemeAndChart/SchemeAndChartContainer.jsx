@@ -74,13 +74,15 @@ class SchemeAndChartContainer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  equip          : state.schemeAndChart.equip,
-  generalParams  : state.schemeAndChart.generalParams,
-  hoveredTarget  : state.schemeAndChart.hoveredTarget,
-  isFetching     : state.schemeAndChart.isFetching,
-  pulseTubePrice : state.schemeAndChart.equipDbData?.pulse_tubes[0].price,
-});
+const mapStateToProps = (state) => {
+  return {
+    equip          : state.schemeAndChart.equip,
+    generalParams  : state.schemeAndChart.generalParams,
+    hoveredTarget  : state.schemeAndChart.hoveredTarget,
+    isFetching     : state.schemeAndChart.isFetching,
+    pulseTubePrice : state.schemeAndChart.equipDbData?.pulse_tubes[0].price,
+  }
+}
 const mapDispatchToProps = {
   changeGeneralParamAC,
   changeHoveredTargetAC,

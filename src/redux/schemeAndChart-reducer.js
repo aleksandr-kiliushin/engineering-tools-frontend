@@ -1,7 +1,7 @@
 import {getDataArr, getNewUnitState, getPSat} from "../utils/circuitUtil";
 import {circuitApi,} from "../api/api";
 import {saveAs,} from 'file-saver';
-import {getMountedUnitsCodes} from "./circuitSelectors";
+import {selectMountedUnitsCodes,} from "./circuitSelectors";
 
 const CHANGE_GENERAL_PARAM_AC  = 'CHANGE_GENERAL_PARAM_AC';
 const CHANGE_HOVERED_TARGET_AC = 'CHANGE_HOVERED_TARGET_AC';
@@ -9,8 +9,6 @@ const SET_EQUIP_DB_DATA_AC     = 'SET_EQUIP_DB_DATA_AC';
 const SET_IS_FETCHING_AC       = 'SET_IS_FETCHING_AC';
 const SET_START_EQUIP_AC       = 'SET_START_EQUIP_AC';
 const SWITCH_MODEL_AC          = 'SWITCH_MODEL_AC';
-
-// ToDo: If data from db will not be added to state, add 'dataArray' field to return in the very end of schemeAndChartReducer.
 
 // Defines initial equip state.
 const isMountedArr       = [false,          false,          true,         true,        false,        false,       false,        false,       ];
@@ -50,6 +48,7 @@ const initialState = {
   generalParams: initialGeneralParams,
   hoveredTarget: null,
   isFetching: false,
+  fake: 10,
 }
 
 const schemeAndChartReducer = (state = initialState, action) => {
@@ -57,6 +56,11 @@ const schemeAndChartReducer = (state = initialState, action) => {
   let st;
 
   switch (action.type) {
+
+    case 'FAKE': {
+      st = {...state, fake: state.fake + 1,}
+      break;
+    }
     
     case CHANGE_GENERAL_PARAM_AC: {
       if (!isNaN(+action.value)) {
@@ -222,7 +226,7 @@ export const getEquipDbDataAndSetStartEquipState = () => (dispatch) => {
   });
 }
 export const downloadCircuitCp = () => (dispatch, getState) => {
-  const mountedUnitsCodes = getMountedUnitsCodes(getState().schemeAndChart.equip)
+  const mountedUnitsCodes = selectMountedUnitsCodes(getState());
   circuitApi.downloadCp(mountedUnitsCodes).then((data) => {
     saveAs(data, 'cp.xlsx');
   });
