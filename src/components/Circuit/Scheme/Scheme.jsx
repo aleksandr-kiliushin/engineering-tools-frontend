@@ -9,10 +9,10 @@ export default function Scheme(props) {
   const unitDraws = props.unitsList.map((unit) => {
     return (
       <UnitDraw
-        aliases               = {unit?.aliases}
+        aliases               = {unit.aliases}
         hoveredTarget         = {props.hoveredTarget}
         isMounted             = {unit.isMounted}
-        key                   = {unit.aliases.position}
+        key                   = {unit.aliases.alias}
 
         changeHoveredTargetAC = {props.changeHoveredTargetAC}
         switchModelAC         = {props.switchModelAC}
@@ -22,9 +22,7 @@ export default function Scheme(props) {
 
 
   const inputFieldDraws = props.generalParamsList.map((param) => {
-    return (
-      <ParamInputField key={param.alias} param={param} changeGeneralParamAC={props.changeGeneralParamAC} />
-    );
+    return <ParamInputField key={param.alias} param={param} changeGeneralParamAC={props.changeGeneralParamAC} />;
   });
 
   return (

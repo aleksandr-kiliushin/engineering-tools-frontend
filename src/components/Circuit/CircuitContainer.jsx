@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 import {connect,} from 'react-redux';
-import {LinearProgress,} from "@material-ui/core";
+import {LinearProgress,} from '@material-ui/core';
 
-import Chart from "./Chart/Chart";
-import Scheme from "./Scheme/Scheme";
+import Chart from './Chart/Chart';
+import Scheme from './Scheme/Scheme';
 import {
   changeGeneralParamAC, changeHoveredTargetAC, downloadCircuitCp, getEquipDbDataAndSetStartEquipState, switchModelAC,
-} from "../../redux/schemeAndChart-reducer";
+} from '../../redux/circuit-reducer';
 
 
-class SchemeAndChartContainer extends React.Component {
+class CircuitContainer extends React.Component {
   componentDidMount() {
     this.props.getEquipDbDataAndSetStartEquipState();
   }
@@ -76,19 +76,19 @@ class SchemeAndChartContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    equip          : state.schemeAndChart.equip,
-    generalParams  : state.schemeAndChart.generalParams,
-    hoveredTarget  : state.schemeAndChart.hoveredTarget,
-    isFetching     : state.schemeAndChart.isFetching,
-    pulseTubePrice : state.schemeAndChart.equipDbData?.pulse_tubes[0].price,
+    equip          : state.circuit.equip,
+    generalParams  : state.circuit.generalParams,
+    hoveredTarget  : state.circuit.hoveredTarget,
+    isFetching     : state.circuit.isFetching,
+    pulseTubePrice : state.circuit.equipDbData?.pulse_tubes[0].price,
   }
 }
 const mapDispatchToProps = {
   changeGeneralParamAC,
   changeHoveredTargetAC,
-  switchModelAC,
   downloadCircuitCp,
+  switchModelAC,
   getEquipDbDataAndSetStartEquipState,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SchemeAndChartContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CircuitContainer);

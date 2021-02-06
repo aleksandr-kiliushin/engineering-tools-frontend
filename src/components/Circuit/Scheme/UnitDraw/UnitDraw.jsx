@@ -2,15 +2,16 @@ import React from "react";
 import UpAndDownBtnsGroup from "./UpAndDownBtnsGroup/UpAndDownBtnsGroup";
 import s from './UnitDraw.module.css';
 
-export default function UnitDraw(props) {
+
+const UnitDraw = React.memo((props) => {
 
   const position  = props.aliases.position;
 
   let x;
-  if      (['Downstream 1', 'Upstream 2',].includes(position)) {x = 160;}
-  else if (['Downstream 2', 'Upstream 1',].includes(position)) {x = 330;}
-  else if (['Supply DPR', 'Return DPR',].includes(position))   {x = 505;}
-  else if (['Supply CV', 'Return CV',].includes(position))     {x = 695;}
+  if      (['Downstream 1', 'Upstream 2',].includes(position)) x = 160;
+  else if (['Downstream 2', 'Upstream 1',].includes(position)) x = 330;
+  else if (['Supply DPR',   'Return DPR',].includes(position)) x = 505;
+  else if (['Supply CV',    'Return CV', ].includes(position)) x = 695;
 
   const y = (['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV',].includes(position)) ? 85 : 280;
 
@@ -58,4 +59,6 @@ export default function UnitDraw(props) {
       <UpAndDownBtnsGroup x={x} y={y-55} alias={props.aliases.alias} objectToSwitch={'controlUnit'} switchModelAC={props.switchModelAC} />
     </g>
   );
-}
+});
+
+export default UnitDraw;

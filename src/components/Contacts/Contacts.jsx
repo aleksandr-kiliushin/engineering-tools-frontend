@@ -1,18 +1,12 @@
 import React from 'react';
-// import * as axios from "axios";
-// import {saveAs,} from 'file-saver';
-
-
-export default class Contacts extends React.Component {
 
 
 
-  render() {
-    return (
-      <div>
-        hehe
-        {/*<button onClick={() => this.download()}>download</button>*/}
-      </div>
-    );
-  }
+
+export default function Contacts() {
+  return (
+    <div>
+      <p style={{padding: 10,}}>If you have any suggestions or ideas, please contact me at <i>alexander.kilyushin@gmail.com</i>.</p>
+    </div>
+  );
 }

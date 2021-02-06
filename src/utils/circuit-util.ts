@@ -1,4 +1,4 @@
-export const getPSat = (t) => {
+export const getPSat = (t: number) => {
 	const pSatMap = new Map([
 		[0, -0.99],  [1, -0.99],  [2, -0.99],  [3, -0.99],  [4, -0.99],  [5, -0.99],  [6, -0.99],  [7, -0.99],  [8, -0.99],
 		[9, -0.99],  [10, -0.99], [11, -0.99], [12, -0.99], [13, -0.99], [14, -0.98], [15, -0.98], [16, -0.98], [17, -0.98],
@@ -22,9 +22,9 @@ export const getPSat = (t) => {
 }
 
 
-export const getNewUnitState = (currentId, dataArr, switchDirection) => {
-	// Calculate new id // ===========
-	let newId;
+export const getNewUnitState = (currentId : number, dataArr: {}[], switchDirection: string) => {
+	// Calculate a new id.
+	let newId = 0;
 	if      (switchDirection === 'start') newId = 0;
 	else if (switchDirection === 'up')    newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0;
 	else if (switchDirection === 'down')  newId = (currentId !== 0)                  ? currentId - 1 : dataArr.length - 1;
@@ -32,9 +32,16 @@ export const getNewUnitState = (currentId, dataArr, switchDirection) => {
 	return {...dataArr[newId], id: newId,};
 }
 
+type equipDbDataType = {
+	cv_actuators: []
+	cv_valves: []
+	downstream_blocks: []
+	dpr_blocks: []
+	pr_valves: []
+	upstream_blocks: []
+};
 
-
-export const getDataArr = (equipDbData, alias, object) => {
+export const getDataArr = (equipDbData: equipDbDataType, alias: string, object: string) => {
 	if (object === 'valve') {
 		return (['supCv', 'retCv',].includes(alias) ? equipDbData.cv_valves : equipDbData.pr_valves);
 	} else if (object === 'controlUnit') {

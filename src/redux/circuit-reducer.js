@@ -1,14 +1,14 @@
-import {getDataArr, getNewUnitState, getPSat} from "../utils/circuitUtil";
+import {getDataArr, getNewUnitState, getPSat} from "../utils/circuit-util";
 import {circuitApi,} from "../api/api";
 import {saveAs,} from 'file-saver';
-import {selectMountedUnitsCodes,} from "./circuitSelectors";
+import {selectMountedUnitsCodes,} from "./circuit-selectors";
 
-const CHANGE_GENERAL_PARAM_AC  = 'CHANGE_GENERAL_PARAM_AC';
-const CHANGE_HOVERED_TARGET_AC = 'CHANGE_HOVERED_TARGET_AC';
-const SET_EQUIP_DB_DATA_AC     = 'SET_EQUIP_DB_DATA_AC';
-const SET_IS_FETCHING_AC       = 'SET_IS_FETCHING_AC';
-const SET_START_EQUIP_AC       = 'SET_START_EQUIP_AC';
-const SWITCH_MODEL_AC          = 'SWITCH_MODEL_AC';
+const CHANGE_GENERAL_PARAM_AC  = 'circuit/CHANGE_GENERAL_PARAM_AC';
+const CHANGE_HOVERED_TARGET_AC = 'circuit/CHANGE_HOVERED_TARGET_AC';
+const SET_EQUIP_DB_DATA_AC     = 'circuit/SET_EQUIP_DB_DATA_AC';
+const SET_IS_FETCHING_AC       = 'circuit/SET_IS_FETCHING_AC';
+const SET_START_EQUIP_AC       = 'circuit/SET_START_EQUIP_AC';
+const SWITCH_MODEL_AC          = 'circuit/SWITCH_MODEL_AC';
 
 // Defines initial equip state.
 const isMountedArr       = [false,          false,          true,         true,        false,        false,       false,        false,       ];
@@ -43,25 +43,20 @@ for (let i = 0; i < generalParamsAliases.length; i++) {
 
 
 const initialState = {
-  equip: initialEquip,
-  equipDbData: null,
-  generalParams: initialGeneralParams,
-  hoveredTarget: null,
-  isFetching: false,
-  fake: 10,
+  equip         : initialEquip,
+  equipDbData   : null,
+  generalParams : initialGeneralParams,
+  hoveredTarget : null,
+  isFetching    : false,
+  fake          : 10,
 }
 
-const schemeAndChartReducer = (state = initialState, action) => {
+const circuitReducer = (state = initialState, action) => {
 
   let st;
 
   switch (action.type) {
 
-    case 'FAKE': {
-      st = {...state, fake: state.fake + 1,}
-      break;
-    }
-    
     case CHANGE_GENERAL_PARAM_AC: {
       if (!isNaN(+action.value)) {
         const changedValue = (action.value.endsWith('.')) ? action.value : +action.value;
@@ -91,8 +86,8 @@ const schemeAndChartReducer = (state = initialState, action) => {
       for (let i = 0; i < equipAliases.length; i++) {
         const valveDataArr                      = getDataArr(state.equipDbData, equipAliases[i], 'valve'      );
         const controlUnitDataArr                = getDataArr(state.equipDbData, equipAliases[i], 'controlUnit');
-        startEquip[equipAliases[i]].valve       = getNewUnitState(null, valveDataArr,       'start');
-        startEquip[equipAliases[i]].controlUnit = getNewUnitState(null, controlUnitDataArr, 'start');
+        startEquip[equipAliases[i]].valve       = getNewUnitState(0, valveDataArr,       'start');
+        startEquip[equipAliases[i]].controlUnit = getNewUnitState(0, controlUnitDataArr, 'start');
       }
       st = {...state, equip: startEquip,};
       break;
@@ -214,22 +209,20 @@ export const changeGeneralParamAC  = (field,       value            ) => ({type:
 export const changeHoveredTargetAC = (target                        ) => ({type: CHANGE_HOVERED_TARGET_AC, target,                        });
 export const setEquipDbDataAC      = (equipDbData                   ) => ({type: SET_EQUIP_DB_DATA_AC,     equipDbData,                   });
 export const setIsFetchingAC       = (isFetching                    ) => ({type: SET_IS_FETCHING_AC,       isFetching,                    });
-export const setStartEquipAC       = ()                               => ({type: SET_START_EQUIP_AC,                                      });
+export const setStartEquipAC       = (                              ) => ({type: SET_START_EQUIP_AC,                                      });
 export const switchModelAC         = (alias,       object, direction) => ({type: SWITCH_MODEL_AC,          alias,       object, direction,});
 
-export const getEquipDbDataAndSetStartEquipState = () => (dispatch) => {
+export const getEquipDbDataAndSetStartEquipState = () => async (dispatch) => {
   dispatch(setIsFetchingAC(true));
-  circuitApi.getEquipDbData().then((data) => {
-    dispatch(setIsFetchingAC(false));
-    dispatch(setEquipDbDataAC(data));
-    dispatch(setStartEquipAC());
-  });
+  const data = await circuitApi.getEquipDbData();
+  dispatch(setIsFetchingAC(false));
+  dispatch(setEquipDbDataAC(data));
+  dispatch(setStartEquipAC());
 }
-export const downloadCircuitCp = () => (dispatch, getState) => {
+export const downloadCircuitCp = () => async (dispatch, getState) => {
   const mountedUnitsCodes = selectMountedUnitsCodes(getState());
-  circuitApi.downloadCp(mountedUnitsCodes).then((data) => {
-    saveAs(data, 'cp.xlsx');
-  });
+  const data = await circuitApi.downloadCp(mountedUnitsCodes);
+  saveAs(data, 'cp.xlsx');
 }
 
-export default schemeAndChartReducer;
+export default circuitReducer;

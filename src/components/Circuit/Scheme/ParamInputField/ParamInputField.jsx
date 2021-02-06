@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import s from './ParamInputField.module.css';
 
 
-export default function ParamInputField(props) {
+const ParamInputField = (props) => {
 
   const alias = props.param.alias;
 
@@ -48,3 +48,5 @@ export default function ParamInputField(props) {
     </g>
   );
 }
+
+export default ParamInputField;

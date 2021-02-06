@@ -5,10 +5,12 @@ const instance = axios.create({
 });
 
 export const circuitApi = {
-	getEquipDbData() {
-		return instance.get('equipments/').then(response => response.data);
+	async getEquipDbData() {
+		const response = await instance.get('equipments/');
+		return response.data;
 	},
-	downloadCp(mountedUnitsCodes) {
-		return instance.post('downloadcp/', mountedUnitsCodes, {responseType: 'blob',}).then(response => response.data);
+	async downloadCp(mountedUnitsCodes) {
+		const response = await instance.post('downloadcp/', mountedUnitsCodes, {responseType: 'blob',});
+		return response.data;
 	},
 };
