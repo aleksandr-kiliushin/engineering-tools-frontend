@@ -1,28 +1,38 @@
 import React from "react";
-import s from './Scheme.module.css';
 import ParamInputField from "./ParamInputField/ParamInputField";
 import UnitDraw from "./UnitDraw/UnitDraw";
+import {makeStyles} from "@material-ui/core/styles";
+
+
+const useStyles = makeStyles({
+  scheme  : {background: 'lightgray',},
+  corpus  : {fill: '#6d6d6d', stroke: '#000000', strokeWidth: 1,},
+  supPipe : {fill: '#BE1622', stroke: '#000000', strokeWidth: 1,},
+  retPipe : {fill: '#009FE3', stroke: '#000000', strokeWidth: 1,},
+});
 
 
 export default function Scheme(props) {
 
-  const unitDraws = props.unitsList.map((unit) => {
+  const s = useStyles();
+
+  const unitDraws = props.unitsList.map(unit => {
     return (
       <UnitDraw
-        aliases               = {unit.aliases}
+        alias                 = {unit.aliases.alias}
         hoveredTarget         = {props.hoveredTarget}
         isMounted             = {unit.isMounted}
         key                   = {unit.aliases.alias}
 
-        changeHoveredTargetAC = {props.changeHoveredTargetAC}
-        switchModelAC         = {props.switchModelAC}
+        changeHoveredTarget   = {props.changeHoveredTarget}
+        switchModel           = {props.switchModel}
       />
     );
   });
 
 
   const inputFieldDraws = props.generalParamsList.map((param) => {
-    return <ParamInputField key={param.alias} param={param} changeGeneralParamAC={props.changeGeneralParamAC} />;
+    return <ParamInputField key={param.alias} param={param} changeGeneralParam={props.changeGeneralParam} />;
   });
 
   return (

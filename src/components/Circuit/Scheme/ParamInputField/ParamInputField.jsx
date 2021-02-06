@@ -1,9 +1,15 @@
 import React from "react";
-import {TextField} from "@material-ui/core";
-import s from './ParamInputField.module.css';
+import {makeStyles, TextField} from "@material-ui/core";
 
+const useStyles = makeStyles({
+  paramInputFieldStem: {
+    stroke: '#7A7A7A',
+  }
+});
 
 const ParamInputField = (props) => {
+
+  const s = useStyles();
 
   const alias = props.param.alias;
 
@@ -30,7 +36,7 @@ const ParamInputField = (props) => {
   }
 
   const onChangeHandler = (e) => {
-    props.changeGeneralParamAC(alias, e.target.value);
+    props.changeGeneralParam(alias, e.target.value);
   }
 
   return (

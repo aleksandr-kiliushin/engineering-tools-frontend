@@ -18,7 +18,7 @@ export const getPSat = (t: number) => {
 		[135, 2.11], [136, 2.20], [137, 2.32], [138, 2.47], [139, 2.70], [140, 2.57], [141, 2.68], [142, 2.81], [143, 2.99],
 		[144, 3.26], [145, 3.11], [146, 3.24], [147, 3.39], [148, 3.60], [149, 3.92], [150, 3.74],
 	]);
-	return pSatMap.get(t);
+	return pSatMap.get(t) || 666;
 }
 
 
@@ -31,6 +31,7 @@ export const getNewUnitState = (currentId : number, dataArr: {}[], switchDirecti
 	// Return new unit state as the result.
 	return {...dataArr[newId], id: newId,};
 }
+
 
 type equipDbDataType = {
 	cv_actuators: []
@@ -50,4 +51,113 @@ export const getDataArr = (equipDbData: equipDbDataType, alias: string, object: 
 		else if (['supDpr', 'retDpr',].includes(alias))           return equipDbData.dpr_blocks;
 		else if (['supCv', 'retCv',].includes(alias))             return equipDbData.cv_actuators;
 	}
+}
+
+
+type generalParamsType = {
+	[key: string]: {alias: string, value: number,};
+}
+
+type equipType = {
+	[key: string]: {
+		aliases: {
+			alias       : string
+			controlUnit : string
+			position    : string
+			valve       : string
+		},
+		controlUnit : {},
+		isMounted   : boolean | number
+		valve       : {authority?: string, dn: number, kvs: number, z: number,},
+	};
+};
+
+type stType = {
+	equip         : equipType
+	equipDbData   : [] | null
+	generalParams : generalParamsType
+	hoveredTarget : string
+	isFetching    : boolean
+};
+
+
+export const getStWithCalcs = (st: stType, equipAliases: string[]) => {
+
+	const t1    : number = st.generalParams.t1.value;
+	const t2    : number = st.generalParams.t2.value;
+	const p1    : number = st.generalParams.p1.value;
+	const p2    : number = st.generalParams.p2.value;
+	const p3    : number = st.generalParams.p3.value;
+	const p8    : number = st.generalParams.p8.value;
+	const p9    : number = st.generalParams.p9.value;
+	const p10   : number = st.generalParams.p10.value;
+	const g     : number = st.generalParams.g.value;
+	const hexDp : number = st.generalParams.hexDp.value;
+
+	const supCvDp  : number = (st.equip.supCv.isMounted) ? (g / st.equip.supCv.valve.kvs) ** 2 : 0;
+	const retCvDp  : number = (st.equip.retCv.isMounted) ? (g / st.equip.retCv.valve.kvs) ** 2 : 0;
+	const supDprDp : number = (st.equip.supDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
+	const retDprDp : number = (st.equip.retDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
+
+	const downstream1Dp : number = p1 - p2;
+	const downstream2Dp : number = p2 - p3;
+	const upstream1Dp   : number = p8 - p9;
+	const upstream2Dp   : number = p9 - p10;
+
+	const p4 : number = p3 - supDprDp;
+	const p5 : number = p4 - supCvDp;
+	const p6 : number = p5 - hexDp;
+	const p7 : number = p6 - retCvDp;
+
+	const pSatSup : number = getPSat(t1) || 999;
+	const pSatRet : number = getPSat(t2) || 999;
+
+	const downstream1DpMax = st.equip.downstream1.valve.z * (p1 - pSatSup);
+	const downstream2DpMax = st.equip.downstream2.valve.z * (p2 - pSatSup);
+	const supDprDpMax = st.equip.supDpr.valve.z * (p3 - pSatSup);
+	const supCvDpMax = st.equip.supCv.valve.z * (p4 - pSatSup);
+	const retCvDpMax = st.equip.retCv.valve.z * (p6 - pSatRet);
+	const retDprDpMax = st.equip.retDpr.valve.z * (p7 - pSatRet);
+	const upstream1DpMax = st.equip.upstream1.valve.z * (p8 - pSatRet);
+	const upstream2DpMax = st.equip.upstream2.valve.z * (p9 - pSatRet);
+
+	const downstream1V = g * (18.8 / st.equip.downstream1.valve.dn) ** 2;
+	const downstream2V = g * (18.8 / st.equip.downstream2.valve.dn) ** 2;
+	const supDprV = g * (18.8 / st.equip.supDpr.valve.dn) ** 2;
+	const supCvV = g * (18.8 / st.equip.supCv.valve.dn) ** 2;
+	const retCvV = g * (18.8 / st.equip.retCv.valve.dn) ** 2;
+	const retDprV = g * (18.8 / st.equip.retDpr.valve.dn) ** 2;
+	const upstream1V = g * (18.8 / st.equip.upstream1.valve.dn) ** 2;
+	const upstream2V = g * (18.8 / st.equip.upstream2.valve.dn) ** 2;
+
+	const supCvAuthority = `${supCvDp.toFixed(2)} > ${(0.5 * (supCvDp + hexDp)).toFixed(2)}`;
+	const retCvAuthority = `${retCvDp.toFixed(2)} > ${(0.5 * (retCvDp + hexDp)).toFixed(2)}`;
+
+	const dps = [downstream1Dp, downstream2Dp, supDprDp, supCvDp, retCvDp, retDprDp, upstream1Dp, upstream2Dp,];
+	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,];
+	const vs = [downstream1V, downstream2V, supDprV, supCvV, retCvV, retDprV, upstream1V, upstream2V,];
+
+	let refreshedEquip : equipType = {};
+	for (let i = 0; i < equipAliases.length; i++) {
+		const newItem = {
+			...st.equip[equipAliases[i]],
+			valve: {...st.equip[equipAliases[i]].valve, dp: dps[i], dpMax: dpMaxs[i], v: vs[i],},
+		};
+		if ([0, 1, 6, 7,].includes(i)) newItem.isMounted = dps[i];
+		refreshedEquip[equipAliases[i]] = newItem;
+	}
+	refreshedEquip.supCv.valve.authority = supCvAuthority;
+	refreshedEquip.retCv.valve.authority = retCvAuthority;
+
+	return {
+		...st,
+		equip: refreshedEquip,
+		generalParams: {
+			...st.generalParams,
+			p4: {...st.generalParams.p4, value: p4,},
+			p5: {...st.generalParams.p5, value: p5,},
+			p6: {...st.generalParams.p6, value: p6,},
+			p7: {...st.generalParams.p7, value: p7,},
+		},
+	};
 }

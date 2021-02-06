@@ -1,25 +1,36 @@
 import React from "react";
-import UpAndDownBtnsGroup from "./UpAndDownBtnsGroup/UpAndDownBtnsGroup";
-import s from './UnitDraw.module.css';
+import UpAndDownBtnsGroup from "./UpAndDownBtnsGroup";
+import {makeStyles} from "@material-ui/core";
+
+
+const useStyles = makeStyles({
+  corpus      : {fill: '#6d6d6d',   stroke: '#000000',},
+  spring      : {fill: '#6d6d6d',   stroke: '#000000',},
+  actuator    : {fill: '#eeeeee',   stroke: '#000000',},
+  impulseTube : {fill: 'none',      stroke: '#000000',},
+  green       : {fill: 'darkgreen', stroke: '#000000', opacity: '0.5',}
+});
 
 
 const UnitDraw = React.memo((props) => {
 
-  const position  = props.aliases.position;
+  const s = useStyles();
+
+  const alias = props.alias;
 
   let x;
-  if      (['Downstream 1', 'Upstream 2',].includes(position)) x = 160;
-  else if (['Downstream 2', 'Upstream 1',].includes(position)) x = 330;
-  else if (['Supply DPR',   'Return DPR',].includes(position)) x = 505;
-  else if (['Supply CV',    'Return CV', ].includes(position)) x = 695;
+  if      (['downstream1', 'upstream2',].includes(alias)) x = 160;
+  else if (['downstream2', 'upstream1',].includes(alias)) x = 330;
+  else if (['supDpr',      'retDpr',].includes(alias))    x = 505;
+  else if (['supCv',       'retCv', ].includes(alias))    x = 695;
 
-  const y = (['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV',].includes(position)) ? 85 : 280;
+  const y = (['downstream1', 'downstream2', 'supDpr', 'supCv',].includes(alias)) ? 85 : 280;
 
   let detailsForPressureRegulator  = null;
   let drive                        = null;
   let secondPulseTube              = null;
 
-  if (['Downstream 1', 'Downstream 2', 'Supply DPR', 'Return DPR', 'Upstream 1', 'Upstream 2',].includes(position)) {
+  if (['downstream1', 'downstream2', 'supDpr', 'retDpr', 'upstream1', 'upstream2',].includes(alias)) {
     detailsForPressureRegulator = (
       <g>
         <ellipse className={s.spring}      cx={x+30} cy={y-20} rx='25' ry='10'/>
@@ -30,20 +41,20 @@ const UnitDraw = React.memo((props) => {
       </g>
     );
 
-    if (position === 'Supply DPR') {
+    if (alias === 'supDpr') {
       secondPulseTube = (<path className={s.impulseTube} d={`M${x+40},79c105-50,60,150,65,210`}/>);
-    } else if (position === 'Return DPR') {
+    } else if (alias === 'retDpr') {
       secondPulseTube = (<path className={s.impulseTube} d={`M${x+40},${y-6}c60-10,50-150,50-159`}/>);
     }
-  } else if (['Supply CV', 'Return CV',].includes(position)) {
-    drive = (<rect x={x+8} y={y-55} className={s.drive} width="45" height="40"/>);
+  } else if (['supCv', 'retCv',].includes(alias)) {
+    drive = (<rect x={x+8} y={y-55} className={s.actuator} width="45" height="40"/>);
   }
 
-  const strokeWidth = (props.hoveredTarget === position) ? 2 : 1;
+  const strokeWidth = (props.hoveredTarget === alias) ? 2 : 1;
 
   const onMouseEnterHandler = () => {
-    props.changeHoveredTargetAC(position);
-    setTimeout(() => {props.changeHoveredTargetAC(null)}, 1000);
+    props.changeHoveredTarget(alias);
+    setTimeout(() => {props.changeHoveredTarget(null)}, 1000);
   }
 
   return (
@@ -55,8 +66,8 @@ const UnitDraw = React.memo((props) => {
       {detailsForPressureRegulator}
       {drive}
       {secondPulseTube}
-      <UpAndDownBtnsGroup x={x} y={y}    alias={props.aliases.alias} objectToSwitch={'valve'}       switchModelAC={props.switchModelAC} />
-      <UpAndDownBtnsGroup x={x} y={y-55} alias={props.aliases.alias} objectToSwitch={'controlUnit'} switchModelAC={props.switchModelAC} />
+      <UpAndDownBtnsGroup x={x} y={y}    alias={props.alias} objectToSwitch={'valve'}       switchModel={props.switchModel} />
+      <UpAndDownBtnsGroup x={x} y={y-55} alias={props.alias} objectToSwitch={'controlUnit'} switchModel={props.switchModel} />
     </g>
   );
 });

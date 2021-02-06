@@ -5,7 +5,7 @@ import {LinearProgress,} from '@material-ui/core';
 import Chart from './Chart/Chart';
 import Scheme from './Scheme/Scheme';
 import {
-  changeGeneralParamAC, changeHoveredTargetAC, downloadCircuitCp, getEquipDbDataAndSetStartEquipState, switchModelAC,
+  changeGeneralParam, changeHoveredTarget, downloadCircuitCp, getEquipDbDataAndSetStartEquipState, switchModel,
 } from '../../redux/circuit-reducer';
 
 
@@ -28,6 +28,7 @@ class CircuitContainer extends React.Component {
       else if (['supDpr', 'retDpr',].includes(alias))                                     additionalPulseTubePrice += pulseTubePrice * 2;
 
       return {
+        alias            : unit.aliases.alias,
         authority        : (['supCv', 'return',].includes(alias)) ? unit.valve.authority : null,
         controlUnitModel : unit.controlUnit.full_title,
         dp               : unit.valve.dp?.toFixed(2),
@@ -41,9 +42,7 @@ class CircuitContainer extends React.Component {
     });
 
     let totalPrice = 0;
-    for (const row of mountedRows) {
-      totalPrice += row.price
-    };
+    for (const row of mountedRows) totalPrice += row.price;
     totalPrice = totalPrice.toFixed(2);
 
 
@@ -55,9 +54,9 @@ class CircuitContainer extends React.Component {
           hoveredTarget         = {this.props.hoveredTarget}
           unitsList             = {unitsList}
 
-          changeGeneralParamAC  = {this.props.changeGeneralParamAC}
-          changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
-          switchModelAC         = {this.props.switchModelAC}
+          changeGeneralParam    = {this.props.changeGeneralParam}
+          changeHoveredTarget   = {this.props.changeHoveredTarget}
+          switchModel           = {this.props.switchModel}
         />
         <Chart
           hoveredTarget         = {this.props.hoveredTarget}
@@ -65,7 +64,7 @@ class CircuitContainer extends React.Component {
           totalPrice            = {totalPrice}
 
           downloadCircuitCp     = {this.props.downloadCircuitCp}
-          changeHoveredTargetAC = {this.props.changeHoveredTargetAC}
+          changeHoveredTarget   = {this.props.changeHoveredTarget}
         />
       </div>
     );
@@ -84,10 +83,10 @@ const mapStateToProps = (state) => {
   }
 }
 const mapDispatchToProps = {
-  changeGeneralParamAC,
-  changeHoveredTargetAC,
+  changeGeneralParam,
+  changeHoveredTarget,
   downloadCircuitCp,
-  switchModelAC,
+  switchModel,
   getEquipDbDataAndSetStartEquipState,
 };
 

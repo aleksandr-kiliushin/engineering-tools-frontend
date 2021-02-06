@@ -1,15 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import InstrumentCard from './InstrumentCard/InstrumentCard';
+import InstrumentCard from './InstrumentCard';
 import tduPhoto from '../../assets/img/tdu-for-home-page.png';
 import valvesPhoto from '../../assets/img/valves-for-home-page.png';
 
 const useStyles = makeStyles({
-  cards: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
+  cards: {display: 'flex', flexDirection: 'row', justifyContent: 'flex-start',},
 });
 
 

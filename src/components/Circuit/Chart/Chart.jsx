@@ -6,36 +6,33 @@ import {GetApp as GetAppIcon,} from '@material-ui/icons';
 
 export default function Chart (props) {
 
+  const TableCellR = (props) => <TableCell align="right">{props.children}</TableCell>;
+
   const mountedRows = props.mountedRows.map((row) => (
     <TableRow
-      key          = {row.position}
-      selected     = {row.position === props.hoveredTarget}
-      onMouseEnter = {() => props.changeHoveredTargetAC(row.position)}
-      onMouseOut   = {() => props.changeHoveredTargetAC(null)}
+      key          = {row.alias}
+      selected     = {row.alias === props.hoveredTarget}
+      onMouseEnter = {() => props.changeHoveredTarget(row.alias)}
+      onMouseOut   = {() => props.changeHoveredTarget(null)}
     >
-      <TableCell>              {row.position}        </TableCell>
-      <TableCell align="right">{row.valveModel}      </TableCell>
-      <TableCell align="right">{row.controlUnitModel}</TableCell>
-      <TableCell align="right">{row.dp}              </TableCell>
-      <TableCell align="right">{row.dpMax}           </TableCell>
-      <TableCell align="right">{row.v}               </TableCell>
-      <TableCell align="right">{row.authority}       </TableCell>
-      <TableCell align="right">{row.price}           </TableCell>
+      <TableCell> {row.position}        </TableCell>
+      <TableCellR>{row.valveModel}      </TableCellR>
+      <TableCellR>{row.controlUnitModel}</TableCellR>
+      <TableCellR>{row.dp}              </TableCellR>
+      <TableCellR>{row.dpMax}           </TableCellR>
+      <TableCellR>{row.v}               </TableCellR>
+      <TableCellR>{row.authority}       </TableCellR>
+      <TableCellR>{row.price}           </TableCellR>
     </TableRow>
   ))
 
   const totalPriceRow = (
     <TableRow>
-      <TableCell/>
-      <TableCell/>
-      <TableCell/>
-      <TableCell/>
-      <TableCell/>
-      <TableCell/>
-      <TableCell align="right">
+      <TableCell/><TableCell/><TableCell/><TableCell/><TableCell/><TableCell/>
+      <TableCellR>
         <Button startIcon={<GetAppIcon />} onClick={props.downloadCircuitCp}>Total:</Button>
-      </TableCell>
-      <TableCell align="right">{props.totalPrice}</TableCell>
+      </TableCellR>
+      <TableCellR>{props.totalPrice}</TableCellR>
     </TableRow>
   );
 
@@ -58,13 +55,13 @@ export default function Chart (props) {
           <TableHead>
             <TableRow>
               <TableCell/>
-              <TableCell align="right">Valve       </TableCell>
-              <TableCell align="right">Control Unit</TableCell>
-              <TableCell align="right">ΔP, bar     </TableCell>
-              <TableCell align="right">ΔPmax, bar  </TableCell>
-              <TableCell align="right">V, m/s      </TableCell>
-              <TableCell align="right">Authority   </TableCell>
-              <TableCell align="right">Price       </TableCell>
+              <TableCellR>Valve       </TableCellR>
+              <TableCellR>Control Unit</TableCellR>
+              <TableCellR>ΔP, bar     </TableCellR>
+              <TableCellR>ΔPmax, bar  </TableCellR>
+              <TableCellR>V, m/s      </TableCellR>
+              <TableCellR>Authority   </TableCellR>
+              <TableCellR>Price       </TableCellR>
             </TableRow>
           </TableHead>
 
