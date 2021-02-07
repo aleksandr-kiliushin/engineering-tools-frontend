@@ -6,10 +6,8 @@ const useStyles = makeStyles({
 });
 
 
-const ParamInputField = (props) => {
-
+export default function ParamInputField(props) {
   const s = useStyles();
-
   const alias = props.param.alias;
 
   let x;
@@ -20,7 +18,6 @@ const ParamInputField = (props) => {
   else if (['p4', 'p7',].includes(alias))      {x = 620;}
   else if (['p5', 'p6',].includes(alias))      {x = 770;}
   else if (alias === 'hexDp')                  {x = 880;}
-
 
   let y;
   if      (['t1', 'p1', 'p2', 'p3', 'p4', 'p5',].includes(alias))  {y = 55 ;}
@@ -53,14 +50,3 @@ const ParamInputField = (props) => {
     </g>
   );
 }
-
-function areEqual(prevProps, nextProps) {
-  if (prevProps.param.alias === 't2') {
-    console.log('prevProps:', prevProps.param.value);
-    console.log('nextProps:', nextProps.param.value);
-  }
-  return (prevProps.param.value === nextProps.param.value);
-  // return false;
-}
-
-export default React.memo(ParamInputField, areEqual);
