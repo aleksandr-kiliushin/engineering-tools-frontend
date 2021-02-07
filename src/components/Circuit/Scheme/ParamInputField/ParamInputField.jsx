@@ -2,10 +2,9 @@ import React from "react";
 import {makeStyles, TextField} from "@material-ui/core";
 
 const useStyles = makeStyles({
-  paramInputFieldStem: {
-    stroke: '#7A7A7A',
-  }
+  paramInputFieldStem: {stroke: '#7A7A7A',}
 });
+
 
 const ParamInputField = (props) => {
 
@@ -55,4 +54,13 @@ const ParamInputField = (props) => {
   );
 }
 
-export default ParamInputField;
+function areEqual(prevProps, nextProps) {
+  if (prevProps.param.alias === 't2') {
+    console.log('prevProps:', prevProps.param.value);
+    console.log('nextProps:', nextProps.param.value);
+  }
+  return (prevProps.param.value === nextProps.param.value);
+  // return false;
+}
+
+export default React.memo(ParamInputField, areEqual);

@@ -5,13 +5,22 @@ import {LinearProgress,} from '@material-ui/core';
 import Chart from './Chart/Chart';
 import Scheme from './Scheme/Scheme';
 import {
-  changeGeneralParam, changeHoveredTarget, downloadCircuitCp, getEquipDbDataAndSetStartEquipState, switchModel,
+  changeGeneralParam,
+  changeHoveredTarget,
+  downloadCircuitCp,
+  getEquipDbDataAndSetStartEquipState,
+  setEquipDbData,
+  switchModel,
 } from '../../redux/circuit-reducer';
 
 
 class CircuitContainer extends React.Component {
   componentDidMount() {
     this.props.getEquipDbDataAndSetStartEquipState();
+  }
+
+  componentWillUnmount() {
+    this.props.setEquipDbData(null);
   }
 
   render() {
@@ -86,7 +95,9 @@ const mapDispatchToProps = {
   changeGeneralParam,
   changeHoveredTarget,
   downloadCircuitCp,
+  setEquipDbData,
   switchModel,
+
   getEquipDbDataAndSetStartEquipState,
 };
 

@@ -1,10 +1,8 @@
-import {ButtonGroup} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import {KeyboardArrowDown, KeyboardArrowUp,} from "@material-ui/icons";
 import React from "react";
+import {ButtonGroup, Button,} from "@material-ui/core";
+import {KeyboardArrowDown, KeyboardArrowUp,} from "@material-ui/icons";
 
-export default function UpAndDownBtnsGroup(props) {
-
+const UpAndDownBtnsGroup = React.memo((props) => {
   const onUpClick = () => {
     props.switchModel(props.alias, props.objectToSwitch, 'up');
   }
@@ -24,5 +22,6 @@ export default function UpAndDownBtnsGroup(props) {
       </ButtonGroup>
     </foreignObject>
   );
+});
 
-}
+export default UpAndDownBtnsGroup;
