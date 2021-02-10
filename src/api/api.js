@@ -1,7 +1,8 @@
 import * as axios from "axios";
 
 const instance = axios.create({
-	baseURL: 'https://oaiyuiapi.herokuapp.com/api/',
+	baseURL: 'https://oaiyui.herokuapp.com/api/',
+	// baseURL: 'http://localhost:8000/api/',
 });
 
 export const circuitApi = {
