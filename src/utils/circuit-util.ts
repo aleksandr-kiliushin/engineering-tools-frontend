@@ -130,8 +130,8 @@ export const getStWithCalcs = (st: stType, equipAliases: string[]) => {
 	const upstream1V = g * (18.8 / st.equip.upstream1.valve.dn) ** 2;
 	const upstream2V = g * (18.8 / st.equip.upstream2.valve.dn) ** 2;
 
-	const supCvAuthority = `${supCvDp.toFixed(2)} > ${(0.5 * (supCvDp + hexDp)).toFixed(2)}`;
-	const retCvAuthority = `${retCvDp.toFixed(2)} > ${(0.5 * (retCvDp + hexDp)).toFixed(2)}`;
+	const supCvAuthority = (supCvDp / (supCvDp + hexDp)).toFixed(2);
+	const retCvAuthority = (retCvDp / (retCvDp + hexDp)).toFixed(2);
 
 	const dps = [downstream1Dp, downstream2Dp, supDprDp, supCvDp, retCvDp, retDprDp, upstream1Dp, upstream2Dp,];
 	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,];

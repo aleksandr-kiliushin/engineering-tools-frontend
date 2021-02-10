@@ -38,7 +38,7 @@ class CircuitContainer extends React.Component {
 
       return {
         alias            : unit.aliases.alias,
-        authority        : (['supCv', 'return',].includes(alias)) ? unit.valve.authority : null,
+        authority        : (['supCv', 'retCv',].includes(alias)) ? unit.valve.authority : null,
         controlUnitModel : unit.controlUnit.full_title,
         dp               : unit.valve.dp?.toFixed(2),
         dpMax            : unit.valve.dpMax?.toFixed(2),

@@ -54,7 +54,7 @@ export default function circuitReducer(state = initialState, action) {
   switch (action.type) {
 
     case CHANGE_GENERAL_PARAM: {
-      if (!isNaN(+action.value) && +action.value <= 150 && +action.value >= 0) {
+      if (!isNaN(+action.value) && (+action.value <= 150 || action.field === 'g') && +action.value >= 0) {
         const changedValue = (action.value.endsWith('.')) ? action.value : +action.value;
         st = {...state};
         st.generalParams[action.field].value = changedValue;
