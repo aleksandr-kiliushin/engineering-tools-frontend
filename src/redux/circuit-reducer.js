@@ -12,9 +12,9 @@ const SET_START_EQUIP       = 'circuit/SET_START_EQUIP';
 const SWITCH_MODEL          = 'circuit/SWITCH_MODEL';
 
 // Defines initial equip state.
-const isMountedArr       = [false,          false,          true,         true,        false,        false,       false,        false,       ];
-const equipAliases       = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retCv',     'retDpr',     'upstream1',  'upstream2', ];
-const positionAliases    = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2',];
+const isMountedArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ];
+const equipAliases    = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retCv',     'retDpr',     'upstream1',  'upstream2', ];
+const positionAliases = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2',];
 
 const initialEquip = {};
 for (let i = 0; i < equipAliases.length; i++) {
@@ -99,17 +99,17 @@ export default function circuitReducer(state = initialState, action) {
       st.equip[alias][object] = getNewUnitState(state.equip[alias][object].id, dataArr, action.direction);
 
       if (alias === 'supDpr') {
-        st.equip.supDpr.isMounted = true;
-        st.equip.retDpr.isMounted = false;
+        st.equip.supDpr.isMounted = 1;
+        st.equip.retDpr.isMounted = 0;
       } else if (alias === 'retDpr') {
-        st.equip.supDpr.isMounted = false;
-        st.equip.retDpr.isMounted = true;
+        st.equip.supDpr.isMounted = 0;
+        st.equip.retDpr.isMounted = 1;
       } else if (alias === 'supCv') {
-        st.equip.supCv.isMounted = true;
-        st.equip.retCv.isMounted = false;
+        st.equip.supCv.isMounted = 1;
+        st.equip.retCv.isMounted = 0;
       } else if (alias === 'retCv') {
-        st.equip.supCv.isMounted = false;
-        st.equip.retCv.isMounted = true;
+        st.equip.supCv.isMounted = 0;
+        st.equip.retCv.isMounted = 1;
       }
 
       return getStWithCalcs(st, equipAliases);

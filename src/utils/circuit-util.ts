@@ -34,12 +34,12 @@ export const getNewUnitState = (currentId : number, dataArr: {}[], switchDirecti
 
 
 type equipDbDataType = {
-	cv_actuators: []
-	cv_valves: []
-	downstream_blocks: []
-	dpr_blocks: []
-	pr_valves: []
-	upstream_blocks: []
+	cv_actuators      : []
+	cv_valves         : []
+	downstream_blocks : []
+	dpr_blocks        : []
+	pr_valves         : []
+	upstream_blocks   : []
 };
 
 export const getDataArr = (equipDbData: equipDbDataType, alias: string, object: string) => {
@@ -67,7 +67,7 @@ type equipType = {
 			valve       : string
 		},
 		controlUnit : {},
-		isMounted   : boolean | number
+		isMounted   : number
 		valve       : {authority?: string, dn: number, kvs: number, z: number,},
 	};
 };
@@ -133,9 +133,9 @@ export const getStWithCalcs = (st: stType, equipAliases: string[]) => {
 	const supCvAuthority = (supCvDp / (supCvDp + hexDp)).toFixed(2);
 	const retCvAuthority = (retCvDp / (retCvDp + hexDp)).toFixed(2);
 
-	const dps = [downstream1Dp, downstream2Dp, supDprDp, supCvDp, retCvDp, retDprDp, upstream1Dp, upstream2Dp,];
+	const dps    = [downstream1Dp,    downstream2Dp,    supDprDp,    supCvDp,    retCvDp,    retDprDp,    upstream1Dp,    upstream2Dp,   ];
 	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,];
-	const vs = [downstream1V, downstream2V, supDprV, supCvV, retCvV, retDprV, upstream1V, upstream2V,];
+	const vs     = [downstream1V,     downstream2V,     supDprV,     supCvV,     retCvV,     retDprV,     upstream1V,     upstream2V,    ];
 
 	let refreshedEquip : equipType = {};
 	for (let i = 0; i < equipAliases.length; i++) {
