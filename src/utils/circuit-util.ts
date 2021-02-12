@@ -35,10 +35,10 @@ export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArrayTyp
 }
 
 
-export const getDataArr = (equipDbData: EquipDbDataType, alias: string, object: string) => {
+export const getDataArr = (equipDbData: EquipDbDataType, alias: string, object: 'valve' | 'controlUnit') => {
 	if (object === 'valve') {
 		return (['supCv', 'retCv',].includes(alias) ? equipDbData?.cv_valves : equipDbData?.pr_valves);
-	} else if (object === 'controlUnit') {
+	} else if (object === 'controlUnit') {//change to brain
 		if      (['downstream1', 'downstream2',].includes(alias)) return equipDbData?.downstream_blocks;
 		else if (['upstream1', 'upstream2',].includes(alias))     return equipDbData?.upstream_blocks;
 		else if (['supDpr', 'retDpr',].includes(alias))           return equipDbData?.dpr_blocks;

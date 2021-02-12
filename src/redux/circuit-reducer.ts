@@ -1,8 +1,10 @@
-import { GeneralParamsType, StateType, EquipType } from './../types/types';
+import { RootState } from './store';
+import { GeneralParamsType, StateType, EquipType, EquipDbDataType } from './../types/types';
 import {getDataArr, getNewUnitState, getStWithCalcs} from "../utils/circuit-util"
 import {circuitApi,} from "../api/api"
 import {saveAs,} from 'file-saver'
 import {selectMountedUnitsCodes,} from "./circuit-selectors"
+import { ThunkAction } from 'redux-thunk';
 
 
 const CHANGE_GENERAL_PARAM  = 'circuit/CHANGE_GENERAL_PARAM'
@@ -28,7 +30,7 @@ equipAliases.forEach((alias, i) => {
       position    : positionAliases[i],
 			valve       : alias + 'Valve',
 		},
-    controlUnit : {id: 0,},
+    controlUnit : {id: 0,},// change to 'brain'
     isMounted   : isMountedArr[i],
     valve       : {id: 0,},
   }
@@ -42,7 +44,7 @@ const generalParamsValues  = [10,  0.15,    8,    8,    8,    0,    0,    0,    
 
 const initialGeneralParams: GeneralParamsType = {}
 generalParamsAliases.forEach((alias, i) => {
-  initialGeneralParams[generalParamsAliases[i]] = {alias: alias, value: generalParamsValues[i],}
+  initialGeneralParams[alias] = {alias: alias, value: generalParamsValues[i],}
 })
 
 
@@ -52,11 +54,11 @@ const initialState: StateType = {
   equip         : initialEquip,
   equipDbData   : null,
   generalParams : initialGeneralParams,
-  hoveredTarget : '',
+  hoveredTarget : null,
   isFetching    : false,
 }
 
-const circuitReducer = (state: StateType = initialState, action: any): StateType => {
+const circuitReducer = (state: StateType = initialState, action: ActionsTypes): StateType => {
 
   let st
 
@@ -66,7 +68,7 @@ const circuitReducer = (state: StateType = initialState, action: any): StateType
       if (!isNaN(+action.value) && (+action.value <= 150 || action.field === 'g') && +action.value >= 0) {
         const changedValue = (action.value.endsWith('.')) ? action.value : +action.value
         st = {...state}
-        st.generalParams[action.field].value = changedValue
+        st.generalParams[action.field].value = +changedValue
       } else {
         return state
       }
@@ -129,6 +131,8 @@ const circuitReducer = (state: StateType = initialState, action: any): StateType
   }
 }
 
+type ActionsTypes = ChangeGeneralParamActionType | ChangeHoveredTargetActionType | SetEquipDbDataActionType |
+SetIsFetchingActionType | SetStartEquipActionType | SwitchModelActionType
 
 type ChangeGeneralParamActionType = {
   type  : typeof CHANGE_GENERAL_PARAM
@@ -141,9 +145,9 @@ export const changeGeneralParam = (field: string, value: string): ChangeGeneralP
 
 type ChangeHoveredTargetActionType = {
   type   : typeof CHANGE_HOVERED_TARGET
-  target : string
+  target : string | null
 }
-export const changeHoveredTarget = (target: string): ChangeHoveredTargetActionType => ({
+export const changeHoveredTarget = (target: string | null): ChangeHoveredTargetActionType => ({
   type: CHANGE_HOVERED_TARGET, target,
 })
 
@@ -151,7 +155,7 @@ type SetEquipDbDataActionType = {
   type        : typeof SET_EQUIP_DB_DATA
   equipDbData : any
 }
-export const setEquipDbData = (equipDbData: any): SetEquipDbDataActionType => ({
+export const setEquipDbData = (equipDbData: EquipDbDataType): SetEquipDbDataActionType => ({
   type: SET_EQUIP_DB_DATA, equipDbData,
 })
 
@@ -173,24 +177,27 @@ export const setStartEquip = (): SetStartEquipActionType => ({
 type SwitchModelActionType = {
   type      : typeof SWITCH_MODEL
   alias     : string
-  object    : string
+  object    : 'valve' | 'controlUnit'
   direction : string
 }
-export const switchModel = (alias: string, object: string, direction: string): SwitchModelActionType => ({
+export const switchModel = (alias: string, object: 'valve' | 'controlUnit', direction: string): SwitchModelActionType => ({
   type: SWITCH_MODEL, alias, object, direction,
 })
 
-export const getEquipDbDataAndSetStartEquipState = () => async (dispatch: any) => {
-  dispatch(setIsFetching(true));
-  const data = await circuitApi.getEquipDbData();
-  dispatch(setIsFetching(false));
-  dispatch(setEquipDbData(data));
-  dispatch(setStartEquip());
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsTypes>
+
+export const getEquipDbDataAndSetStartEquipState = (): ThunkType => async (dispatch) => {
+  dispatch(setIsFetching(true))
+  const data = await circuitApi.getEquipDbData()
+  dispatch(setIsFetching(false))
+  dispatch(setEquipDbData(data))
+  dispatch(setStartEquip())
 }
-export const downloadCircuitCp = () => async (dispatch: any, getState: any) => {
-  const mountedUnitsCodes = selectMountedUnitsCodes(getState());
-  const data = await circuitApi.downloadCp(mountedUnitsCodes);
-  saveAs(data, 'cp.xlsx');
+
+export const downloadCircuitCp = (): ThunkType => async (dispatch, getState) => {
+  const mountedUnitsCodes = selectMountedUnitsCodes(getState())
+  const data = await circuitApi.downloadCp(mountedUnitsCodes)
+  saveAs(data, 'cp.xlsx')
 }
 
 export default circuitReducer;

@@ -1,19 +1,31 @@
-import React from "react";
+import React from 'react'
 
 import {Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,} from '@material-ui/core';
 import {GetApp as GetAppIcon,} from '@material-ui/icons';
 
+type PropsType = {
+  hoveredTarget         : string | null
+  mountedUnitsTableData : any
+  totalPrice            : number | string
 
-export default function Chart (props) {
+  changeHoveredTarget : (target: string | null) => void
 
-  const TableCellR = (props) => <TableCell align="right">{props.children}</TableCell>;
+  downloadCircuitCp   : any
+}
 
-  const mountedRows = props.mountedRows.map((row) => (
+export const Chart: React.FC<PropsType> = (props) => {
+
+  const {hoveredTarget, mountedUnitsTableData, totalPrice, changeHoveredTarget, downloadCircuitCp} = props
+
+  const TableCellR: React.FC<{children: React.ReactNode}> = ({children}) => <TableCell align="right">{children}</TableCell>;
+
+  // @ts-ignore
+  const mountedRows = mountedUnitsTableData.map((row) => (
     <TableRow
       key          = {row.alias}
-      selected     = {row.alias === props.hoveredTarget}
-      onMouseEnter = {() => props.changeHoveredTarget(row.alias)}
-      onMouseOut   = {() => props.changeHoveredTarget(null)}
+      selected     = {row.alias === hoveredTarget}
+      onMouseEnter = {() => changeHoveredTarget(row.alias)}
+      onMouseOut   = {() => changeHoveredTarget(null)}
     >
       <TableCell> {row.position}        </TableCell>
       <TableCellR>{row.valveModel}      </TableCellR>
@@ -30,9 +42,9 @@ export default function Chart (props) {
     <TableRow>
       <TableCell/><TableCell/><TableCell/><TableCell/><TableCell/><TableCell/>
       <TableCellR>
-        <Button startIcon={<GetAppIcon />} onClick={props.downloadCircuitCp}>Total:</Button>
+        <Button startIcon={<GetAppIcon />} onClick={downloadCircuitCp}>Total:</Button>
       </TableCellR>
-      <TableCellR>{props.totalPrice}</TableCellR>
+      <TableCellR>{totalPrice}</TableCellR>
     </TableRow>
   );
 
@@ -73,5 +85,5 @@ export default function Chart (props) {
         </Table>
       </TableContainer>
     </div>
-  );
+  )
 }

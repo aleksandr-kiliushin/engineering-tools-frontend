@@ -16,32 +16,35 @@ export type EquipDbDataType = {
 	[key: string]: EquipDbDataArrayType
 } | null
 
+export type GeneralParamType = {
+	alias: string
+	value: number
+}
 
 export type GeneralParamsType = {
-  [key: string]: {
-    alias: string
-    value: number
-  }
+  [key: string]: GeneralParamType
 }
 
 export type StateType = {
   equip         : EquipType
   equipDbData   : EquipDbDataType
   generalParams : GeneralParamsType
-  hoveredTarget : string
+  hoveredTarget : string | null
   isFetching    : boolean
 }
 
+export type EquipUnitType = {
+	aliases: {
+		alias       : string
+		controlUnit : string
+		position    : string
+		valve       : string
+	}
+	controlUnit : any
+	isMounted   : number
+	valve       : any
+}
+
 export type EquipType = {
-	[key: string]: {
-		aliases: {
-			alias       : string
-			controlUnit : string
-			position    : string
-			valve       : string
-		},
-		controlUnit : any
-		isMounted   : number
-		valve       : any
-	};
-};
+	[key: string]: EquipUnitType
+}

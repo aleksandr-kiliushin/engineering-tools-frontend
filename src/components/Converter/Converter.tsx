@@ -1,42 +1,42 @@
-import React, {useState} from 'react';
-import {Card, CardContent, TextField, Typography} from '@material-ui/core';
-import {fromBar, scales, toBar,} from '../../utils/converterCalcUtil';
+import React, {ChangeEvent, useState} from 'react'
+import {Card, CardContent, TextField, Typography} from '@material-ui/core'
+import {fromBar, scales, toBar} from '../../utils/converterCalcUtil'
 
 
 export default function Converter () {
 
-  const [isDot,      setIsDot,     ] = useState(false);
-  const [scale,      setScale,     ] = useState(scales.p.bar);
-  const [valueInBar, setValueInBar,] = useState(5);
+  const [isDot,      setIsDot,     ] = useState(false)
+  const [scale,      setScale,     ] = useState(scales.p.bar)
+  const [valueInBar, setValueInBar,] = useState(5)
 
   const onChangeHandler = (value: string, scale: string) => {
 
-    const dotCount: number = (value.match(/\./g) || []).length;
-    if (isNaN(+value) || dotCount > 1) return;
+    const dotCount: number = (value.match(/\./g) || []).length
+    if (isNaN(+value) || dotCount > 1) return
 
-    const isDot: boolean = (value.endsWith('.') && dotCount === 1);
+    const isDot: boolean = (value.endsWith('.') && dotCount === 1)
 
-    const valueInBar: number = toBar(value, scale);
+    const valueInBar: number = toBar(value, scale)
 
-    setIsDot(isDot);
-    setScale(scale);
-    setValueInBar(valueInBar);
+    setIsDot(isDot)
+    setScale(scale)
+    setValueInBar(valueInBar)
   }
 
-  let bar:   string = (+valueInBar.toFixed(2)).toString();
-  let mpa:   string = fromBar(valueInBar, scales.p.mpa);
-  let mh2o:  string = fromBar(valueInBar, scales.p.mh2o);
-  let kgcm2: string = fromBar(valueInBar, scales.p.kgcm2);
+  let bar:   string = (+valueInBar.toFixed(2)).toString()
+  let mpa:   string = fromBar(valueInBar, scales.p.mpa)
+  let mh2o:  string = fromBar(valueInBar, scales.p.mh2o)
+  let kgcm2: string = fromBar(valueInBar, scales.p.kgcm2)
 
   if (isDot) {
-    if      (scale === scales.p.bar)   {bar   += '.';}
-    else if (scale === scales.p.mpa)   {mpa   += '.';}
-    else if (scale === scales.p.mh2o)  {mh2o  += '.';}
-    else if (scale === scales.p.kgcm2) {kgcm2 += '.';}
+    if      (scale === scales.p.bar)   bar   += '.'
+    else if (scale === scales.p.mpa)   mpa   += '.'
+    else if (scale === scales.p.mh2o)  mh2o  += '.'
+    else if (scale === scales.p.kgcm2) kgcm2 += '.'
   }
 
   return (
-    <Card style={{width: 150,}}>
+    <Card style={{width: 150}}>
       <CardContent>
 
         <Typography color="textSecondary">Pressure</Typography>
@@ -61,12 +61,12 @@ type ParamInputFieldPropsType = {
 };
 
 function ParamInputField(props: ParamInputFieldPropsType) {
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.onChangeHandler(e.target.value, props.scale);
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    props.onChangeHandler(e.target.value, props.scale)
   }
   return (
     <div>
-      <TextField label={props.label} onChange={onChangeHandler} style={{width: 100,}} value={props.value} />
+      <TextField label={props.label} onChange={onChangeHandler} style={{width: 100}} value={props.value} />
     </div>
   );
 }
