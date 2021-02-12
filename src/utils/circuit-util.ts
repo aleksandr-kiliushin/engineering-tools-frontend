@@ -1,4 +1,6 @@
-export const getPSat = (t: number) => {
+import { EquipDbDataType, StateType, EquipType, EquipDbDataArrayType } from './../types/types';
+
+const getPSat = (t: number) => {
 	const pSatMap = new Map([
 		[0, -0.99],  [1, -0.99],  [2, -0.99],  [3, -0.99],  [4, -0.99],  [5, -0.99],  [6, -0.99],  [7, -0.99],  [8, -0.99],
 		[9, -0.99],  [10, -0.99], [11, -0.99], [12, -0.99], [13, -0.99], [14, -0.98], [15, -0.98], [16, -0.98], [17, -0.98],
@@ -18,70 +20,34 @@ export const getPSat = (t: number) => {
 		[135, 2.11], [136, 2.20], [137, 2.32], [138, 2.47], [139, 2.70], [140, 2.57], [141, 2.68], [142, 2.81], [143, 2.99],
 		[144, 3.26], [145, 3.11], [146, 3.24], [147, 3.39], [148, 3.60], [149, 3.92], [150, 3.74],
 	]);
-	return pSatMap.get(t) || 666;
+	return pSatMap.get(t) || 666
 }
 
 
-export const getNewUnitState = (currentId : number, dataArr: {}[], switchDirection: string) => {
+export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArrayType, switchDirection: string) => {
 	// Calculate a new id.
-	let newId = 0;
-	if      (switchDirection === 'start') newId = 0;
-	else if (switchDirection === 'up')    newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0;
-	else if (switchDirection === 'down')  newId = (currentId !== 0)                  ? currentId - 1 : dataArr.length - 1;
+	let newId = 0
+	if      (switchDirection === 'start') newId = 0
+	else if (switchDirection === 'up')    newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0
+	else if (switchDirection === 'down')  newId = (currentId !== 0)                  ? currentId - 1 : dataArr.length - 1
 	// Return new unit state as the result.
-	return {...dataArr[newId], id: newId,};
+	return {...dataArr[newId], id: newId,}
 }
 
 
-type equipDbDataType = {
-	cv_actuators      : []
-	cv_valves         : []
-	downstream_blocks : []
-	dpr_blocks        : []
-	pr_valves         : []
-	upstream_blocks   : []
-};
-
-export const getDataArr = (equipDbData: equipDbDataType, alias: string, object: string) => {
+export const getDataArr = (equipDbData: EquipDbDataType, alias: string, object: string) => {
 	if (object === 'valve') {
-		return (['supCv', 'retCv',].includes(alias) ? equipDbData.cv_valves : equipDbData.pr_valves);
+		return (['supCv', 'retCv',].includes(alias) ? equipDbData?.cv_valves : equipDbData?.pr_valves);
 	} else if (object === 'controlUnit') {
-		if      (['downstream1', 'downstream2',].includes(alias)) return equipDbData.downstream_blocks;
-		else if (['upstream1', 'upstream2',].includes(alias))     return equipDbData.upstream_blocks;
-		else if (['supDpr', 'retDpr',].includes(alias))           return equipDbData.dpr_blocks;
-		else if (['supCv', 'retCv',].includes(alias))             return equipDbData.cv_actuators;
+		if      (['downstream1', 'downstream2',].includes(alias)) return equipDbData?.downstream_blocks;
+		else if (['upstream1', 'upstream2',].includes(alias))     return equipDbData?.upstream_blocks;
+		else if (['supDpr', 'retDpr',].includes(alias))           return equipDbData?.dpr_blocks;
+		else if (['supCv', 'retCv',].includes(alias))             return equipDbData?.cv_actuators;
 	}
 }
 
 
-type generalParamsType = {
-	[key: string]: {alias: string, value: number,};
-}
-
-type equipType = {
-	[key: string]: {
-		aliases: {
-			alias       : string
-			controlUnit : string
-			position    : string
-			valve       : string
-		},
-		controlUnit : {},
-		isMounted   : number
-		valve       : {authority?: string, dn: number, kvs: number, z: number,},
-	};
-};
-
-type stType = {
-	equip         : equipType
-	equipDbData   : [] | null
-	generalParams : generalParamsType
-	hoveredTarget : string
-	isFetching    : boolean
-};
-
-
-export const getStWithCalcs = (st: stType, equipAliases: string[]) => {
+export const getStWithCalcs = (st: StateType, equipAliases: Array<string>) => {
 
 	const t1    : number = st.generalParams.t1.value;
 	const t2    : number = st.generalParams.t2.value;
@@ -137,15 +103,17 @@ export const getStWithCalcs = (st: stType, equipAliases: string[]) => {
 	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,];
 	const vs     = [downstream1V,     downstream2V,     supDprV,     supCvV,     retCvV,     retDprV,     upstream1V,     upstream2V,    ];
 
-	let refreshedEquip : equipType = {};
-	for (let i = 0; i < equipAliases.length; i++) {
+	let refreshedEquip : EquipType = {};
+
+	equipAliases.forEach((alias, i) => {
 		const newItem = {
-			...st.equip[equipAliases[i]],
-			valve: {...st.equip[equipAliases[i]].valve, dp: dps[i], dpMax: dpMaxs[i], v: vs[i],},
+			...st.equip[alias],
+			valve: {...st.equip[alias].valve, dp: dps[i], dpMax: dpMaxs[i], v: vs[i],},
 		};
 		if ([0, 1, 6, 7,].includes(i)) newItem.isMounted = dps[i];
-		refreshedEquip[equipAliases[i]] = newItem;
-	}
+		refreshedEquip[alias] = newItem;
+	})
+
 	refreshedEquip.supCv.valve.authority = supCvAuthority;
 	refreshedEquip.retCv.valve.authority = retCvAuthority;
 
