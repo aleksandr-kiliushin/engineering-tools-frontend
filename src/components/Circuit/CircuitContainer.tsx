@@ -5,12 +5,13 @@ import {LinearProgress,} from '@material-ui/core'
 import { Chart } from './Chart/Chart'
 import {Scheme} from './Scheme/Scheme'
 import {
-  changeGeneralParam,
-  changeHoveredTarget,
+  actions,
+  // changeGeneralParam,
+  // changeHoveredTarget,
+  // setEquipDbData,
+  // switchModel,
   downloadCircuitCp,
   getEquipDbDataAndSetStartEquipState,
-  setEquipDbData,
-  switchModel,
 } from '../../redux/circuit-reducer'
 import { EquipDbDataType, EquipType, GeneralParamsType } from '../../types/types'
 import { RootState } from '../../redux/store'
@@ -107,6 +108,7 @@ class CircuitContainer extends React.Component<PropsType> {
   }
 }
 
+
 const mapStateToProps = (state: RootState): MapStatePropsType => {
   return {
     equip          : state.circuit.equip,
@@ -116,12 +118,10 @@ const mapStateToProps = (state: RootState): MapStatePropsType => {
     pulseTubePrice : state.circuit.equipDbData?.pulse_tubes[0].price,
   }
 }
+
+
 const mapDispatchToProps: MapDispatchPropsType = {
-  changeGeneralParam,
-  changeHoveredTarget,
-  setEquipDbData,
-  switchModel,
-  
+  ...actions,
   downloadCircuitCp,
   getEquipDbDataAndSetStartEquipState,
 };

@@ -1,25 +1,15 @@
-import { RootState } from './store';
-import { GeneralParamsType, StateType, EquipType, EquipDbDataType } from './../types/types';
+import { BaseThunkType, InferActionsTypes } from './store';
+import { GeneralParamsType, StateType, EquipType, EquipDbDataType } from './../types/types'
 import {getDataArr, getNewUnitState, getStWithCalcs} from "../utils/circuit-util"
-import {circuitApi,} from "../api/api"
+import {circuitApi,} from '../api/circuit-api'
 import {saveAs,} from 'file-saver'
-import {selectMountedUnitsCodes,} from "./circuit-selectors"
-import { ThunkAction } from 'redux-thunk';
+import {selectMountedUnitsCodes,} from './circuit-selectors'
 
-
-const CHANGE_GENERAL_PARAM  = 'circuit/CHANGE_GENERAL_PARAM'
-const CHANGE_HOVERED_TARGET = 'circuit/CHANGE_HOVERED_TARGET'
-const SET_EQUIP_DB_DATA     = 'circuit/SET_EQUIP_DB_DATA'
-const SET_IS_FETCHING       = 'circuit/SET_IS_FETCHING'
-const SET_START_EQUIP       = 'circuit/SET_START_EQUIP'
-const SWITCH_MODEL          = 'circuit/SWITCH_MODEL'
 
 // Defines initial equip state.
 const isMountedArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
 const equipAliases    = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retCv',     'retDpr',     'upstream1',  'upstream2', ]
 const positionAliases = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2',]
-
-
 
 const initialEquip: EquipType = {}
 equipAliases.forEach((alias, i) => {
@@ -48,7 +38,7 @@ generalParamsAliases.forEach((alias, i) => {
 })
 
 
-
+// todo: delete 'is mounted'. replace with dp.
 
 const initialState: StateType = {
   equip         : initialEquip,
@@ -64,7 +54,7 @@ const circuitReducer = (state: StateType = initialState, action: ActionsTypes): 
 
   switch (action.type) {
 
-    case CHANGE_GENERAL_PARAM: {
+    case 'CHANGE_GENERAL_PARAM': {
       if (!isNaN(+action.value) && (+action.value <= 150 || action.field === 'g') && +action.value >= 0) {
         const changedValue = (action.value.endsWith('.')) ? action.value : +action.value
         st = {...state}
@@ -75,19 +65,19 @@ const circuitReducer = (state: StateType = initialState, action: ActionsTypes): 
       return getStWithCalcs(st, equipAliases)
     }
 
-    case CHANGE_HOVERED_TARGET: {
+    case 'CHANGE_HOVERED_TARGET': {
       return {...state, hoveredTarget: action.target,}
     }
 
-    case SET_EQUIP_DB_DATA: {
+    case 'SET_EQUIP_DB_DATA': {
       return {...state, equipDbData: action.equipDbData,}
     }
 
-    case SET_IS_FETCHING: {
+    case 'SET_IS_FETCHING': {
       return {...state, isFetching: action.isFetching,}
     }
 
-    case SET_START_EQUIP: {
+    case 'SET_START_EQUIP': {
       const startEquip = {...state.equip,}
       for (let i = 0; i < equipAliases.length; i++) {
         const valveDataArr                      = getDataArr(state.equipDbData, equipAliases[i], 'valve')
@@ -99,7 +89,7 @@ const circuitReducer = (state: StateType = initialState, action: ActionsTypes): 
       return getStWithCalcs(st, equipAliases);
     }
 
-    case SWITCH_MODEL: {
+    case 'SWITCH_MODEL': {
 
       const alias: string = action.alias;
       const object: 'valve' | 'controlUnit' = action.object;
@@ -131,67 +121,26 @@ const circuitReducer = (state: StateType = initialState, action: ActionsTypes): 
   }
 }
 
-type ActionsTypes = ChangeGeneralParamActionType | ChangeHoveredTargetActionType | SetEquipDbDataActionType |
-SetIsFetchingActionType | SetStartEquipActionType | SwitchModelActionType
+type ActionsTypes = InferActionsTypes<typeof actions>
 
-type ChangeGeneralParamActionType = {
-  type  : typeof CHANGE_GENERAL_PARAM
-  field : string
-  value : string
+type ThunkType = BaseThunkType<ActionsTypes>
+
+export const actions = {
+  changeGeneralParam  : (field: string, value: string) => ({type: 'CHANGE_GENERAL_PARAM', field, value} as const),
+  changeHoveredTarget : (target: string | null)        => ({type: 'CHANGE_HOVERED_TARGET', target} as const),
+  setEquipDbData      : (equipDbData: EquipDbDataType) => ({type: 'SET_EQUIP_DB_DATA', equipDbData} as const),
+  setIsFetching       : (isFetching: boolean)          => ({type: 'SET_IS_FETCHING', isFetching} as const),
+  setStartEquip       : ()                             => ({type: 'SET_START_EQUIP'} as const),
+  switchModel         : (alias: string, object: 'valve' | 'controlUnit', direction: string) => ({type: 'SWITCH_MODEL', alias, object, direction} as const),
 }
-export const changeGeneralParam = (field: string, value: string): ChangeGeneralParamActionType => ({
-  type: CHANGE_GENERAL_PARAM, field, value,
-})
 
-type ChangeHoveredTargetActionType = {
-  type   : typeof CHANGE_HOVERED_TARGET
-  target : string | null
-}
-export const changeHoveredTarget = (target: string | null): ChangeHoveredTargetActionType => ({
-  type: CHANGE_HOVERED_TARGET, target,
-})
-
-type SetEquipDbDataActionType = {
-  type        : typeof SET_EQUIP_DB_DATA
-  equipDbData : any
-}
-export const setEquipDbData = (equipDbData: EquipDbDataType): SetEquipDbDataActionType => ({
-  type: SET_EQUIP_DB_DATA, equipDbData,
-})
-
-type SetIsFetchingActionType = {
-  type       : typeof SET_IS_FETCHING
-  isFetching : boolean
-}
-export const setIsFetching = (isFetching: boolean): SetIsFetchingActionType => ({
-  type: SET_IS_FETCHING, isFetching,
-})
-
-type SetStartEquipActionType = {
-  type: typeof SET_START_EQUIP
-}
-export const setStartEquip = (): SetStartEquipActionType => ({
-  type: SET_START_EQUIP,
-})
-
-type SwitchModelActionType = {
-  type      : typeof SWITCH_MODEL
-  alias     : string
-  object    : 'valve' | 'controlUnit'
-  direction : string
-}
-export const switchModel = (alias: string, object: 'valve' | 'controlUnit', direction: string): SwitchModelActionType => ({
-  type: SWITCH_MODEL, alias, object, direction,
-})
-
-type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionsTypes>
 
 export const getEquipDbDataAndSetStartEquipState = (): ThunkType => async (dispatch) => {
-  dispatch(setIsFetching(true))
+  dispatch(actions.setIsFetching(true))
   const data = await circuitApi.getEquipDbData()
-  dispatch(setIsFetching(false))
-  dispatch(setEquipDbData(data))
-  dispatch(setStartEquip())
+  dispatch(actions.setIsFetching(false))
+  dispatch(actions.setEquipDbData(data))
+  dispatch(actions.setStartEquip())
 }
 
 export const downloadCircuitCp = (): ThunkType => async (dispatch, getState) => {
