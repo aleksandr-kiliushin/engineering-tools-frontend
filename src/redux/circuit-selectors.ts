@@ -5,7 +5,7 @@ export const selectMountedUnitsCodes = (state: RootState) => {
 	const mountedUnitsList  = unitsList.filter((unit) => unit.isMounted)
 	const mountedUnitsCodes = []
 	for (const unit of mountedUnitsList) {
-		mountedUnitsCodes.push(unit.valve.code, unit.controlUnit.code)
+		mountedUnitsCodes.push(unit.valve.code, unit.brain.code)
 	}
 	return mountedUnitsCodes
 }

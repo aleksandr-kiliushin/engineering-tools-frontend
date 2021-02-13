@@ -27,14 +27,14 @@ export const Chart: React.FC<PropsType> = (props) => {
       onMouseEnter = {() => changeHoveredTarget(row.alias)}
       onMouseOut   = {() => changeHoveredTarget(null)}
     >
-      <TableCell> {row.position}        </TableCell>
-      <TableCellR>{row.valveModel}      </TableCellR>
-      <TableCellR>{row.controlUnitModel}</TableCellR>
-      <TableCellR>{row.dp}              </TableCellR>
-      <TableCellR>{row.dpMax}           </TableCellR>
-      <TableCellR>{row.v}               </TableCellR>
-      <TableCellR>{row.authority}       </TableCellR>
-      <TableCellR>{row.price}           </TableCellR>
+      <TableCell> {row.position}  </TableCell>
+      <TableCellR>{row.valveModel}</TableCellR>
+      <TableCellR>{row.brainModel}</TableCellR>
+      <TableCellR>{row.dp}        </TableCellR>
+      <TableCellR>{row.dpMax}     </TableCellR>
+      <TableCellR>{row.v}         </TableCellR>
+      <TableCellR>{row.authority} </TableCellR>
+      <TableCellR>{row.price}     </TableCellR>
     </TableRow>
   ))
 

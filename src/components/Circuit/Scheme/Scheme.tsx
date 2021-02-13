@@ -2,7 +2,7 @@ import React from 'react'
 import {ParamInputField} from './ParamInputField/ParamInputField'
 import UnitDraw from './UnitDraw/UnitDraw'
 import {makeStyles} from '@material-ui/core/styles'
-import { EquipUnitType, GeneralParamType } from '../../../types/types'
+import { EquipUnitState, GeneralParamType, ObjectToSwitch } from '../../../types/types'
 
 
 const useStyles = makeStyles({
@@ -16,11 +16,11 @@ const useStyles = makeStyles({
 type PropsType = {
   generalParamsList   : Array<GeneralParamType>
   hoveredTarget       : string | null
-  unitsList           : Array<EquipUnitType>
+  unitsList           : Array<EquipUnitState>
 
   changeGeneralParam  : (field: string, value: string) => void
   changeHoveredTarget : (target: string | null) => void
-  switchModel         : (alias: string, object: 'valve' | 'controlUnit', direction: string) => void
+  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => void
 }
 
 export const Scheme: React.FC<PropsType> = (props) => {

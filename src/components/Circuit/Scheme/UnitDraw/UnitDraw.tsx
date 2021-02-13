@@ -1,6 +1,7 @@
 import React from 'react'
 import UpAndDownBtnsGroup from './UpAndDownBtnsGroup'
 import {makeStyles} from '@material-ui/core'
+import { ObjectToSwitch } from '../../../../types/types'
 
 
 const useStyles = makeStyles({
@@ -16,7 +17,7 @@ type PropsType = {
   alias               : string
   hoveredTarget       : string | null
   isMounted           : number
-  switchModel         : (alias: string, object: 'valve' | 'controlUnit', direction: string) => void
+  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => void
   changeHoveredTarget : (target: string | null) => void
 }
 
@@ -73,9 +74,9 @@ const UnitDraw: React.FC<PropsType> = ({alias, hoveredTarget, isMounted, changeH
       {detailsForPressureRegulator}
       {drive}
       {secondPulseTube}
-      <UpAndDownBtnsGroup alias={alias} object="valve"       switchModel={switchModel} x={x} y={y}    />
-      <UpAndDownBtnsGroup alias={alias} object="controlUnit" switchModel={switchModel} x={x} y={y-55} />
-    </g>///////////////////////////////////////////////////////////////////////////change to brain
+      <UpAndDownBtnsGroup alias={alias} object="valve" switchModel={switchModel} x={x} y={y}    />
+      <UpAndDownBtnsGroup alias={alias} object="brain" switchModel={switchModel} x={x} y={y-55} />
+    </g>
   )
 }
 

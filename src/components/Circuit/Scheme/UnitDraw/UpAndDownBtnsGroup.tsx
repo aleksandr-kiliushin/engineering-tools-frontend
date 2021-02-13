@@ -1,11 +1,12 @@
 import React from 'react'
 import {ButtonGroup, Button,} from '@material-ui/core'
 import {KeyboardArrowDown, KeyboardArrowUp,} from '@material-ui/icons'
+import { ObjectToSwitch } from '../../../../types/types'
 
 type PropsType = {
   alias       : string
-  object      : 'valve' | 'controlUnit'
-  switchModel : (alias: string, object: 'valve' | 'controlUnit', direction: string) => void
+  object      : ObjectToSwitch
+  switchModel : (alias: string, object: ObjectToSwitch, direction: string) => void
   x           : number
   y           : number
 }

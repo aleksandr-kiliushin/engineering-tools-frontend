@@ -1,46 +1,46 @@
-import { BaseThunkType, InferActionsTypes } from './store';
-import { GeneralParamsType, StateType, EquipType, EquipDbDataType } from './../types/types'
-import {getDataArr, getNewUnitState, getStWithCalcs} from "../utils/circuit-util"
+import { BaseThunkType, InferActions } from './store';
+import { GeneralParamsType, CircuitState, EquipState, EquipDbData, ValveResData, BrainResData, ObjectToSwitch,
+  ValveEquipState, BrainEquipState} from './../types/types'
+import {getDataArr, getNewUnitState, getStWithCalcs} from '../utils/circuit-util'
 import {circuitApi,} from '../api/circuit-api'
 import {saveAs,} from 'file-saver'
 import {selectMountedUnitsCodes,} from './circuit-selectors'
 
 
-// Defines initial equip state.
 const isMountedArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
+// const dPArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
 const equipAliases    = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retCv',     'retDpr',     'upstream1',  'upstream2', ]
 const positionAliases = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2',]
 
-const initialEquip: EquipType = {}
+const initialEquip: EquipState = {}
 equipAliases.forEach((alias, i) => {
-  initialEquip[equipAliases[i]] = {
+  initialEquip[alias] = {
     aliases: {
-			alias       : alias,
-			controlUnit : alias + 'Brain',
-      position    : positionAliases[i],
-			valve       : alias + 'Valve',
+			alias    : alias,
+			brain    : alias + 'Brain',
+      position : positionAliases[i],
+			valve    : alias + 'Valve',
 		},
-    controlUnit : {id: 0,},// change to 'brain'
-    isMounted   : isMountedArr[i],
-    valve       : {id: 0,},
+    brain     : {id: 0, code: '', equip_type: 'cv_actuator', full_title: '', price: 0},
+    isMounted : isMountedArr[i],
+    valve     : {id: 0, code: '', dp: 0, dpMax: 0, price: 0, v: 0, dn: 0, equip_type: 'cv_valve', kvs: 0,
+      type_title: 'VFM2', z: 0, authority: ''},
   }
 })
 
 
-// Defines initial generalParams state.
 const generalParamsAliases = ['g', 'hexDp', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 't1', 't2',]
 const generalParamsValues  = [10,  0.15,    8,    8,    8,    0,    0,    0,    0,    6,    6,    6,     150,  70,  ]
 
-
 const initialGeneralParams: GeneralParamsType = {}
 generalParamsAliases.forEach((alias, i) => {
-  initialGeneralParams[alias] = {alias: alias, value: generalParamsValues[i],}
+  initialGeneralParams[alias] = {alias: alias, value: generalParamsValues[i]}
 })
 
 
 // todo: delete 'is mounted'. replace with dp.
 
-const initialState: StateType = {
+const initialState: CircuitState = {
   equip         : initialEquip,
   equipDbData   : null,
   generalParams : initialGeneralParams,
@@ -48,7 +48,7 @@ const initialState: StateType = {
   isFetching    : false,
 }
 
-const circuitReducer = (state: StateType = initialState, action: ActionsTypes): StateType => {
+const circuitReducer = (state: CircuitState = initialState, action: Actions): CircuitState => {
 
   let st
 
@@ -80,23 +80,25 @@ const circuitReducer = (state: StateType = initialState, action: ActionsTypes): 
     case 'SET_START_EQUIP': {
       const startEquip = {...state.equip,}
       for (let i = 0; i < equipAliases.length; i++) {
-        const valveDataArr                      = getDataArr(state.equipDbData, equipAliases[i], 'valve')
-        const controlUnitDataArr                = getDataArr(state.equipDbData, equipAliases[i], 'controlUnit')
-        startEquip[equipAliases[i]].valve       = getNewUnitState(0, valveDataArr, 'start')
-        startEquip[equipAliases[i]].controlUnit = getNewUnitState(0, controlUnitDataArr, 'start')
+        const valveDataArr       = getDataArr(state.equipDbData, equipAliases[i], 'valve') as Array<ValveResData>
+        const controlUnitDataArr = getDataArr(state.equipDbData, equipAliases[i], 'brain') as Array<BrainResData>
+        startEquip[equipAliases[i]].valve = getNewUnitState(0, valveDataArr, 'start') as ValveEquipState
+        startEquip[equipAliases[i]].brain = getNewUnitState(0, controlUnitDataArr, 'start') as BrainEquipState
       }
       st = {...state, equip: startEquip,};
-      return getStWithCalcs(st, equipAliases);
+      return getStWithCalcs(st, equipAliases)
     }
 
     case 'SWITCH_MODEL': {
 
-      const alias: string = action.alias;
-      const object: 'valve' | 'controlUnit' = action.object;
+      const alias: string = action.alias
+      const object: ObjectToSwitch = action.object
 
-      const dataArr = getDataArr(state.equipDbData, alias, object);
+      const dataArr = getDataArr(state.equipDbData, alias, object) as Array<ValveResData> | Array<BrainResData>
 
-      st = {...state,}
+      st = {...state}
+
+      // @ts-ignore
       st.equip[alias][object] = getNewUnitState(state.equip[alias][object].id, dataArr, action.direction)
 
       if (alias === 'supDpr') {
@@ -121,17 +123,17 @@ const circuitReducer = (state: StateType = initialState, action: ActionsTypes): 
   }
 }
 
-type ActionsTypes = InferActionsTypes<typeof actions>
+type Actions = InferActions<typeof actions>
 
-type ThunkType = BaseThunkType<ActionsTypes>
+type ThunkType = BaseThunkType<Actions>
 
 export const actions = {
   changeGeneralParam  : (field: string, value: string) => ({type: 'CHANGE_GENERAL_PARAM', field, value} as const),
-  changeHoveredTarget : (target: string | null)        => ({type: 'CHANGE_HOVERED_TARGET', target} as const),
-  setEquipDbData      : (equipDbData: EquipDbDataType) => ({type: 'SET_EQUIP_DB_DATA', equipDbData} as const),
-  setIsFetching       : (isFetching: boolean)          => ({type: 'SET_IS_FETCHING', isFetching} as const),
-  setStartEquip       : ()                             => ({type: 'SET_START_EQUIP'} as const),
-  switchModel         : (alias: string, object: 'valve' | 'controlUnit', direction: string) => ({type: 'SWITCH_MODEL', alias, object, direction} as const),
+  changeHoveredTarget : (target: string | null)        => ({type: 'CHANGE_HOVERED_TARGET', target}      as const),
+  setEquipDbData      : (equipDbData: EquipDbData)     => ({type: 'SET_EQUIP_DB_DATA', equipDbData}     as const),
+  setIsFetching       : (isFetching: boolean)          => ({type: 'SET_IS_FETCHING', isFetching}        as const),
+  setStartEquip       : ()                             => ({type: 'SET_START_EQUIP'}                    as const),
+  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => ({type: 'SWITCH_MODEL', alias, object, direction} as const),
 }
 
 
@@ -149,4 +151,4 @@ export const downloadCircuitCp = (): ThunkType => async (dispatch, getState) => 
   saveAs(data, 'cp.xlsx')
 }
 
-export default circuitReducer;
+export default circuitReducer

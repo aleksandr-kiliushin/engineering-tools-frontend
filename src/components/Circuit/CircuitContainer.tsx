@@ -6,19 +6,15 @@ import { Chart } from './Chart/Chart'
 import {Scheme} from './Scheme/Scheme'
 import {
   actions,
-  // changeGeneralParam,
-  // changeHoveredTarget,
-  // setEquipDbData,
-  // switchModel,
   downloadCircuitCp,
   getEquipDbDataAndSetStartEquipState,
 } from '../../redux/circuit-reducer'
-import { EquipDbDataType, EquipType, GeneralParamsType } from '../../types/types'
+import { EquipDbData, EquipState, GeneralParamsType, ObjectToSwitch } from '../../types/types'
 import { RootState } from '../../redux/store'
 
 
 type MapStatePropsType = {
-  equip          : EquipType
+  equip          : EquipState
   generalParams  : GeneralParamsType
   hoveredTarget  : string | null
   isFetching     : boolean
@@ -28,8 +24,8 @@ type MapStatePropsType = {
 type MapDispatchPropsType = {
   changeGeneralParam  : (field: string, value: string) => void
   changeHoveredTarget : (target: string | null) => void
-  setEquipDbData      : (equipDbData: EquipDbDataType) => void
-  switchModel         : (alias: string, object: 'valve' | 'controlUnit', direction: string) => void
+  setEquipDbData      : (equipDbData: EquipDbData) => void
+  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => void
   
   downloadCircuitCp                   : any
   getEquipDbDataAndSetStartEquipState : any
@@ -66,12 +62,12 @@ class CircuitContainer extends React.Component<PropsType> {
       return {
         alias            : unit.aliases.alias,
         authority        : (['supCv', 'retCv'].includes(alias)) ? unit.valve.authority : null,
-        controlUnitModel : unit.controlUnit.full_title,
+        brainModel       : unit.brain.full_title,
         dp               : unit.valve.dp?.toFixed(2),
         dpMax            : unit.valve.dpMax?.toFixed(2),
         isMounted        : unit.isMounted,
         position         : unit.aliases.position,
-        price            : +((unit.valve.price + unit.controlUnit.price + additionalPulseTubePrice).toFixed(2)),
+        price            : +((unit.valve.price + unit.brain.price + additionalPulseTubePrice).toFixed(2)),
         v                : unit.valve.v?.toFixed(2),
         valveModel       : `${unit.valve.type_title} ${unit.valve.dn}/${unit.valve.kvs}`,
       }
@@ -115,7 +111,7 @@ const mapStateToProps = (state: RootState): MapStatePropsType => {
     generalParams  : state.circuit.generalParams,
     hoveredTarget  : state.circuit.hoveredTarget,
     isFetching     : state.circuit.isFetching,
-    pulseTubePrice : state.circuit.equipDbData?.pulse_tubes[0].price,
+    pulseTubePrice : state.circuit.equipDbData?.pulse_tubes[0].price || 999999,
   }
 }
 

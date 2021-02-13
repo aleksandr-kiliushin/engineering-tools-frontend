@@ -1,4 +1,4 @@
-import { EquipDbDataType, StateType, EquipType, EquipDbDataArrayType } from './../types/types';
+import { EquipDbData, CircuitState, EquipState, EquipDbDataArray, ObjectToSwitch } from './../types/types';
 
 const getPSat = (t: number) => {
 	const pSatMap = new Map([
@@ -24,21 +24,21 @@ const getPSat = (t: number) => {
 }
 
 
-export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArrayType, switchDirection: string) => {
+export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArray, switchDirection: string) => {
 	// Calculate a new id.
 	let newId = 0
 	if      (switchDirection === 'start') newId = 0
 	else if (switchDirection === 'up')    newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0
 	else if (switchDirection === 'down')  newId = (currentId !== 0)                  ? currentId - 1 : dataArr.length - 1
 	// Return new unit state as the result.
-	return {...dataArr[newId], id: newId,}
+	return {...dataArr[newId], id: newId}
 }
 
 
-export const getDataArr = (equipDbData: EquipDbDataType, alias: string, object: 'valve' | 'controlUnit') => {
+export const getDataArr = (equipDbData: EquipDbData, alias: string, object: ObjectToSwitch) => {
 	if (object === 'valve') {
 		return (['supCv', 'retCv',].includes(alias) ? equipDbData?.cv_valves : equipDbData?.pr_valves);
-	} else if (object === 'controlUnit') {//change to brain
+	} else if (object === 'brain') {
 		if      (['downstream1', 'downstream2',].includes(alias)) return equipDbData?.downstream_blocks;
 		else if (['upstream1', 'upstream2',].includes(alias))     return equipDbData?.upstream_blocks;
 		else if (['supDpr', 'retDpr',].includes(alias))           return equipDbData?.dpr_blocks;
@@ -47,36 +47,36 @@ export const getDataArr = (equipDbData: EquipDbDataType, alias: string, object: 
 }
 
 
-export const getStWithCalcs = (st: StateType, equipAliases: Array<string>) => {
+export const getStWithCalcs = (st: CircuitState, equipAliases: Array<string>) => {
 
-	const t1    : number = st.generalParams.t1.value;
-	const t2    : number = st.generalParams.t2.value;
-	const p1    : number = st.generalParams.p1.value;
-	const p2    : number = st.generalParams.p2.value;
-	const p3    : number = st.generalParams.p3.value;
-	const p8    : number = st.generalParams.p8.value;
-	const p9    : number = st.generalParams.p9.value;
-	const p10   : number = st.generalParams.p10.value;
-	const g     : number = st.generalParams.g.value;
-	const hexDp : number = st.generalParams.hexDp.value;
+	const t1    = st.generalParams.t1.value;
+	const t2    = st.generalParams.t2.value;
+	const p1    = st.generalParams.p1.value;
+	const p2    = st.generalParams.p2.value;
+	const p3    = st.generalParams.p3.value;
+	const p8    = st.generalParams.p8.value;
+	const p9    = st.generalParams.p9.value;
+	const p10   = st.generalParams.p10.value;
+	const g     = st.generalParams.g.value;
+	const hexDp = st.generalParams.hexDp.value;
 
-	const supCvDp  : number = (st.equip.supCv.isMounted) ? (g / st.equip.supCv.valve.kvs) ** 2 : 0;
-	const retCvDp  : number = (st.equip.retCv.isMounted) ? (g / st.equip.retCv.valve.kvs) ** 2 : 0;
-	const supDprDp : number = (st.equip.supDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
-	const retDprDp : number = (st.equip.retDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
+	const supCvDp  = (st.equip.supCv.isMounted) ? (g / st.equip.supCv.valve.kvs) ** 2 : 0;
+	const retCvDp  = (st.equip.retCv.isMounted) ? (g / st.equip.retCv.valve.kvs) ** 2 : 0;
+	const supDprDp = (st.equip.supDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
+	const retDprDp = (st.equip.retDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
 
-	const downstream1Dp : number = p1 - p2;
-	const downstream2Dp : number = p2 - p3;
-	const upstream1Dp   : number = p8 - p9;
-	const upstream2Dp   : number = p9 - p10;
+	const downstream1Dp = p1 - p2;
+	const downstream2Dp = p2 - p3;
+	const upstream1Dp   = p8 - p9;
+	const upstream2Dp   = p9 - p10;
 
-	const p4 : number = p3 - supDprDp;
-	const p5 : number = p4 - supCvDp;
-	const p6 : number = p5 - hexDp;
-	const p7 : number = p6 - retCvDp;
+	const p4 = p3 - supDprDp;
+	const p5 = p4 - supCvDp;
+	const p6 = p5 - hexDp;
+	const p7 = p6 - retCvDp;
 
-	const pSatSup : number = getPSat(t1) || 999;
-	const pSatRet : number = getPSat(t2) || 999;
+	const pSatSup = getPSat(t1) || 999;
+	const pSatRet = getPSat(t2) || 999;
 
 	const downstream1DpMax = st.equip.downstream1.valve.z * (p1 - pSatSup);
 	const downstream2DpMax = st.equip.downstream2.valve.z * (p2 - pSatSup);
@@ -103,7 +103,7 @@ export const getStWithCalcs = (st: StateType, equipAliases: Array<string>) => {
 	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,];
 	const vs     = [downstream1V,     downstream2V,     supDprV,     supCvV,     retCvV,     retDprV,     upstream1V,     upstream2V,    ];
 
-	let refreshedEquip : EquipType = {};
+	let refreshedEquip : EquipState = {}
 
 	equipAliases.forEach((alias, i) => {
 		const newItem = {
