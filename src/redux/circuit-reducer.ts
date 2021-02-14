@@ -7,7 +7,6 @@ import {saveAs,} from 'file-saver'
 import {selectMountedUnitsCodes,} from './circuit-selectors'
 
 
-// const isMountedArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
 const dpArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
 const equipAliases    = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retCv',     'retDpr',     'upstream1',  'upstream2', ]
 const positionAliases = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2',]

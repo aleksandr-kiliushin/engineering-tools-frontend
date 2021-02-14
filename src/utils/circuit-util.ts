@@ -27,9 +27,8 @@ const getPSat = (t: number) => {
 export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArray, switchDirection: string) => {
 	// Calculate a new id.
 	let newId = 0
-	if      (switchDirection === 'start') newId = 0
-	else if (switchDirection === 'up')    newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0
-	else if (switchDirection === 'down')  newId = (currentId !== 0)                  ? currentId - 1 : dataArr.length - 1
+	if      (switchDirection === 'up')   newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0
+	else if (switchDirection === 'down') newId = (currentId !== 0)                  ? currentId - 1 : dataArr.length - 1
 	// Return new unit state as the result.
 	return {...dataArr[newId], id: newId}
 }
