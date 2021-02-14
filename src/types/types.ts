@@ -18,23 +18,23 @@ export interface PulseTubeResData extends EquipItemResData {
 	full_title : string
 }
 
-export type EquipDbDataArray = Array<ValveResData> | Array<BrainResData> | Array<PulseTubeResData>
+export type EquipDbDataArray = ValveResData[] | BrainResData[] | PulseTubeResData[]
 
 export type EquipDbData = {
-	cv_actuators      : Array<BrainResData>
-	cv_valves         : Array<ValveResData>
-	downstream_blocks : Array<BrainResData>
-	dpr_blocks        : Array<BrainResData>
-	pr_valves         : Array<ValveResData>
-	pulse_tubes       : Array<PulseTubeResData>
-	upstream_blocks   : Array<BrainResData>
+	cv_actuators      : BrainResData[]
+	cv_valves         : ValveResData[]
+	downstream_blocks : BrainResData[]
+	dpr_blocks        : BrainResData[]
+	pr_valves         : ValveResData[]
+	pulse_tubes       : PulseTubeResData[]
+	upstream_blocks   : BrainResData[]
 } | null
 
 
 
 export type GeneralParamType = {
 	alias: string
-	value: number
+	value: string
 }
 export type GeneralParamsType = {
   [key: string]: GeneralParamType
@@ -53,14 +53,9 @@ export interface BrainEquipState extends BrainResData {
 	id: number
 }
 export type EquipUnitState = {
-	aliases: {
-		alias    : string
-		brain    : string
-		position : string
-		valve    : string
-	}
+	alias    : EquipAlias
+	position : PositionAlias
 	brain     : BrainEquipState
-	// isMounted : number
 	valve     : ValveEquipState
 }
 export type EquipState = {
@@ -77,9 +72,13 @@ export type CircuitState = {
 
 
 export type ObjectToSwitch = 'valve' | 'brain'
+export type SwitchDirection = 'down' | 'up' | 'start'
 
 
-
+const equipAliases = ['downstream1', 'downstream2', 'supDpr', 'supCv', 'retCv', 'retDpr', 'upstream1', 'upstream2'] as const
+export type EquipAlias = typeof equipAliases[number]
+const positionAliases = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2'] as const
+export type PositionAlias = typeof positionAliases[number]
 
 
 

@@ -1,15 +1,15 @@
 import React, { ChangeEvent } from 'react'
 import {makeStyles, TextField} from '@material-ui/core'
-import { GeneralParamType } from '../../../../types/types';
+import { GeneralParamType } from '../../../../types/types'
 
 const useStyles = makeStyles({
   paramInputFieldStem: {stroke: '#7A7A7A'}
 });
 
 type PropsType = {
-  param              : GeneralParamType
+  param: GeneralParamType
 
-  changeGeneralParam : (field: string, value: string) => void
+  changeGeneralParam: (field: string, value: string) => void
 }
 
 export const ParamInputField: React.FC<PropsType> = ({param, changeGeneralParam}) => {
@@ -35,7 +35,6 @@ export const ParamInputField: React.FC<PropsType> = ({param, changeGeneralParam}
   let value = param.value
   let disabled = false
   if (['p4', 'p5', 'p6', 'p7'].includes(param.alias)) {
-    value = +value.toFixed(2)
     disabled = true
   }
 
@@ -48,11 +47,12 @@ export const ParamInputField: React.FC<PropsType> = ({param, changeGeneralParam}
       {!(['g', 'hexDp'].includes(alias)) && <line className={s.paramInputFieldStem} x1={x+25} y1={y+25} x2={x+25} y2={y+40}/>}
       <foreignObject x={x} y={y} width="50" height="50">
         <TextField
-          disabled   = {disabled}
-          inputProps = {{style: {height: 25, padding: 0, fontSize: 14, textAlign: 'center'}}}
-          onChange   = {onChangeHandler}
-          style      = {{height: 25}}
-          value      = {value}
+          disabled    = {disabled}
+          inputProps  = {{style: {height: 25, padding: 0, fontSize: 14, textAlign: 'center'}}}
+          onChange    = {onChangeHandler}
+          placeholder = {alias}
+          style       = {{height: 25}}
+          value       = {value}
         />
       </foreignObject>
     </g>

@@ -1,23 +1,21 @@
 import React from 'react'
 import UpAndDownBtnsGroup from './UpAndDownBtnsGroup'
 import {makeStyles} from '@material-ui/core'
-import { ObjectToSwitch } from '../../../../types/types'
+import { EquipAlias, ObjectToSwitch, SwitchDirection } from '../../../../types/types'
 
 
 const useStyles = makeStyles({
-  corpus      : {fill: '#6d6d6d',   stroke: '#000000'                },
-  spring      : {fill: '#6d6d6d',   stroke: '#000000'                },
-  actuator    : {fill: '#eeeeee',   stroke: '#000000'                },
-  impulseTube : {fill: 'none',      stroke: '#000000'                },
-  green       : {fill: 'darkgreen', stroke: '#000000', opacity: '0.5'},
+  corpusAndSpring : {fill: '#6d6d6d', stroke: '#000000'},
+  actuator        : {fill: '#eeeeee', stroke: '#000000'},
+  impulseTube     : {fill: 'none',    stroke: '#000000'},
 });
 
 
 type PropsType = {
-  alias               : string
+  alias               : EquipAlias
   hoveredTarget       : string | null
   isMounted           : number
-  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => void
+  switchModel         : (alias: EquipAlias, object: ObjectToSwitch, direction: SwitchDirection) => void
   changeHoveredTarget : (target: string | null) => void
 }
 
@@ -41,11 +39,11 @@ const UnitDraw: React.FC<PropsType> = ({alias, hoveredTarget, isMounted, changeH
   if (['downstream1', 'downstream2', 'supDpr', 'retDpr', 'upstream1', 'upstream2'].includes(alias)) {
     detailsForPressureRegulator = (
       <g>
-        <ellipse className={s.spring}      cx={x+30} cy={y-20} rx="25" ry="10" />
-        <ellipse className={s.spring}      cx={x+30} cy={y-30} rx="25" ry="10" />
-        <ellipse className={s.spring}      cx={x+30} cy={y-40} rx="25" ry="10" />
-        <ellipse className={s.spring}      cx={x+30} cy={y-50} rx="25" ry="10" />
-        <path    className={s.impulseTube} d={`M${x+40},${y-6}c50-10,45,15,45,15`}/>
+        <ellipse className={s.corpusAndSpring} cx={x+30} cy={y-20} rx="25" ry="10"    />
+        <ellipse className={s.corpusAndSpring} cx={x+30} cy={y-30} rx="25" ry="10"    />
+        <ellipse className={s.corpusAndSpring} cx={x+30} cy={y-40} rx="25" ry="10"    />
+        <ellipse className={s.corpusAndSpring} cx={x+30} cy={y-50} rx="25" ry="10"    />
+        <path    className={s.impulseTube}       d={`M${x+40},${y-6}c50-10,45,15,45,15`}/>
       </g>
     );
 
@@ -67,10 +65,10 @@ const UnitDraw: React.FC<PropsType> = ({alias, hoveredTarget, isMounted, changeH
 
   return (
     <g opacity={isMounted ? 1 : 0.15} strokeWidth={strokeWidth} onMouseEnter={onMouseEnterHandler}>
-      <rect    className={s.corpus} x={x+20}  y={y-15}  width="20" height="20" /> {/* Valve corpus stem */}
-      <ellipse className={s.corpus} cx={x+30} cy={y+20} rx   ="35" ry    ="20" /> {/* Valve corpus body */}
-      <rect    className={s.corpus} x={x-6}   y={y}     width="10" height="40" /> {/* Valve left flange */}
-      <rect    className={s.corpus} x={x+56}  y={y}     width="10" height="40" /> {/* Valve right flange */}
+      <rect    className={s.corpusAndSpring} x={x+20}  y={y-15}  width="20" height="20" /> {/* Valve corpus stem */}
+      <ellipse className={s.corpusAndSpring} cx={x+30} cy={y+20} rx   ="35" ry    ="20" /> {/* Valve corpus body */}
+      <rect    className={s.corpusAndSpring} x={x-6}   y={y}     width="10" height="40" /> {/* Valve left flange */}
+      <rect    className={s.corpusAndSpring} x={x+56}  y={y}     width="10" height="40" /> {/* Valve right flange */}
       {detailsForPressureRegulator}
       {drive}
       {secondPulseTube}

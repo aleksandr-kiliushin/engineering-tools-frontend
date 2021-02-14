@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect,} from 'react-redux'
-import {LinearProgress,} from '@material-ui/core'
+import {connect} from 'react-redux'
+import {LinearProgress} from '@material-ui/core'
 
 import { Chart } from './Chart/Chart'
 import {Scheme} from './Scheme/Scheme'
@@ -9,7 +9,7 @@ import {
   downloadCircuitCp,
   getEquipDbDataAndSetStartEquipState,
 } from '../../redux/circuit-reducer'
-import { EquipDbData, EquipState, GeneralParamsType, ObjectToSwitch } from '../../types/types'
+import { EquipAlias, EquipDbData, EquipState, GeneralParamsType, ObjectToSwitch, SwitchDirection } from '../../types/types'
 import { RootState } from '../../redux/store'
 
 
@@ -25,8 +25,8 @@ type MapDispatchPropsType = {
   changeGeneralParam  : (field: string, value: string) => void
   changeHoveredTarget : (target: string | null) => void
   setEquipDbData      : (equipDbData: EquipDbData) => void
-  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => void
-  
+  switchModel         : (alias: EquipAlias, object: ObjectToSwitch, direction: SwitchDirection) => void
+
   downloadCircuitCp                   : any
   getEquipDbDataAndSetStartEquipState : any
 }
@@ -50,9 +50,9 @@ class CircuitContainer extends React.Component<PropsType> {
     const mountedUnitsList  = unitsList.filter((unit) => unit.valve.dp)
 
     const mountedUnitsTableData = mountedUnitsList.map((unit) => {
-      const alias = unit.aliases.alias
+      const alias = unit.alias
 
-      let additionalPulseTubePrice = 0;
+      let additionalPulseTubePrice = 0
       if (['downstream1', 'downstream2', 'upstream1', 'upstream2'].includes(alias)) {
         additionalPulseTubePrice += pulseTubePrice
       } else if (['supDpr', 'retDpr'].includes(alias)) {
@@ -60,19 +60,20 @@ class CircuitContainer extends React.Component<PropsType> {
       }
 
       return {
-        alias            : unit.aliases.alias,
-        authority        : (['supCv', 'retCv'].includes(alias)) ? unit.valve.authority : null,
+        alias            : unit.alias,
+        authority        : unit.valve.authority,
         brainModel       : unit.brain.full_title,
         dp               : unit.valve.dp?.toFixed(2),
         dpMax            : unit.valve.dpMax?.toFixed(2),
         isMounted        : unit.valve.dp,
-        position         : unit.aliases.position,
+        position         : unit.position,
         price            : +((unit.valve.price + unit.brain.price + additionalPulseTubePrice).toFixed(2)),
         v                : unit.valve.v?.toFixed(2),
         valveModel       : `${unit.valve.type_title} ${unit.valve.dn}/${unit.valve.kvs}`,
       }
     })
 
+    
     let totalPrice: number | string = 0
     for (const row of mountedUnitsTableData) totalPrice += row.price
     totalPrice = totalPrice.toFixed(2)
@@ -100,7 +101,7 @@ class CircuitContainer extends React.Component<PropsType> {
       </div>
     );
 
-    return (<>{this.props.isFetching ? <LinearProgress /> : schemeAndChartJsx}</>);
+    return <div>{this.props.isFetching ? <LinearProgress /> : schemeAndChartJsx}</div>
   }
 }
 

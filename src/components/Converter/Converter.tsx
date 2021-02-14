@@ -14,19 +14,19 @@ export default function Converter () {
     const dotCount: number = (value.match(/\./g) || []).length
     if (isNaN(+value) || dotCount > 1) return
 
-    const isDot: boolean = (value.endsWith('.') && dotCount === 1)
+    const isDot = (value.endsWith('.') && dotCount === 1)
 
-    const valueInBar: number = toBar(value, scale)
+    const valueInBar = toBar(value, scale)
 
     setIsDot(isDot)
     setScale(scale)
     setValueInBar(valueInBar)
   }
 
-  let bar:   string = (+valueInBar.toFixed(2)).toString()
-  let mpa:   string = fromBar(valueInBar, scales.p.mpa)
-  let mh2o:  string = fromBar(valueInBar, scales.p.mh2o)
-  let kgcm2: string = fromBar(valueInBar, scales.p.kgcm2)
+  let bar   = (+valueInBar.toFixed(2)).toString()
+  let mpa   = fromBar(valueInBar, scales.p.mpa)
+  let mh2o  = fromBar(valueInBar, scales.p.mh2o)
+  let kgcm2 = fromBar(valueInBar, scales.p.kgcm2)
 
   if (isDot) {
     if      (scale === scales.p.bar)   bar   += '.'
@@ -54,7 +54,7 @@ export default function Converter () {
 
 
 type ParamInputFieldPropsType = {
-  onChangeHandler : Function
+  onChangeHandler : (value: string, scale: string) => void
   label           : string
   scale           : string
   value           : string

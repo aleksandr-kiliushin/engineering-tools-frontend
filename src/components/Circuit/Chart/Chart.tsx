@@ -1,12 +1,11 @@
 import React from 'react'
-
-import {Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,} from '@material-ui/core';
-import {GetApp as GetAppIcon,} from '@material-ui/icons';
+import {Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,} from '@material-ui/core'
+import {GetApp as GetAppIcon,} from '@material-ui/icons'
 
 type PropsType = {
   hoveredTarget         : string | null
   mountedUnitsTableData : any
-  totalPrice            : number | string
+  totalPrice            : string
 
   changeHoveredTarget : (target: string | null) => void
 

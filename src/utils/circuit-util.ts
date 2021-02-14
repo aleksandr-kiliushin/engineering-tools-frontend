@@ -1,4 +1,4 @@
-import { EquipDbData, CircuitState, EquipState, EquipDbDataArray, ObjectToSwitch } from './../types/types'
+import { EquipDbData, CircuitState, EquipState, EquipDbDataArray, ObjectToSwitch, SwitchDirection, EquipAlias} from './../types/types'
 
 const getPSat = (t: number) => {
 	const pSatMap = new Map([
@@ -20,11 +20,11 @@ const getPSat = (t: number) => {
 		[135, 2.11], [136, 2.20], [137, 2.32], [138, 2.47], [139, 2.70], [140, 2.57], [141, 2.68], [142, 2.81], [143, 2.99],
 		[144, 3.26], [145, 3.11], [146, 3.24], [147, 3.39], [148, 3.60], [149, 3.92], [150, 3.74],
 	])
-	return pSatMap.get(t) || 666
+	return pSatMap.get(t) || 999999
 }
 
 
-export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArray, switchDirection: string) => {
+export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArray, switchDirection: SwitchDirection) => {
 	// Calculate a new id.
 	let newId = 0
 	if      (switchDirection === 'up')   newId = (currentId !== dataArr.length - 1) ? currentId + 1 : 0
@@ -34,30 +34,30 @@ export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArray, s
 }
 
 
-export const getDataArr = (equipDbData: EquipDbData, alias: string, object: ObjectToSwitch) => {
+export const getDataArr = (equipDbData: EquipDbData, alias: EquipAlias, object: ObjectToSwitch) => {
 	if (object === 'valve') {
 		return (['supCv', 'retCv',].includes(alias) ? equipDbData?.cv_valves : equipDbData?.pr_valves)
 	} else if (object === 'brain') {
 		if      (['downstream1', 'downstream2'].includes(alias)) return equipDbData?.downstream_blocks
-		else if (['upstream1', 'upstream2'].includes(alias))     return equipDbData?.upstream_blocks
-		else if (['supDpr', 'retDpr'].includes(alias))           return equipDbData?.dpr_blocks
-		else if (['supCv', 'retCv'].includes(alias))             return equipDbData?.cv_actuators
+		else if (['upstream1'  , 'upstream2'  ].includes(alias)) return equipDbData?.upstream_blocks
+		else if (['supDpr'     , 'retDpr'     ].includes(alias)) return equipDbData?.dpr_blocks
+		else if (['supCv'      , 'retCv'      ].includes(alias)) return equipDbData?.cv_actuators
 	}
 }
 
 
-export const getStWithCalcs = (st: CircuitState, equipAliases: Array<string>) => {
+export const getStWithCalcs = (st: CircuitState, equipAliases: EquipAlias[]) => {
 
-	const t1    = st.generalParams.t1.value
-	const t2    = st.generalParams.t2.value
-	const p1    = st.generalParams.p1.value
-	const p2    = st.generalParams.p2.value
-	const p3    = st.generalParams.p3.value
-	const p8    = st.generalParams.p8.value
-	const p9    = st.generalParams.p9.value
-	const p10   = st.generalParams.p10.value
-	const g     = st.generalParams.g.value
-	const hexDp = st.generalParams.hexDp.value
+	const t1    = +st.generalParams.t1.value
+	const t2    = +st.generalParams.t2.value
+	const p1    = +st.generalParams.p1.value
+	const p2    = +st.generalParams.p2.value
+	const p3    = +st.generalParams.p3.value
+	const p8    = +st.generalParams.p8.value
+	const p9    = +st.generalParams.p9.value
+	const p10   = +st.generalParams.p10.value
+	const g     = +st.generalParams.g.value
+	const hexDp = +st.generalParams.hexDp.value
 
 	const supCvDp  = (st.equip.supCv.valve.dp)  ? (g / st.equip.supCv.valve.kvs) ** 2   : 0
 	const retCvDp  = (st.equip.retCv.valve.dp)  ? (g / st.equip.retCv.valve.kvs) ** 2   : 0
@@ -74,8 +74,8 @@ export const getStWithCalcs = (st: CircuitState, equipAliases: Array<string>) =>
 	const p6 = p5 - hexDp
 	const p7 = p6 - retCvDp
 
-	const pSatSup = getPSat(t1) || 999
-	const pSatRet = getPSat(t2) || 999
+	const pSatSup = getPSat(t1) || 999999
+	const pSatRet = getPSat(t2) || 999999
 
 	const downstream1DpMax = st.equip.downstream1.valve.z * (p1 - pSatSup)
 	const downstream2DpMax = st.equip.downstream2.valve.z * (p2 - pSatSup)
@@ -118,10 +118,10 @@ export const getStWithCalcs = (st: CircuitState, equipAliases: Array<string>) =>
 		equip: refreshedEquip,
 		generalParams: {
 			...st.generalParams,
-			p4: {...st.generalParams.p4, value: p4,},
-			p5: {...st.generalParams.p5, value: p5,},
-			p6: {...st.generalParams.p6, value: p6,},
-			p7: {...st.generalParams.p7, value: p7,},
+			p4: {...st.generalParams.p4, value: p4.toFixed(2)},
+			p5: {...st.generalParams.p5, value: p5.toFixed(2)},
+			p6: {...st.generalParams.p6, value: p6.toFixed(2)},
+			p7: {...st.generalParams.p7, value: p7.toFixed(2)},
 		},
 	}
 }

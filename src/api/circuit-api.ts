@@ -7,7 +7,7 @@ export const circuitApi = {
 		const response = await instance.get<EquipDbData>('equipments/')
 		return response.data
 	},
-	async downloadCp(mountedUnitsCodes: Array<string>) {
+	async downloadCp(mountedUnitsCodes: string[]) {
 		const response = await instance.post('downloadcp/', mountedUnitsCodes, {responseType: 'blob'})
 		return response.data
 	},

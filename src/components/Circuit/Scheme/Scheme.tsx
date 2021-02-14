@@ -2,7 +2,7 @@ import React from 'react'
 import {ParamInputField} from './ParamInputField/ParamInputField'
 import UnitDraw from './UnitDraw/UnitDraw'
 import {makeStyles} from '@material-ui/core/styles'
-import { EquipUnitState, GeneralParamType, ObjectToSwitch } from '../../../types/types'
+import { EquipAlias, EquipUnitState, GeneralParamType, ObjectToSwitch, SwitchDirection } from '../../../types/types'
 
 
 const useStyles = makeStyles({
@@ -14,13 +14,13 @@ const useStyles = makeStyles({
 
 
 type PropsType = {
-  generalParamsList   : Array<GeneralParamType>
+  generalParamsList   : GeneralParamType[]
   hoveredTarget       : string | null
-  unitsList           : Array<EquipUnitState>
+  unitsList           : EquipUnitState[]
 
   changeGeneralParam  : (field: string, value: string) => void
   changeHoveredTarget : (target: string | null) => void
-  switchModel         : (alias: string, object: ObjectToSwitch, direction: string) => void
+  switchModel         : (alias: EquipAlias, object: ObjectToSwitch, direction: SwitchDirection) => void
 }
 
 export const Scheme: React.FC<PropsType> = (props) => {
@@ -31,10 +31,10 @@ export const Scheme: React.FC<PropsType> = (props) => {
 
   const unitDraws = unitsList.map((unit) => (
     <UnitDraw
-      alias         = {unit.aliases.alias}
+      alias         = {unit.alias}
       hoveredTarget = {hoveredTarget}
       isMounted     = {unit.valve.dp}
-      key           = {unit.aliases.alias}
+      key           = {unit.alias}
 
       changeHoveredTarget = {changeHoveredTarget}
       switchModel         = {switchModel}
