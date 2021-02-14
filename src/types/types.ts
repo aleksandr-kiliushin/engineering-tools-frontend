@@ -60,7 +60,7 @@ export type EquipUnitState = {
 		valve    : string
 	}
 	brain     : BrainEquipState
-	isMounted : number
+	// isMounted : number
 	valve     : ValveEquipState
 }
 export type EquipState = {

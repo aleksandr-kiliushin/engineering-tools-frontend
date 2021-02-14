@@ -1,4 +1,4 @@
-import { EquipDbData, CircuitState, EquipState, EquipDbDataArray, ObjectToSwitch } from './../types/types';
+import { EquipDbData, CircuitState, EquipState, EquipDbDataArray, ObjectToSwitch } from './../types/types'
 
 const getPSat = (t: number) => {
 	const pSatMap = new Map([
@@ -19,7 +19,7 @@ const getPSat = (t: number) => {
 		[126, 1.41], [127, 1.50], [128, 1.62], [129, 1.80], [130, 1.70], [131, 1.78], [132, 1.88], [133, 2.02], [134, 2.23],
 		[135, 2.11], [136, 2.20], [137, 2.32], [138, 2.47], [139, 2.70], [140, 2.57], [141, 2.68], [142, 2.81], [143, 2.99],
 		[144, 3.26], [145, 3.11], [146, 3.24], [147, 3.39], [148, 3.60], [149, 3.92], [150, 3.74],
-	]);
+	])
 	return pSatMap.get(t) || 666
 }
 
@@ -37,85 +37,82 @@ export const getNewUnitState = (currentId : number, dataArr: EquipDbDataArray, s
 
 export const getDataArr = (equipDbData: EquipDbData, alias: string, object: ObjectToSwitch) => {
 	if (object === 'valve') {
-		return (['supCv', 'retCv',].includes(alias) ? equipDbData?.cv_valves : equipDbData?.pr_valves);
+		return (['supCv', 'retCv',].includes(alias) ? equipDbData?.cv_valves : equipDbData?.pr_valves)
 	} else if (object === 'brain') {
-		if      (['downstream1', 'downstream2',].includes(alias)) return equipDbData?.downstream_blocks;
-		else if (['upstream1', 'upstream2',].includes(alias))     return equipDbData?.upstream_blocks;
-		else if (['supDpr', 'retDpr',].includes(alias))           return equipDbData?.dpr_blocks;
-		else if (['supCv', 'retCv',].includes(alias))             return equipDbData?.cv_actuators;
+		if      (['downstream1', 'downstream2'].includes(alias)) return equipDbData?.downstream_blocks
+		else if (['upstream1', 'upstream2'].includes(alias))     return equipDbData?.upstream_blocks
+		else if (['supDpr', 'retDpr'].includes(alias))           return equipDbData?.dpr_blocks
+		else if (['supCv', 'retCv'].includes(alias))             return equipDbData?.cv_actuators
 	}
 }
 
 
 export const getStWithCalcs = (st: CircuitState, equipAliases: Array<string>) => {
 
-	const t1    = st.generalParams.t1.value;
-	const t2    = st.generalParams.t2.value;
-	const p1    = st.generalParams.p1.value;
-	const p2    = st.generalParams.p2.value;
-	const p3    = st.generalParams.p3.value;
-	const p8    = st.generalParams.p8.value;
-	const p9    = st.generalParams.p9.value;
-	const p10   = st.generalParams.p10.value;
-	const g     = st.generalParams.g.value;
-	const hexDp = st.generalParams.hexDp.value;
+	const t1    = st.generalParams.t1.value
+	const t2    = st.generalParams.t2.value
+	const p1    = st.generalParams.p1.value
+	const p2    = st.generalParams.p2.value
+	const p3    = st.generalParams.p3.value
+	const p8    = st.generalParams.p8.value
+	const p9    = st.generalParams.p9.value
+	const p10   = st.generalParams.p10.value
+	const g     = st.generalParams.g.value
+	const hexDp = st.generalParams.hexDp.value
 
-	const supCvDp  = (st.equip.supCv.isMounted) ? (g / st.equip.supCv.valve.kvs) ** 2 : 0;
-	const retCvDp  = (st.equip.retCv.isMounted) ? (g / st.equip.retCv.valve.kvs) ** 2 : 0;
-	const supDprDp = (st.equip.supDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
-	const retDprDp = (st.equip.retDpr.isMounted) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0;
+	const supCvDp  = (st.equip.supCv.valve.dp)  ? (g / st.equip.supCv.valve.kvs) ** 2   : 0
+	const retCvDp  = (st.equip.retCv.valve.dp)  ? (g / st.equip.retCv.valve.kvs) ** 2   : 0
+	const supDprDp = (st.equip.supDpr.valve.dp) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0
+	const retDprDp = (st.equip.retDpr.valve.dp) ? (p3 - supCvDp - hexDp - retCvDp - p8) : 0
 
-	const downstream1Dp = p1 - p2;
-	const downstream2Dp = p2 - p3;
-	const upstream1Dp   = p8 - p9;
-	const upstream2Dp   = p9 - p10;
+	const downstream1Dp = p1 - p2
+	const downstream2Dp = p2 - p3
+	const upstream1Dp   = p8 - p9
+	const upstream2Dp   = p9 - p10
 
-	const p4 = p3 - supDprDp;
-	const p5 = p4 - supCvDp;
-	const p6 = p5 - hexDp;
-	const p7 = p6 - retCvDp;
+	const p4 = p3 - supDprDp
+	const p5 = p4 - supCvDp
+	const p6 = p5 - hexDp
+	const p7 = p6 - retCvDp
 
-	const pSatSup = getPSat(t1) || 999;
-	const pSatRet = getPSat(t2) || 999;
+	const pSatSup = getPSat(t1) || 999
+	const pSatRet = getPSat(t2) || 999
 
-	const downstream1DpMax = st.equip.downstream1.valve.z * (p1 - pSatSup);
-	const downstream2DpMax = st.equip.downstream2.valve.z * (p2 - pSatSup);
-	const supDprDpMax = st.equip.supDpr.valve.z * (p3 - pSatSup);
-	const supCvDpMax = st.equip.supCv.valve.z * (p4 - pSatSup);
-	const retCvDpMax = st.equip.retCv.valve.z * (p6 - pSatRet);
-	const retDprDpMax = st.equip.retDpr.valve.z * (p7 - pSatRet);
-	const upstream1DpMax = st.equip.upstream1.valve.z * (p8 - pSatRet);
-	const upstream2DpMax = st.equip.upstream2.valve.z * (p9 - pSatRet);
+	const downstream1DpMax = st.equip.downstream1.valve.z * (p1 - pSatSup)
+	const downstream2DpMax = st.equip.downstream2.valve.z * (p2 - pSatSup)
+	const supDprDpMax      = st.equip.supDpr.valve.z      * (p3 - pSatSup)
+	const supCvDpMax       = st.equip.supCv.valve.z       * (p4 - pSatSup)
+	const retCvDpMax       = st.equip.retCv.valve.z       * (p6 - pSatRet)
+	const retDprDpMax      = st.equip.retDpr.valve.z      * (p7 - pSatRet)
+	const upstream1DpMax   = st.equip.upstream1.valve.z   * (p8 - pSatRet)
+	const upstream2DpMax   = st.equip.upstream2.valve.z   * (p9 - pSatRet)
 
-	const downstream1V = g * (18.8 / st.equip.downstream1.valve.dn) ** 2;
-	const downstream2V = g * (18.8 / st.equip.downstream2.valve.dn) ** 2;
-	const supDprV = g * (18.8 / st.equip.supDpr.valve.dn) ** 2;
-	const supCvV = g * (18.8 / st.equip.supCv.valve.dn) ** 2;
-	const retCvV = g * (18.8 / st.equip.retCv.valve.dn) ** 2;
-	const retDprV = g * (18.8 / st.equip.retDpr.valve.dn) ** 2;
-	const upstream1V = g * (18.8 / st.equip.upstream1.valve.dn) ** 2;
-	const upstream2V = g * (18.8 / st.equip.upstream2.valve.dn) ** 2;
+	const downstream1V = g * (18.8 / st.equip.downstream1.valve.dn) ** 2
+	const downstream2V = g * (18.8 / st.equip.downstream2.valve.dn) ** 2
+	const supDprV      = g * (18.8 / st.equip.supDpr.valve.dn)      ** 2
+	const supCvV       = g * (18.8 / st.equip.supCv.valve.dn)       ** 2
+	const retCvV       = g * (18.8 / st.equip.retCv.valve.dn)       ** 2
+	const retDprV      = g * (18.8 / st.equip.retDpr.valve.dn)      ** 2
+	const upstream1V   = g * (18.8 / st.equip.upstream1.valve.dn)   ** 2
+	const upstream2V   = g * (18.8 / st.equip.upstream2.valve.dn)   ** 2
 
-	const supCvAuthority = (supCvDp / (supCvDp + hexDp)).toFixed(2);
-	const retCvAuthority = (retCvDp / (retCvDp + hexDp)).toFixed(2);
+	const supCvAuthority = (supCvDp / (supCvDp + hexDp)).toFixed(2)
+	const retCvAuthority = (retCvDp / (retCvDp + hexDp)).toFixed(2)
 
-	const dps    = [downstream1Dp,    downstream2Dp,    supDprDp,    supCvDp,    retCvDp,    retDprDp,    upstream1Dp,    upstream2Dp,   ];
-	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,];
-	const vs     = [downstream1V,     downstream2V,     supDprV,     supCvV,     retCvV,     retDprV,     upstream1V,     upstream2V,    ];
+	const dps    = [downstream1Dp,    downstream2Dp,    supDprDp,    supCvDp,    retCvDp,    retDprDp,    upstream1Dp,    upstream2Dp,   ]
+	const dpMaxs = [downstream1DpMax, downstream2DpMax, supDprDpMax, supCvDpMax, retCvDpMax, retDprDpMax, upstream1DpMax, upstream2DpMax,]
+	const vs     = [downstream1V,     downstream2V,     supDprV,     supCvV,     retCvV,     retDprV,     upstream1V,     upstream2V,    ]
 
 	let refreshedEquip : EquipState = {}
-
 	equipAliases.forEach((alias, i) => {
-		const newItem = {
+		refreshedEquip[alias] = {
 			...st.equip[alias],
-			valve: {...st.equip[alias].valve, dp: dps[i], dpMax: dpMaxs[i], v: vs[i],},
-		};
-		if ([0, 1, 6, 7,].includes(i)) newItem.isMounted = dps[i];
-		refreshedEquip[alias] = newItem;
+			valve: {...st.equip[alias].valve, dp: dps[i], dpMax: dpMaxs[i], v: vs[i]},
+		}
 	})
 
-	refreshedEquip.supCv.valve.authority = supCvAuthority;
-	refreshedEquip.retCv.valve.authority = retCvAuthority;
+	refreshedEquip.supCv.valve.authority = supCvAuthority
+	refreshedEquip.retCv.valve.authority = retCvAuthority
 
 	return {
 		...st,
@@ -127,5 +124,5 @@ export const getStWithCalcs = (st: CircuitState, equipAliases: Array<string>) =>
 			p6: {...st.generalParams.p6, value: p6,},
 			p7: {...st.generalParams.p7, value: p7,},
 		},
-	};
+	}
 }

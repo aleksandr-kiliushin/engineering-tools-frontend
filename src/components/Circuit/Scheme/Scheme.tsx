@@ -33,7 +33,7 @@ export const Scheme: React.FC<PropsType> = (props) => {
     <UnitDraw
       alias         = {unit.aliases.alias}
       hoveredTarget = {hoveredTarget}
-      isMounted     = {unit.isMounted}
+      isMounted     = {unit.valve.dp}
       key           = {unit.aliases.alias}
 
       changeHoveredTarget = {changeHoveredTarget}

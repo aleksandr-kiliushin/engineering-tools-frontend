@@ -47,7 +47,7 @@ class CircuitContainer extends React.Component<PropsType> {
     const generalParamsList = Object.values(this.props.generalParams)
     const pulseTubePrice    = this.props.pulseTubePrice
     const unitsList         = Object.values(this.props.equip)
-    const mountedUnitsList  = unitsList.filter((unit) => unit.isMounted)
+    const mountedUnitsList  = unitsList.filter((unit) => unit.valve.dp)
 
     const mountedUnitsTableData = mountedUnitsList.map((unit) => {
       const alias = unit.aliases.alias
@@ -65,7 +65,7 @@ class CircuitContainer extends React.Component<PropsType> {
         brainModel       : unit.brain.full_title,
         dp               : unit.valve.dp?.toFixed(2),
         dpMax            : unit.valve.dpMax?.toFixed(2),
-        isMounted        : unit.isMounted,
+        isMounted        : unit.valve.dp,
         position         : unit.aliases.position,
         price            : +((unit.valve.price + unit.brain.price + additionalPulseTubePrice).toFixed(2)),
         v                : unit.valve.v?.toFixed(2),

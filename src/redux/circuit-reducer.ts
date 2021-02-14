@@ -7,8 +7,8 @@ import {saveAs,} from 'file-saver'
 import {selectMountedUnitsCodes,} from './circuit-selectors'
 
 
-const isMountedArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
-// const dPArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
+// const isMountedArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
+const dpArr    = [0,              0,              1,            1,           0,           0,            0,            0,           ]
 const equipAliases    = ['downstream1',  'downstream2',  'supDpr',     'supCv',     'retCv',     'retDpr',     'upstream1',  'upstream2', ]
 const positionAliases = ['Downstream 1', 'Downstream 2', 'Supply DPR', 'Supply CV', 'Return CV', 'Return DPR', 'Upstream 1', 'Upstream 2',]
 
@@ -22,8 +22,8 @@ equipAliases.forEach((alias, i) => {
 			valve    : alias + 'Valve',
 		},
     brain     : {id: 0, code: '', equip_type: 'cv_actuator', full_title: '', price: 0},
-    isMounted : isMountedArr[i],
-    valve     : {id: 0, code: '', dp: 0, dpMax: 0, price: 0, v: 0, dn: 0, equip_type: 'cv_valve', kvs: 0,
+    // isMounted : isMountedArr[i],
+    valve     : {id: 0, dp: dpArr[i], code: '', dpMax: 0, price: 0, v: 0, dn: 0, equip_type: 'cv_valve', kvs: 0,
       type_title: 'VFM2', z: 0, authority: ''},
   }
 })
@@ -37,8 +37,6 @@ generalParamsAliases.forEach((alias, i) => {
   initialGeneralParams[alias] = {alias: alias, value: generalParamsValues[i]}
 })
 
-
-// todo: delete 'is mounted'. replace with dp.
 
 const initialState: CircuitState = {
   equip         : initialEquip,
@@ -104,17 +102,17 @@ const circuitReducer = (state: CircuitState = initialState, action: Actions): Ci
       }
 
       if (alias === 'supDpr') {
-        st.equip.supDpr.isMounted = 1
-        st.equip.retDpr.isMounted = 0
+        st.equip.supDpr.valve.dp = 1
+        st.equip.retDpr.valve.dp = 0
       } else if (alias === 'retDpr') {
-        st.equip.supDpr.isMounted = 0
-        st.equip.retDpr.isMounted = 1
+        st.equip.supDpr.valve.dp = 0
+        st.equip.retDpr.valve.dp = 1
       } else if (alias === 'supCv') {
-        st.equip.supCv.isMounted = 1
-        st.equip.retCv.isMounted = 0
+        st.equip.supCv.valve.dp = 1
+        st.equip.retCv.valve.dp = 0
       } else if (alias === 'retCv') {
-        st.equip.supCv.isMounted = 0
-        st.equip.retCv.isMounted = 1
+        st.equip.supCv.valve.dp = 0
+        st.equip.retCv.valve.dp = 1
       }
 
       return getStWithCalcs(st, equipAliases)
