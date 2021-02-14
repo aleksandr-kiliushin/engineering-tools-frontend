@@ -97,9 +97,11 @@ const circuitReducer = (state: CircuitState = initialState, action: Actions): Ci
       const dataArr = getDataArr(state.equipDbData, alias, object) as Array<ValveResData> | Array<BrainResData>
 
       st = {...state}
-
-      // @ts-ignore
-      st.equip[alias][object] = getNewUnitState(state.equip[alias][object].id, dataArr, action.direction)
+      if (object === 'valve') {
+        st.equip[alias][object] = getNewUnitState(state.equip[alias][object].id, dataArr, action.direction) as ValveEquipState
+      } else if (object === 'brain') {
+        st.equip[alias][object] = getNewUnitState(state.equip[alias][object].id, dataArr, action.direction) as BrainEquipState
+      }
 
       if (alias === 'supDpr') {
         st.equip.supDpr.isMounted = 1
