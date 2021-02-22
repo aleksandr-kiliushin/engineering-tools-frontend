@@ -3,7 +3,6 @@ import { GeneralParamsType, CircuitState, EquipState, EquipDbData, ValveResData,
   ValveEquipState, BrainEquipState, EquipAlias, PositionAlias, SwitchDirection} from './../types/types'
 import {getDataArr, getNewUnitState, getStWithCalcs} from '../utils/circuit-util'
 import {circuitApi} from '../api/circuit-api'
-import {saveAs} from 'file-saver'
 import {selectMountedUnitsCodes} from './circuit-selectors'
 
 const equipAliases: EquipAlias[] = [
@@ -142,8 +141,7 @@ export const getEquipDbDataAndSetStartEquipState = (): ThunkType => async (dispa
 
 export const downloadCircuitCp = (): ThunkType => async (dispatch, getState) => {
   const mountedUnitsCodes = selectMountedUnitsCodes(getState())
-  const data = await circuitApi.downloadCp(mountedUnitsCodes)
-  saveAs(data, 'cp.xlsx')
+  await circuitApi.downloadCp(mountedUnitsCodes)
 }
 
 export default circuitReducer

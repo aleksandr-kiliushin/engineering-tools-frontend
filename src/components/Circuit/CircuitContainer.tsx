@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {connect} from 'react-redux'
 import {LinearProgress} from '@material-ui/core'
 
@@ -9,7 +9,8 @@ import {
   downloadCircuitCp,
   getEquipDbDataAndSetStartEquipState,
 } from '../../redux/circuit-reducer'
-import { EquipAlias, EquipDbData, EquipState, GeneralParamsType, ObjectToSwitch, SwitchDirection } from '../../types/types'
+import { EquipAlias, EquipDbData, EquipState, GeneralParamsType, ObjectToSwitch,
+  SwitchDirection } from '../../types/types'
 import { RootState } from '../../redux/store'
 
 
@@ -20,7 +21,6 @@ type MapStatePropsType = {
   isFetching     : boolean
   pulseTubePrice : number
 }
-
 type MapDispatchPropsType = {
   changeGeneralParam  : (field: string, value: string) => void
   changeHoveredTarget : (target: string | null) => void
@@ -30,80 +30,76 @@ type MapDispatchPropsType = {
   downloadCircuitCp                   : any
   getEquipDbDataAndSetStartEquipState : any
 }
-
-
 type PropsType = MapStatePropsType & MapDispatchPropsType
 
-class CircuitContainer extends React.Component<PropsType> {
-  componentDidMount() {
-    this.props.getEquipDbDataAndSetStartEquipState()
-  }
 
-  componentWillUnmount() {
-    this.props.setEquipDbData(null)
-  }
+const CircuitContainer: React.FC<PropsType> = (props) => {
+  
+  const {equip, generalParams, isFetching, pulseTubePrice, setEquipDbData,
+    getEquipDbDataAndSetStartEquipState} = props
 
-  render() {
-    const generalParamsList = Object.values(this.props.generalParams)
-    const pulseTubePrice    = this.props.pulseTubePrice
-    const unitsList         = Object.values(this.props.equip)
-    const mountedUnitsList  = unitsList.filter((unit) => unit.valve.dp)
+  useEffect(() => {
+    getEquipDbDataAndSetStartEquipState()
+    return () => {setEquipDbData(null)}
+  }, [getEquipDbDataAndSetStartEquipState, setEquipDbData])
 
-    const mountedUnitsTableData = mountedUnitsList.map((unit) => {
-      const alias = unit.alias
+  const generalParamsList = Object.values(generalParams)
+  const unitsList         = Object.values(equip)
+  const mountedUnitsList  = unitsList.filter((unit) => unit.valve.dp)
 
-      let additionalPulseTubePrice = 0
-      if (['downstream1', 'downstream2', 'upstream1', 'upstream2'].includes(alias)) {
-        additionalPulseTubePrice += pulseTubePrice
-      } else if (['supDpr', 'retDpr'].includes(alias)) {
-        additionalPulseTubePrice += pulseTubePrice * 2
-      }
+  const mountedUnitsTableData = mountedUnitsList.map((unit) => {
+    const alias = unit.alias
 
-      return {
-        alias            : unit.alias,
-        authority        : unit.valve.authority,
-        brainModel       : unit.brain.full_title,
-        dp               : unit.valve.dp?.toFixed(2),
-        dpMax            : unit.valve.dpMax?.toFixed(2),
-        isMounted        : unit.valve.dp,
-        position         : unit.position,
-        price            : +((unit.valve.price + unit.brain.price + additionalPulseTubePrice).toFixed(2)),
-        v                : unit.valve.v?.toFixed(2),
-        valveModel       : `${unit.valve.type_title} ${unit.valve.dn}/${unit.valve.kvs}`,
-      }
-    })
+    let additionalPulseTubePrice = 0
+    if (['downstream1', 'downstream2', 'upstream1', 'upstream2'].includes(alias)) {
+      additionalPulseTubePrice += pulseTubePrice
+    } else if (['supDpr', 'retDpr'].includes(alias)) {
+      additionalPulseTubePrice += pulseTubePrice * 2
+    }
 
-    
-    let totalPrice: number | string = 0
-    for (const row of mountedUnitsTableData) totalPrice += row.price
-    totalPrice = totalPrice.toFixed(2)
+    return {
+      alias            : unit.alias,
+      authority        : unit.valve.authority,
+      brainModel       : unit.brain.full_title,
+      dp               : unit.valve.dp?.toFixed(2),
+      dpMax            : unit.valve.dpMax?.toFixed(2),
+      isMounted        : unit.valve.dp,
+      position         : unit.position,
+      price            : +((unit.valve.price + unit.brain.price + additionalPulseTubePrice).toFixed(2)),
+      v                : unit.valve.v?.toFixed(2),
+      valveModel       : `${unit.valve.type_title} ${unit.valve.dn}/${unit.valve.kvs}`,
+    }
+  })
 
+  let totalPrice: number | string = 0
+  for (const row of mountedUnitsTableData) totalPrice += row.price
+  totalPrice = totalPrice.toFixed(2)
 
-    const schemeAndChartJsx = (
-      <div>
-        <Scheme
-          generalParamsList   = {generalParamsList}
-          hoveredTarget       = {this.props.hoveredTarget}
-          unitsList           = {unitsList}
+  const schemeAndChartJsx = (
+    <div>
+      <Scheme
+        generalParamsList   = {generalParamsList}
+        hoveredTarget       = {props.hoveredTarget}
+        unitsList           = {unitsList}
 
-          changeGeneralParam  = {this.props.changeGeneralParam}
-          changeHoveredTarget = {this.props.changeHoveredTarget}
-          switchModel         = {this.props.switchModel}
-        />
-        <Chart
-          hoveredTarget         = {this.props.hoveredTarget}
-          mountedUnitsTableData = {mountedUnitsTableData}
-          totalPrice            = {totalPrice}
+        changeGeneralParam  = {props.changeGeneralParam}
+        changeHoveredTarget = {props.changeHoveredTarget}
+        switchModel         = {props.switchModel}
+      />
+      <Chart
+        hoveredTarget         = {props.hoveredTarget}
+        mountedUnitsTableData = {mountedUnitsTableData}
+        totalPrice            = {totalPrice}
 
-          downloadCircuitCp   = {this.props.downloadCircuitCp}
-          changeHoveredTarget = {this.props.changeHoveredTarget}
-        />
-      </div>
-    );
+        downloadCircuitCp   = {props.downloadCircuitCp}
+        changeHoveredTarget = {props.changeHoveredTarget}
+      />
+    </div>
+  );
 
-    return <div>{this.props.isFetching ? <LinearProgress /> : schemeAndChartJsx}</div>
-  }
+  return <div>{isFetching ? <LinearProgress /> : schemeAndChartJsx}</div>
 }
+
 
 
 const mapStateToProps = (state: RootState): MapStatePropsType => {
@@ -121,9 +117,9 @@ const mapDispatchToProps: MapDispatchPropsType = {
   ...actions,
   downloadCircuitCp,
   getEquipDbDataAndSetStartEquipState,
-};
+}
 
 
 export default connect
   <MapStatePropsType, MapDispatchPropsType, null, RootState>
-  (mapStateToProps, mapDispatchToProps)(CircuitContainer);
+  (mapStateToProps, mapDispatchToProps)(CircuitContainer)

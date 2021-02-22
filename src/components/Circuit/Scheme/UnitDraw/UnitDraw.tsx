@@ -24,7 +24,7 @@ const UnitDraw: React.FC<PropsType> = ({alias, hoveredTarget, isMounted, changeH
 
   const s = useStyles()
 
-  let x = 0;
+  let x = 0
   if      (['downstream1', 'upstream2'].includes(alias)) x = 160
   else if (['downstream2', 'upstream1'].includes(alias)) x = 330
   else if (['supDpr',      'retDpr'   ].includes(alias)) x = 505
